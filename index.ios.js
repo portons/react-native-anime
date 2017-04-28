@@ -5,7 +5,12 @@ import ChainAnimations from './chain-animations';
 
 export default class Root extends Component {
   componentDidMount() {
-    setTimeout(() => this.box.rotate(180, 5000).start(), 2000);
+		this.box
+			.rotate(360).duration(2000)
+			.wait(3000)
+			.moveX(50).duration(1000)
+      .moveY(-30).duration(2000)
+			.start();
   }
 
   render() {

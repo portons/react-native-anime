@@ -1,93 +1,72 @@
 import React from 'react';
+import { assign } from 'lodash';
 import { Animated } from 'react-native';
 
-import { assign } from 'lodash';
-
-const ANIMATION_TYPES = {
-	ROTATE: 'rotate'
-};
+import { scenarioParser } from './utils';
+import { ROTATE, MOVE_X, MOVE_Y, WAIT, DELAY, DURATION } from './constants';
 
 export default class ChainAnimations extends React.Component {
 	constructor() {
 	  super();
 
 	  this.state = {
-	    animationValues: null
-	  }
+	  	styles: {}
+		};
+
+	  this.scenario = [];
 	}
 
-	componentWillMount() {
-		this.animations = [];
-		this.animationValues = [];
-	}
+	componentWillMount() {}
 
-	rotate(degree, duration = 500) {
-		this.animations.push({
-			type: 'rotate',
-			value: degree,
-			duration
-		});
+	moveX(distance) {
+		this.scenario.push({ type: MOVE_X, distance });
 
 		return this;
 	}
 
-	generateAnimations() {
-		return this.animations.map(({ type, value, duration }) => {
-			switch (type) {
-				case ANIMATION_TYPES.ROTATE:
-					this.rotation = new Animated.Value(0);
+	moveY(distance) {
+		this.scenario.push({ type: MOVE_Y, distance });
 
-					this.rotationInterpolation = this.rotation.interpolate({
-						inputRange: [0, value],
-						outputRange: ['0deg', `${value}deg`]
-					});
+		return this;
+	}
 
-					this.animationValues.push({
-						type,
-						value: this.rotationInterpolation
-					});
+	rotate(degrees) {
+		this.scenario.push({ type: ROTATE, degrees });
 
-					return Animated.timing(
-						this.rotation,
-						{ toValue: value, duration }
-					)
-			}
-		});
+		return this;
+	}
+
+	duration(duration) {
+		this.scenario.push({ type: DURATION, duration });
+
+		return this;
+	}
+
+	delay(duration) {
+		this.scenario.push({ type: DELAY, duration });
+
+		return this;
+	}
+
+	wait(duration) {
+		this.scenario.push({ type: WAIT, duration });
+
+		return this;
 	}
 
 	start() {
-		const animations = this.generateAnimations();
+		const { animations, styles } = scenarioParser(this.scenario);
 
-		this.setState({ animationValues: this.animationValues }, () => {
-			console.log('Starting animation');
-			Animated.sequence(animations).start(() => this.setState({ animationValues: null }));
+		this.setState({ styles }, () => {
+			animations.start(() => {
+				this.setState({ styles: {} });
+			})
 		});
 	}
 
-	getStyling() {
-		console.log('Getting styling');
-		if (!this.state.animationValues) {
-			return {};
-		}
-
-		const styling = {};
-
-		this.state.animationValues.forEach(({ type, value }) => {
-			switch (type) {
-				case ANIMATION_TYPES.ROTATE:
-					assign(styling, { transform: [{ rotate: value }] });
-			}
-		});
-
-		return styling;
-	};
-
 	render() {
-		console.log('Rendering');
-		const style = this.getStyling();
-
 	  return (
-	    <Animated.View style={ style }>
+	    <Animated.View style={ this.state.styles }>
 				{ this.props.children }
 			</Animated.View>
 	  )
