@@ -1,9 +1,8 @@
 import React from 'react';
-import { assign } from 'lodash';
 import { Animated } from 'react-native';
 
 import { scenarioParser } from './utils';
-import { ROTATE, MOVE_X, MOVE_Y, WAIT, DELAY, DURATION } from './constants';
+import { ROTATE, MOVE_X, MOVE_Y, WAIT, DELAY } from './constants';
 
 export default class ChainAnimations extends React.Component {
 	constructor() {
@@ -18,26 +17,20 @@ export default class ChainAnimations extends React.Component {
 
 	componentWillMount() {}
 
-	moveX(distance) {
-		this.scenario.push({ type: MOVE_X, distance });
+	moveX(value, options = {}) {
+		this.scenario.push({ type: MOVE_X, value, options });
 
 		return this;
 	}
 
-	moveY(distance) {
-		this.scenario.push({ type: MOVE_Y, distance });
+	moveY(value, options = {}) {
+		this.scenario.push({ type: MOVE_Y, value, options });
 
 		return this;
 	}
 
-	rotate(degrees) {
-		this.scenario.push({ type: ROTATE, degrees });
-
-		return this;
-	}
-
-	duration(duration) {
-		this.scenario.push({ type: DURATION, duration });
+	rotate(value, options = {}) {
+		this.scenario.push({ type: ROTATE, value, options });
 
 		return this;
 	}
@@ -57,11 +50,7 @@ export default class ChainAnimations extends React.Component {
 	start() {
 		const { animations, styles } = scenarioParser(this.scenario);
 
-		this.setState({ styles }, () => {
-			animations.start(() => {
-				this.setState({ styles: {} });
-			})
-		});
+		this.setState({ styles }, () => animations.start());
 	}
 
 	render() {

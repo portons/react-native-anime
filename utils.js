@@ -1,58 +1,48 @@
 import { Animated } from 'react-native';
-import { reduce, isEqual, last, forEach } from 'lodash';
+import { reduce, isEqual, last, forEach, get } from 'lodash';
 
-import { DEFAULT_DURATION, ROTATE, MOVE_Y, MOVE_X, WAIT, DELAY, DURATION, DEFAULT_SCENARIO_PART } from './constants';
+import { DEFAULT_DURATION, ROTATE, MOVE_Y, MOVE_X, WAIT, DELAY } from './constants';
 
 export const scenarioParser = (scenario) => {
 	const scenarioParts = reduce(scenario, (acc, animation, index) => {
 		const lastAnimation = last(acc);
 
 		switch (animation.type) {
+			// WAIT animation breaks the main animation into sequences. Each sequence runs animations in parallel
 			case WAIT:
+				// Creating new animation sequence, with Animated.delay as its first animation, to simulate waiting
 				if (!isEqual(index, scenario.length - 1)) {
-					acc.push({
-						animatedValue: new Animated.Value(0),
-						duration: animation.duration || DEFAULT_DURATION,
-						animations: [animation]
-					});
+					acc.push([animation]);
 				}
 
 				break;
 
-			case DURATION:
-				lastAnimation.duration = animation.duration;
-				break;
-
+			// Pushes Animated.delay before the last added animation
 			case DELAY:
-				const arrayLen = lastAnimation.animations.length;
+				const arrayLen = lastAnimation.length;
 
-				lastAnimation.animations.splice(arrayLen - 1, 0, animation);
+				lastAnimation.splice(arrayLen - 1, 0, animation);
 				break;
 
 			default:
-				lastAnimation.animations.push(animation);
+				lastAnimation.push(animation);
 		}
 
 		return acc;
-	}, [DEFAULT_SCENARIO_PART]);
+	}, [[]]);
 
 	const animations = [];
-	const styles = [
+	const styles = [ // transform is always first in array for convenience
 		{
 			transform: []
 		}
 	];
 
 	forEach(scenarioParts, (partAnimations) => {
-		const animatedValue = partAnimations.animatedValue;
 		const currentPartAnimations = [];
 
-		forEach(partAnimations.animations, currentAnimation => {
-			const { animation, styling } = parseAnimation({
-				currentAnimation,
-				animatedValue,
-				duration: partAnimations.duration
-			});
+		forEach(partAnimations, currentAnimation => {
+			const { animation, styling } = parseAnimation({ animation: currentAnimation });
 
 			currentPartAnimations.push(animation);
 
@@ -74,17 +64,21 @@ export const scenarioParser = (scenario) => {
 	}
 };
 
-const parseAnimation = ({ currentAnimation, animatedValue, duration }) => {
-	switch (currentAnimation.type) {
+const parseAnimation = ({ animation }) => {
+	let animatedValue;
+
+	switch (animation.type) {
 		case ROTATE:
+			animatedValue = new Animated.Value(0);
+
 			const rotateAnimation = Animated.timing(
 				animatedValue,
-				{ toValue: currentAnimation.degrees, duration }
+				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
 			);
 
 			const interpolation = animatedValue.interpolate({
-				inputRange: [0, currentAnimation.degrees],
-				outputRange: ['0deg', `${currentAnimation.degrees}deg`]
+				inputRange: [0, animation.value],
+				outputRange: ['0deg', `${animation.value}deg`]
 			});
 
 			return {
@@ -96,9 +90,11 @@ const parseAnimation = ({ currentAnimation, animatedValue, duration }) => {
 			};
 
 		case MOVE_X:
+			animatedValue = new Animated.Value(0);
+
 			const xAnimation = Animated.timing(
 				animatedValue,
-				{ toValue: currentAnimation.distance, duration }
+				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
 			);
 
 			return {
@@ -110,9 +106,11 @@ const parseAnimation = ({ currentAnimation, animatedValue, duration }) => {
 			};
 
 		case MOVE_Y:
+			animatedValue = new Animated.Value(0);
+
 			const yAnimation = Animated.timing(
 				animatedValue,
-				{ toValue: currentAnimation.distance, duration }
+				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
 			);
 
 			return {
@@ -126,7 +124,7 @@ const parseAnimation = ({ currentAnimation, animatedValue, duration }) => {
 		case WAIT:
 		case DELAY:
 			return {
-				animation: Animated.delay(currentAnimation.duration)
+				animation: Animated.delay(animation.duration)
 			};
 	}
 };
