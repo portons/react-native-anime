@@ -19,8 +19,6 @@ export default class ChainAnimations extends React.Component {
 	  this.scenario = [];
 	}
 
-	componentWillMount() {}
-
 	moveX(value, options = {}) {
 		if (this.state.animating) {
 			return this;
