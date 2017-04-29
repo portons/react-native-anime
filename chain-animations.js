@@ -10,7 +10,8 @@ export default class ChainAnimations extends React.Component {
 	  super();
 
 	  this.state = {
-	  	styles: {}
+	  	styles: {},
+			animatedValues: null
 		};
 
 	  this.scenario = [];
@@ -98,7 +99,7 @@ export default class ChainAnimations extends React.Component {
 
 	render() {
 	  return (
-	    <Animated.View style={ this.state.styles }>
+	    <Animated.View style={ [this.props.style, this.state.styles] }>
 				{ this.props.children }
 			</Animated.View>
 	  )

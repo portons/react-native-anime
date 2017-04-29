@@ -11,9 +11,9 @@ export const scenarioParser = (scenario) => {
 		switch (animation.type) {
 			// WAIT animation breaks the main animation into sequences. Each sequence runs animations in parallel
 			case WAIT:
-				// Creating new animation sequence, with Animated.delay as its first animation, to simulate waiting
 				if (!isEqual(index, scenario.length - 1)) {
 					acc.push([animation]);
+					acc.push([]);
 				}
 
 				break;
@@ -39,11 +39,15 @@ export const scenarioParser = (scenario) => {
 		}
 	];
 
+	// If an animation repeats a number of times, we shouldn't create new Animated values for each, but re-use them
+	// Here we save created animated values
+	const createdAnimatedValues = {};
+
 	forEach(scenarioParts, (partAnimations) => {
 		const currentPartAnimations = [];
 
 		forEach(partAnimations, currentAnimation => {
-			const { animation, styling } = parseAnimation({ animation: currentAnimation });
+			const { animation, styling } = parseAnimation({ animation: currentAnimation, createdAnimatedValues });
 
 			currentPartAnimations.push(animation);
 
@@ -65,12 +69,16 @@ export const scenarioParser = (scenario) => {
 	}
 };
 
-const parseAnimation = ({ animation }) => {
+const parseAnimation = ({ animation, createdAnimatedValues }) => {
 	let animatedValue;
 
 	switch (animation.type) {
 		case ROTATE:
-			animatedValue = new Animated.Value(0);
+			if (!createdAnimatedValues[ROTATE]) {
+				createdAnimatedValues[ROTATE] = new Animated.Value(0);
+			}
+
+			animatedValue = createdAnimatedValues[ROTATE];
 
 			const rotateAnimation = Animated.timing(
 				animatedValue,
@@ -91,7 +99,11 @@ const parseAnimation = ({ animation }) => {
 			};
 
 		case BACKGROUND_COLOR:
-			animatedValue = new Animated.Value(0);
+			if (!createdAnimatedValues[BACKGROUND_COLOR]) {
+				createdAnimatedValues[BACKGROUND_COLOR] = new Animated.Value(0);
+			}
+
+			animatedValue = createdAnimatedValues[BACKGROUND_COLOR];
 
 			const bgColorAnimation = Animated.timing(
 				animatedValue,
@@ -111,7 +123,11 @@ const parseAnimation = ({ animation }) => {
 			};
 
 		case MOVE_X:
-			animatedValue = new Animated.Value(0);
+			if (!createdAnimatedValues[MOVE_X]) {
+				createdAnimatedValues[MOVE_X] = new Animated.Value(0);
+			}
+
+			animatedValue = createdAnimatedValues[MOVE_X];
 
 			const xAnimation = Animated.timing(
 				animatedValue,
@@ -127,7 +143,11 @@ const parseAnimation = ({ animation }) => {
 			};
 
 		case MOVE_Y:
-			animatedValue = new Animated.Value(0);
+			if (!createdAnimatedValues[MOVE_Y]) {
+				createdAnimatedValues[MOVE_Y] = new Animated.Value(0);
+			}
+
+			animatedValue = createdAnimatedValues[MOVE_Y];
 
 			const yAnimation = Animated.timing(
 				animatedValue,
@@ -143,7 +163,11 @@ const parseAnimation = ({ animation }) => {
 			};
 
 		case SCALE:
-			animatedValue = new Animated.Value(1);
+			if (!createdAnimatedValues[SCALE]) {
+				createdAnimatedValues[SCALE] = new Animated.Value(1);
+			}
+
+			animatedValue = createdAnimatedValues[SCALE];
 
 			const scaleAnimation = Animated.timing(
 				animatedValue,
@@ -159,7 +183,11 @@ const parseAnimation = ({ animation }) => {
 			};
 
 		case BORDER_RADIUS:
-			animatedValue = new Animated.Value(1);
+			if (!createdAnimatedValues[BORDER_RADIUS]) {
+				createdAnimatedValues[BORDER_RADIUS] = new Animated.Value(0);
+			}
+
+			animatedValue = createdAnimatedValues[BORDER_RADIUS];
 
 			const borderRadiusAnimation = Animated.timing(
 				animatedValue,
@@ -174,7 +202,11 @@ const parseAnimation = ({ animation }) => {
 			};
 
 		case PT_HEIGHT:
-			animatedValue = new Animated.Value(0);
+			if (!createdAnimatedValues[PT_HEIGHT]) {
+				createdAnimatedValues[PT_HEIGHT] = new Animated.Value(0);
+			}
+
+			animatedValue = createdAnimatedValues[PT_HEIGHT];
 
 			const ptHeightAnimation = Animated.timing(
 				animatedValue,
@@ -189,7 +221,11 @@ const parseAnimation = ({ animation }) => {
 			};
 
 		case PT_WIDTH:
-			animatedValue = new Animated.Value(0);
+			if (!createdAnimatedValues[PT_WIDTH]) {
+				createdAnimatedValues[PT_WIDTH] = new Animated.Value(0);
+			}
+
+			animatedValue = createdAnimatedValues[PT_WIDTH];
 
 			const ptWidthAnimation = Animated.timing(
 				animatedValue,
@@ -204,7 +240,11 @@ const parseAnimation = ({ animation }) => {
 			};
 
 		case PERCENTAGE_HEIGHT:
-			animatedValue = new Animated.Value(0);
+			if (!createdAnimatedValues[PERCENTAGE_HEIGHT]) {
+				createdAnimatedValues[PERCENTAGE_HEIGHT] = new Animated.Value(0);
+			}
+
+			animatedValue = createdAnimatedValues[PERCENTAGE_HEIGHT];
 
 			const percentageHeightAnimation = Animated.timing(
 				animatedValue,
@@ -224,7 +264,11 @@ const parseAnimation = ({ animation }) => {
 			};
 
 		case PERCENTAGE_WIDTH:
-			animatedValue = new Animated.Value(0);
+			if (!createdAnimatedValues[PERCENTAGE_WIDTH]) {
+				createdAnimatedValues[PERCENTAGE_WIDTH] = new Animated.Value(0);
+			}
+
+			animatedValue = createdAnimatedValues[PERCENTAGE_WIDTH];
 
 			const percentageWidthAnimation = Animated.timing(
 				animatedValue,
