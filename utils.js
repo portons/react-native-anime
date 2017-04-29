@@ -85,29 +85,7 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 
 	switch (animation.type) {
 		case ROTATE:
-			if (!animatedValues[ROTATE]) {
-				animatedValues[ROTATE] = new Animated.Value(0);
-			}
-
-			animatedValue = animatedValues[ROTATE];
-
-			const rotateAnimation = Animated.timing(
-				animatedValue,
-				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
-			);
-
-			const rotationInterpolation = animatedValue.interpolate({
-				inputRange: [0, animation.value],
-				outputRange: ['0deg', `${animation.value}deg`]
-			});
-
-			return {
-				animation: rotateAnimation,
-				styling: {
-					transform: true,
-					style: { rotate: rotationInterpolation }
-				}
-			};
+			return rotate(animation, animatedValues, finalAnimationsValues);
 
 		case BACKGROUND_COLOR:
 			if (!animatedValues[BACKGROUND_COLOR]) {
@@ -140,43 +118,10 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 			return moveY(animation, animatedValues, finalAnimationsValues);
 
 		case SCALE:
-			if (!animatedValues[SCALE]) {
-				animatedValues[SCALE] = new Animated.Value(1);
-			}
-
-			animatedValue = animatedValues[SCALE];
-
-			const scaleAnimation = Animated.timing(
-				animatedValue,
-				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
-			);
-
-			return {
-				animation: scaleAnimation,
-				styling: {
-					transform: true,
-					style: { scale: animatedValue }
-				}
-			};
+			return scale(animation, animatedValues);
 
 		case BORDER_RADIUS:
-			if (!animatedValues[BORDER_RADIUS]) {
-				animatedValues[BORDER_RADIUS] = new Animated.Value(0);
-			}
-
-			animatedValue = animatedValues[BORDER_RADIUS];
-
-			const borderRadiusAnimation = Animated.timing(
-				animatedValue,
-				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
-			);
-
-			return {
-				animation: borderRadiusAnimation,
-				styling: {
-					style: { borderRadius: animatedValue }
-				}
-			};
+			return borderRadius(animation, animatedValues);
 
 		case PT_HEIGHT:
 			if (!animatedValues[PT_HEIGHT]) {
@@ -272,10 +217,40 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 	}
 };
 
-const moveX = (animation, animatedValues, finalAnimationsValues) => {
-	if (!animatedValues[MOVE_X]) {
-		animatedValues[MOVE_X] = new Animated.Value(0);
+const rotate = (animation, animatedValues, finalAnimationsValues) => {
+	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
+
+	let startingPoint;
+
+	if (!finalAnimationsValues[ROTATE]) {
+		finalAnimationsValues[ROTATE] = animation.value;
+		startingPoint = 0;
+	} else {
+		finalAnimationsValues[ROTATE] = finalAnimationsValues[ROTATE] + animation.value;
+		startingPoint = finalAnimationsValues[ROTATE] - animation.value;
 	}
+
+	const rotateAnimation = Animated.timing(
+		animatedValues[ROTATE],
+		{ toValue: finalAnimationsValues[ROTATE], duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+	);
+
+	const rotationInterpolation = animatedValues[ROTATE].interpolate({
+		inputRange: [startingPoint, finalAnimationsValues[ROTATE]],
+		outputRange: [`${startingPoint}deg`, `${finalAnimationsValues[ROTATE]}deg`]
+	});
+
+	return {
+		animation: rotateAnimation,
+		styling: {
+			transform: true,
+			style: { rotate: rotationInterpolation }
+		}
+	};
+};
+
+const moveX = (animation, animatedValues, finalAnimationsValues) => {
+	animatedValues[MOVE_X] = animatedValues[MOVE_X] || new Animated.Value(0);
 
 	if (!finalAnimationsValues[MOVE_X]) {
 		finalAnimationsValues[MOVE_X] = animation.value;
@@ -298,9 +273,7 @@ const moveX = (animation, animatedValues, finalAnimationsValues) => {
 };
 
 const moveY = (animation, animatedValues, finalAnimationsValues) => {
-	if (!animatedValues[MOVE_Y]) {
-		animatedValues[MOVE_Y] = new Animated.Value(0);
-	}
+	animatedValues[MOVE_Y] = animatedValues[MOVE_Y] || new Animated.Value(0);
 
 	if (!finalAnimationsValues[MOVE_Y]) {
 		finalAnimationsValues[MOVE_Y] = animation.value;
@@ -318,6 +291,39 @@ const moveY = (animation, animatedValues, finalAnimationsValues) => {
 		styling: {
 			transform: true,
 			style: { translateY: animatedValues[MOVE_Y] }
+		}
+	};
+};
+
+const scale = (animation, animatedValues) => {
+	animatedValues[SCALE] = animatedValues[SCALE] || new Animated.Value(1);
+
+	const scaleAnimation = Animated.timing(
+		animatedValues[SCALE],
+		{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+	);
+
+	return {
+		animation: scaleAnimation,
+		styling: {
+			transform: true,
+			style: { scale: animatedValues[SCALE] }
+		}
+	};
+};
+
+const borderRadius = (animation, animatedValues) => {
+	animatedValues[BORDER_RADIUS] = animatedValues[BORDER_RADIUS] || new Animated.Value(0);
+
+	const borderRadiusAnimation = Animated.timing(
+		animatedValues[BORDER_RADIUS],
+		{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+	);
+
+	return {
+		animation: borderRadiusAnimation,
+		styling: {
+			style: { borderRadius: animatedValues[BORDER_RADIUS] }
 		}
 	};
 };
