@@ -80,35 +80,12 @@ const createAnimations = (sequences, animatedValues) => {
 };
 
 const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) => {
-	let animatedValue;
-
 	switch (animation.type) {
 		case ROTATE:
 			return rotate(animation, animatedValues, finalAnimationsValues);
 
 		case BACKGROUND_COLOR:
-			if (!animatedValues[BACKGROUND_COLOR]) {
-				animatedValues[BACKGROUND_COLOR] = new Animated.Value(0);
-			}
-
-			animatedValue = animatedValues[BACKGROUND_COLOR];
-
-			const bgColorAnimation = Animated.timing(
-				animatedValue,
-				{ toValue: 100, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
-			);
-
-			const bgColorInterpolation = animatedValue.interpolate({
-				inputRange: [0, 100],
-				outputRange: [get(animation, 'options.from') || 'white', animation.value]
-			});
-
-			return {
-				animation: bgColorAnimation,
-				styling: {
-					style: { backgroundColor: bgColorInterpolation }
-				}
-			};
+			return backgroundColor(animation, animatedValues, finalAnimationsValues);
 
 		case MOVE_X:
 			return moveX(animation, animatedValues, finalAnimationsValues);
@@ -130,9 +107,7 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 
 		case WAIT:
 		case DELAY:
-			return {
-				animation: Animated.delay(animation.duration)
-			};
+			return { animation: Animated.delay(animation.duration) };
 	}
 };
 
@@ -164,6 +139,33 @@ const rotate = (animation, animatedValues, finalAnimationsValues) => {
 		styling: {
 			transform: true,
 			style: { rotate: rotationInterpolation }
+		}
+	};
+};
+
+const backgroundColor = (animation, animatedValues, finalAnimationsValues) => {
+	animatedValues[BACKGROUND_COLOR] = animatedValues[BACKGROUND_COLOR] || new Animated.Value(0);
+
+	if (!finalAnimationsValues[BACKGROUND_COLOR]) {
+		finalAnimationsValues[BACKGROUND_COLOR] = animation.value;
+	} else {
+		finalAnimationsValues[BACKGROUND_COLOR] = finalAnimationsValues[BACKGROUND_COLOR] + animation.value;
+	}
+
+	const bgColorAnimation = Animated.timing(
+		animatedValues[BACKGROUND_COLOR],
+		{ toValue: 100, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+	);
+
+	const bgColorInterpolation = animatedValues[BACKGROUND_COLOR].interpolate({
+		inputRange: [0, 100],
+		outputRange: [animation.startingColor, animation.value]
+	});
+
+	return {
+		animation: bgColorAnimation,
+		styling: {
+			style: { backgroundColor: bgColorInterpolation }
 		}
 	};
 };

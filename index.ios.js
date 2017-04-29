@@ -13,6 +13,7 @@ export default class Root extends Component {
 			.width(25)
 			.wait(1000)
 			.height(50)
+			.backgroundColor('red')
 			.width(50)
 			.start();
 

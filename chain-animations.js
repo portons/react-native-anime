@@ -64,7 +64,7 @@ export default class ChainAnimations extends React.Component {
 			return this;
 		}
 
-		this.scenario.push({ type: BACKGROUND_COLOR, value, options });
+		this.scenario.push({ type: BACKGROUND_COLOR, value, options, startingColor: this.props.style.backgroundColor});
 
 		return this;
 	}
