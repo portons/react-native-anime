@@ -1,8 +1,7 @@
 import { Animated } from 'react-native';
 import { reduce, isEqual, last, forEach, get } from 'lodash';
 
-import { DEFAULT_DURATION, ROTATE, MOVE_Y, MOVE_X, WAIT, DELAY, SCALE, BACKGROUND_COLOR, BORDER_RADIUS, PT_WIDTH,
-				 PT_HEIGHT, PERCENTAGE_HEIGHT, PERCENTAGE_WIDTH } from './constants';
+import { DEFAULT_DURATION, ROTATE, MOVE_Y, MOVE_X, WAIT, DELAY, SCALE, BACKGROUND_COLOR, BORDER_RADIUS, WIDTH, HEIGHT } from './constants';
 
 export const scenarioParser = ({ scenario, animatedValues }) => {
 	const { sequenceAnimations, styles } = createAnimations(breakScenarioIntoSequences(scenario), animatedValues);
@@ -123,89 +122,41 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 		case BORDER_RADIUS:
 			return borderRadius(animation, animatedValues);
 
-		case PT_HEIGHT:
-			if (!animatedValues[PT_HEIGHT]) {
-				animatedValues[PT_HEIGHT] = new Animated.Value(0);
+		case HEIGHT:
+			if (!animatedValues[HEIGHT]) {
+				animatedValues[HEIGHT] = new Animated.Value(0);
 			}
 
-			animatedValue = animatedValues[PT_HEIGHT];
+			animatedValue = animatedValues[HEIGHT];
 
-			const ptHeightAnimation = Animated.timing(
+			const heightAnimation = Animated.timing(
 				animatedValue,
 				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
 			);
 
 			return {
-				animation: ptHeightAnimation,
+				animation: heightAnimation,
 				styling: {
 					style: { height: animatedValue }
 				}
 			};
 
-		case PT_WIDTH:
-			if (!animatedValues[PT_WIDTH]) {
-				animatedValues[PT_WIDTH] = new Animated.Value(0);
+		case WIDTH:
+			if (!animatedValues[WIDTH]) {
+				animatedValues[WIDTH] = new Animated.Value(0);
 			}
 
-			animatedValue = animatedValues[PT_WIDTH];
+			animatedValue = animatedValues[WIDTH];
 
-			const ptWidthAnimation = Animated.timing(
+			const widthAnimation = Animated.timing(
 				animatedValue,
 				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
 			);
 
 			return {
-				animation: ptWidthAnimation,
+				animation: widthAnimation,
 				styling: {
 					style: { width: animatedValue }
-				}
-			};
-
-		case PERCENTAGE_HEIGHT:
-			if (!animatedValues[PERCENTAGE_HEIGHT]) {
-				animatedValues[PERCENTAGE_HEIGHT] = new Animated.Value(0);
-			}
-
-			animatedValue = animatedValues[PERCENTAGE_HEIGHT];
-
-			const percentageHeightAnimation = Animated.timing(
-				animatedValue,
-				{ toValue: 100, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
-			);
-
-			const percentageHeightInterpolation = animatedValue.interpolate({
-				inputRange: [0, 100],
-				outputRange: ['0%', `${animation.value}%`]
-			});
-
-			return {
-				animation: percentageHeightAnimation,
-				styling: {
-					style: { height: percentageHeightInterpolation }
-				}
-			};
-
-		case PERCENTAGE_WIDTH:
-			if (!animatedValues[PERCENTAGE_WIDTH]) {
-				animatedValues[PERCENTAGE_WIDTH] = new Animated.Value(0);
-			}
-
-			animatedValue = animatedValues[PERCENTAGE_WIDTH];
-
-			const percentageWidthAnimation = Animated.timing(
-				animatedValue,
-				{ toValue: 100, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
-			);
-
-			const percentageWidthInterpolation = animatedValue.interpolate({
-				inputRange: [0, 100],
-				outputRange: ['0%', `${animation.value}%`]
-			});
-
-			return {
-				animation: percentageWidthAnimation,
-				styling: {
-					style: { width: percentageWidthInterpolation }
 				}
 			};
 

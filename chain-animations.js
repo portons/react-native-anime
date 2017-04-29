@@ -79,7 +79,7 @@ export default class ChainAnimations extends React.Component {
 		return this;
 	}
 
-	ptWidth(value, options = {}) {
+	width(value, options = {}) {
 		if (this.state.animating) {
 			return this;
 		}
@@ -89,32 +89,12 @@ export default class ChainAnimations extends React.Component {
 		return this;
 	}
 
-	ptHeight(value, options = {}) {
+	height(value, options = {}) {
 		if (this.state.animating) {
 			return this;
 		}
 
 		this.scenario.push({ type: PT_HEIGHT, value, options });
-
-		return this;
-	}
-
-	percentageHeight(value, options = {}) {
-		if (this.state.animating) {
-			return this;
-		}
-
-		this.scenario.push({ type: PERCENTAGE_HEIGHT, value, options });
-
-		return this;
-	}
-
-	percentageWidth(value, options = {}) {
-		if (this.state.animating) {
-			return this;
-		}
-
-		this.scenario.push({ type: PERCENTAGE_WIDTH, value, options });
 
 		return this;
 	}

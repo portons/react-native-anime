@@ -8,8 +8,39 @@ export default class Root extends Component {
 		this.box
 			.rotate(360 * 200, { duration: 2500 })
 			.borderRadius(50, { duration: 2500 })
-			.scale(1.5, { duration: 2000 })
-      .start()
+			.scale(1.5, { duration: 1500 })
+			.start();
+
+		//this.box
+		//	.rotate(360 * 200, { duration: 2500 })
+		//	.borderRadius(50, { duration: 2500 })
+		//	.scale(1.5, { duration: 1500 })
+     // .start();
+
+		//componentWillMount() {
+		//	this.rotation = new Animated.Value(0);
+		//	this.radius = new Animated.Value(0);
+		//	this.scale = new Animated.Value(0);
+		//
+		//	const rotate = Animated.timing(this.rotation, { toValue: 360 * 200, duration: 2500 });
+		//	const radius = Animated.timing(this.radius, { toValue: 50, duration: 2500 });
+		//	const scale = Animated.timing(this.scale, { toValue: 1.5, duration: 1500 });
+		//
+		//	Animated.parallel([
+		//		rotate,
+		//		radius,
+		//		scale
+		//	])
+		//}
+		//
+		//render() {
+		//	<Animated.View style={ [styles.container, {
+		//		borderRadius: this.borderRadius,
+		//		transform: [
+		//		{ rotate: this.rotation },
+		//		{ scale: this.scale }
+		//		] }] }/>
+		//}
   }
 
   stopBox() {
