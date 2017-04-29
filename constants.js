@@ -1,5 +1,4 @@
-import { Animated } from 'react-native';
-
+// Animation types
 export const ROTATE = 'rotate';
 export const MOVE_X = 'moveX';
 export const MOVE_Y = 'moveY';
@@ -13,10 +12,5 @@ export const PERCENTAGE_WIDTH = 'percentageWidth';
 export const BACKGROUND_COLOR = 'backgroundColor';
 export const BORDER_RADIUS = 'borderRadius';
 
+// Other
 export const DEFAULT_DURATION = 500;
-
-export const DEFAULT_SCENARIO_PART = {
-	animatedValue: new Animated.Value(0),
-	duration: DEFAULT_DURATION,
-	animations: []
-};

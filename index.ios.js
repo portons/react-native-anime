@@ -6,12 +6,14 @@ import ChainAnimations from './chain-animations';
 export default class Root extends Component {
   moveBox() {
 		this.box
-			.moveX(10, { duration: 1000 })
-			.wait(1000)
-			.moveX(-10, { duration: 1000 })
-			.backgroundColor('red', { duration: 1000, from: 'blue' })
-      .rotate(180, { duration: 1000 })
+			.moveX(50, { duration: 1000 })
+      .wait(1000)
+      .moveX(0, { duration: 1000 })
 			.start();
+  }
+
+  stopBox() {
+    this.box.stop();
   }
 
   render() {
@@ -32,6 +34,20 @@ export default class Root extends Component {
                          alignItems: 'center' }}>
             <Text>
               CLICK ME
+            </Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={ () => this.stopBox() }>
+          <View style={{ marginTop: 50,
+						width: 100,
+						height: 50,
+						borderRadius: 3,
+						backgroundColor: '#dedede',
+						justifyContent: 'center',
+						alignItems: 'center' }}>
+            <Text>
+              STOP ME
             </Text>
           </View>
         </TouchableOpacity>

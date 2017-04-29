@@ -151,10 +151,23 @@ export default class ChainAnimations extends React.Component {
 			animatedValues: assign({}, this.state.animatedValues)
 		});
 
-		this.setState({ styles, animatedValues, animating: true }, () => animations.start(() => {
+		this.setState({ styles, animatedValues, animating: true }, () => {
+			this.currentAnimation = animations;
+
+			this.currentAnimation.start(() => {
+				this.emptyScenario();
+				this.setState({ animating: false });
+			});
+		});
+	}
+
+	stop() {
+		if (this.state.animating) {
+			this.currentAnimation.stop();
 			this.emptyScenario();
 			this.setState({ animating: false });
-		}));
+			this.currentAnimation = null;
+		}
 	}
 
 	emptyScenario() {
