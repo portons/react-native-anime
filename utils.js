@@ -123,42 +123,10 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 			return borderRadius(animation, animatedValues);
 
 		case HEIGHT:
-			if (!animatedValues[HEIGHT]) {
-				animatedValues[HEIGHT] = new Animated.Value(0);
-			}
-
-			animatedValue = animatedValues[HEIGHT];
-
-			const heightAnimation = Animated.timing(
-				animatedValue,
-				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
-			);
-
-			return {
-				animation: heightAnimation,
-				styling: {
-					style: { height: animatedValue }
-				}
-			};
+			return height(animation, animatedValues, finalAnimationsValues);
 
 		case WIDTH:
-			if (!animatedValues[WIDTH]) {
-				animatedValues[WIDTH] = new Animated.Value(0);
-			}
-
-			animatedValue = animatedValues[WIDTH];
-
-			const widthAnimation = Animated.timing(
-				animatedValue,
-				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
-			);
-
-			return {
-				animation: widthAnimation,
-				styling: {
-					style: { width: animatedValue }
-				}
-			};
+			return width(animation, animatedValues, finalAnimationsValues);
 
 		case WAIT:
 		case DELAY:
@@ -275,6 +243,50 @@ const borderRadius = (animation, animatedValues) => {
 		animation: borderRadiusAnimation,
 		styling: {
 			style: { borderRadius: animatedValues[BORDER_RADIUS] }
+		}
+	};
+};
+
+const height = (animation, animatedValues, finalAnimationsValues) => {
+	animatedValues[HEIGHT] = animatedValues[HEIGHT] || new Animated.Value(animation.height);
+
+	if (!finalAnimationsValues[HEIGHT]) {
+		finalAnimationsValues[HEIGHT] = animation.value;
+	} else {
+		finalAnimationsValues[HEIGHT] = finalAnimationsValues[HEIGHT] + animation.value;
+	}
+
+	const heightAnimation = Animated.timing(
+		animatedValues[HEIGHT],
+		{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+	);
+
+	return {
+		animation: heightAnimation,
+		styling: {
+			style: { height: animatedValues[HEIGHT] }
+		}
+	};
+};
+
+const width = (animation, animatedValues, finalAnimationsValues) => {
+	animatedValues[WIDTH] = animatedValues[WIDTH] || new Animated.Value(animation.width);
+
+	if (!finalAnimationsValues[WIDTH]) {
+		finalAnimationsValues[WIDTH] = animation.value;
+	} else {
+		finalAnimationsValues[WIDTH] = finalAnimationsValues[WIDTH] + animation.value;
+	}
+
+	const widthAnimation = Animated.timing(
+		animatedValues[WIDTH],
+		{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+	);
+
+	return {
+		animation: widthAnimation,
+		styling: {
+			style: { width: animatedValues[WIDTH] }
 		}
 	};
 };

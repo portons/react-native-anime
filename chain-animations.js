@@ -3,8 +3,7 @@ import { Animated } from 'react-native';
 import { assign } from 'lodash';
 
 import { scenarioParser } from './utils';
-import { ROTATE, MOVE_X, MOVE_Y, WAIT, DELAY, SCALE, BACKGROUND_COLOR, BORDER_RADIUS, PT_WIDTH, PT_HEIGHT,
-				 PERCENTAGE_HEIGHT, PERCENTAGE_WIDTH} from './constants';
+import { ROTATE, MOVE_X, MOVE_Y, WAIT, DELAY, SCALE, BACKGROUND_COLOR, BORDER_RADIUS, WIDTH, HEIGHT } from './constants';
 
 export default class ChainAnimations extends React.Component {
 	constructor() {
@@ -17,6 +16,7 @@ export default class ChainAnimations extends React.Component {
 		};
 
 	  this.scenario = [];
+	  this.dimensionsSet = false;
 	}
 
 	moveX(value, options = {}) {
@@ -84,7 +84,7 @@ export default class ChainAnimations extends React.Component {
 			return this;
 		}
 
-		this.scenario.push({ type: PT_WIDTH, value, options });
+		this.scenario.push({ type: WIDTH, value, options, width: this.viewWidth });
 
 		return this;
 	}
@@ -94,7 +94,8 @@ export default class ChainAnimations extends React.Component {
 			return this;
 		}
 
-		this.scenario.push({ type: PT_HEIGHT, value, options });
+
+		this.scenario.push({ type: HEIGHT, value, options, height: this.viewHeight });
 
 		return this;
 	}
@@ -148,9 +149,18 @@ export default class ChainAnimations extends React.Component {
 		}
 	}
 
+	setDimensions({ height, width }) {
+		this.viewHeight = height;
+		this.viewWidth = width;
+		this.dimensionsSet = true;
+	}
+
 	render() {
+		const { styles } = this.state;
+
 	  return (
-	    <Animated.View style={ [this.props.style, this.state.styles] }>
+	    <Animated.View style={ [this.props.style, styles] }
+			               onLayout={ (event) => !this.dimensionsSet && this.setDimensions(event.nativeEvent.layout) }>
 				{ this.props.children }
 			</Animated.View>
 	  )

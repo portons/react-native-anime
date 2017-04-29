@@ -9,6 +9,11 @@ export default class Root extends Component {
 			.rotate(360 * 200, { duration: 2500 })
 			.borderRadius(50, { duration: 2500 })
 			.scale(1.5, { duration: 1500 })
+			.height(150)
+			.width(25)
+			.wait(1000)
+			.height(50)
+			.width(50)
 			.start();
 
 		//this.box
