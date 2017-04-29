@@ -1,5 +1,6 @@
 import React from 'react';
 import { Animated } from 'react-native';
+import { assign } from 'lodash';
 
 import { scenarioParser } from './utils';
 import { ROTATE, MOVE_X, MOVE_Y, WAIT, DELAY, SCALE, BACKGROUND_COLOR, BORDER_RADIUS, PT_WIDTH, PT_HEIGHT,
@@ -92,9 +93,16 @@ export default class ChainAnimations extends React.Component {
 	}
 
 	start() {
-		const { animations, styles } = scenarioParser(this.scenario);
+		const { animations, styles, animatedValues } = scenarioParser({
+			scenario: this.scenario,
+			animatedValues: assign({}, this.state.animatedValues)
+		});
 
-		this.setState({ styles }, () => animations.start());
+		this.setState({ styles, animatedValues }, () => animations.start(() => this.emptyScenario()));
+	}
+
+	emptyScenario() {
+		this.scenario = [];
 	}
 
 	render() {
