@@ -153,7 +153,7 @@ export default class ChainAnimations extends React.Component {
 			this.currentAnimation = animations;
 
 			this.currentAnimation.start(() => {
-				this.emptyScenario();
+				this.scenario = [];
 				this.setState({ animating: false });
 			});
 		});
@@ -162,14 +162,10 @@ export default class ChainAnimations extends React.Component {
 	stop() {
 		if (this.state.animating) {
 			this.currentAnimation.stop();
-			this.emptyScenario();
+			this.scenario = [];
 			this.setState({ animating: false });
 			this.currentAnimation = null;
 		}
-	}
-
-	emptyScenario() {
-		this.scenario = [];
 	}
 
 	render() {

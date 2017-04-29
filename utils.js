@@ -5,51 +5,16 @@ import { DEFAULT_DURATION, ROTATE, MOVE_Y, MOVE_X, WAIT, DELAY, SCALE, BACKGROUN
 				 PT_HEIGHT, PERCENTAGE_HEIGHT, PERCENTAGE_WIDTH } from './constants';
 
 export const scenarioParser = ({ scenario, animatedValues }) => {
-	const scenarioParts = breakScenarioIntoParts(scenario);
-	const { animations, styles } = createAnimations(scenarioParts, animatedValues);
+	const { sequenceAnimations, styles } = createAnimations(breakScenarioIntoSequences(scenario), animatedValues);
 
 	return {
-		animations: Animated.sequence(animations),
+		animations: Animated.sequence(sequenceAnimations),
 		animatedValues,
 		styles
 	}
 };
 
-const createAnimations = (scenarioParts, animatedValues) => {
-	const animations = [];
-	const styles = [ // transform is always first in array for convenience
-		{
-			transform: []
-		}
-	];
-
-	forEach(scenarioParts, (partAnimations) => {
-		const currentPartAnimations = [];
-
-		forEach(partAnimations, currentAnimation => {
-			const { animation, styling } = parseAnimation({ animation: currentAnimation, animatedValues });
-
-			currentPartAnimations.push(animation);
-
-			if (styling) {
-				if (styling.transform) {
-					styles[0].transform.push(styling.style)
-				} else {
-					styles.push(styling.style)
-				}
-			}
-		});
-
-		animations.push(Animated.parallel(currentPartAnimations));
-	});
-
-	return {
-		animations,
-		styles
-	}
-};
-
-const breakScenarioIntoParts = (scenario) => reduce(scenario, (acc, animation, index) => {
+const breakScenarioIntoSequences = (scenario) => reduce(scenario, (acc, animation, index) => {
 	const lastAnimation = last(acc);
 
 	switch (animation.type) {
@@ -75,6 +40,40 @@ const breakScenarioIntoParts = (scenario) => reduce(scenario, (acc, animation, i
 
 	return acc;
 }, [[]]);
+
+const createAnimations = (sequences, animatedValues) => {
+	const sequenceAnimations = [];
+	const styles = [ // transform is always first in array for convenience
+		{
+			transform: []
+		}
+	];
+
+	forEach(sequences, (parallels) => {
+		const currentPartAnimations = [];
+
+		forEach(parallels, currentAnimation => {
+			const { animation, styling } = parseAnimation({ animation: currentAnimation, animatedValues });
+
+			currentPartAnimations.push(animation);
+
+			if (styling) {
+				if (styling.transform) {
+					styles[0].transform.push(styling.style)
+				} else {
+					styles.push(styling.style)
+				}
+			}
+		});
+
+		sequenceAnimations.push(Animated.parallel(currentPartAnimations));
+	});
+
+	return {
+		sequenceAnimations,
+		styles
+	}
+};
 
 const parseAnimation = ({ animation, animatedValues }) => {
 	let animatedValue;
