@@ -1,7 +1,8 @@
 import { Animated } from 'react-native';
 import { reduce, isEqual, last, forEach, get } from 'lodash';
 
-import { DEFAULT_DURATION, ROTATE, MOVE_Y, MOVE_X, WAIT, DELAY } from './constants';
+import { DEFAULT_DURATION, ROTATE, MOVE_Y, MOVE_X, WAIT, DELAY, SCALE, BACKGROUND_COLOR, BORDER_RADIUS, PT_WIDTH,
+				 PT_HEIGHT, PERCENTAGE_HEIGHT, PERCENTAGE_WIDTH } from './constants';
 
 export const scenarioParser = (scenario) => {
 	const scenarioParts = reduce(scenario, (acc, animation, index) => {
@@ -76,7 +77,7 @@ const parseAnimation = ({ animation }) => {
 				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
 			);
 
-			const interpolation = animatedValue.interpolate({
+			const rotationInterpolation = animatedValue.interpolate({
 				inputRange: [0, animation.value],
 				outputRange: ['0deg', `${animation.value}deg`]
 			});
@@ -85,7 +86,27 @@ const parseAnimation = ({ animation }) => {
 				animation: rotateAnimation,
 				styling: {
 					transform: true,
-					style: { rotate: interpolation }
+					style: { rotate: rotationInterpolation }
+				}
+			};
+
+		case BACKGROUND_COLOR:
+			animatedValue = new Animated.Value(0);
+
+			const bgColorAnimation = Animated.timing(
+				animatedValue,
+				{ toValue: 100, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+			);
+
+			const bgColorInterpolation = animatedValue.interpolate({
+				inputRange: [0, 100],
+				outputRange: [get(animation, 'options.from') || 'white', animation.value]
+			});
+
+			return {
+				animation: bgColorAnimation,
+				styling: {
+					style: { backgroundColor: bgColorInterpolation }
 				}
 			};
 
@@ -118,6 +139,107 @@ const parseAnimation = ({ animation }) => {
 				styling: {
 					transform: true,
 					style: { translateY: animatedValue }
+				}
+			};
+
+		case SCALE:
+			animatedValue = new Animated.Value(1);
+
+			const scaleAnimation = Animated.timing(
+				animatedValue,
+				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+			);
+
+			return {
+				animation: scaleAnimation,
+				styling: {
+					transform: true,
+					style: { scale: animatedValue }
+				}
+			};
+
+		case BORDER_RADIUS:
+			animatedValue = new Animated.Value(1);
+
+			const borderRadiusAnimation = Animated.timing(
+				animatedValue,
+				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+			);
+
+			return {
+				animation: borderRadiusAnimation,
+				styling: {
+					style: { borderRadius: animatedValue }
+				}
+			};
+
+		case PT_HEIGHT:
+			animatedValue = new Animated.Value(0);
+
+			const ptHeightAnimation = Animated.timing(
+				animatedValue,
+				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+			);
+
+			return {
+				animation: ptHeightAnimation,
+				styling: {
+					style: { height: animatedValue }
+				}
+			};
+
+		case PT_WIDTH:
+			animatedValue = new Animated.Value(0);
+
+			const ptWidthAnimation = Animated.timing(
+				animatedValue,
+				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+			);
+
+			return {
+				animation: ptWidthAnimation,
+				styling: {
+					style: { width: animatedValue }
+				}
+			};
+
+		case PERCENTAGE_HEIGHT:
+			animatedValue = new Animated.Value(0);
+
+			const percentageHeightAnimation = Animated.timing(
+				animatedValue,
+				{ toValue: 100, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+			);
+
+			const percentageHeightInterpolation = animatedValue.interpolate({
+				inputRange: [0, 100],
+				outputRange: ['0%', `${animation.value}%`]
+			});
+
+			return {
+				animation: percentageHeightAnimation,
+				styling: {
+					style: { height: percentageHeightInterpolation }
+				}
+			};
+
+		case PERCENTAGE_WIDTH:
+			animatedValue = new Animated.Value(0);
+
+			const percentageWidthAnimation = Animated.timing(
+				animatedValue,
+				{ toValue: 100, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+			);
+
+			const percentageWidthInterpolation = animatedValue.interpolate({
+				inputRange: [0, 100],
+				outputRange: ['0%', `${animation.value}%`]
+			});
+
+			return {
+				animation: percentageWidthAnimation,
+				styling: {
+					style: { width: percentageWidthInterpolation }
 				}
 			};
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, Animated, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import { AppRegistry, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 
 import ChainAnimations from './chain-animations';
 
@@ -7,9 +7,15 @@ export default class Root extends Component {
   moveBox() {
 		this.box
 			.rotate(360, { duration: 2000 })
+			.scale(0.5, { duration: 2000 })
+			.ptHeight(300, { duration: 2000 })
+			.percentageWidth(50, { duration: 2000 })
+			.borderRadius(50, { duration: 2000 })
 			.wait(3000)
 			.moveX(50, { duration: 2000 })
+			.scale(2, { duration: 2000 })
 			.moveY(-30, { duration: 5000 })
+			.backgroundColor('red', { duration: 2000, from: 'blue' })
 			.start();
   }
 
@@ -47,8 +53,7 @@ const styles = StyleSheet.create({
   },
   box: {
     width: 50,
-    height: 50,
-    backgroundColor: 'blue'
+    height: 50
   }
 });
 
