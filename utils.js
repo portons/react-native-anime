@@ -42,6 +42,7 @@ const breakScenarioIntoSequences = (scenario) => reduce(scenario, (acc, animatio
 }, [[]]);
 
 const createAnimations = (sequences, animatedValues) => {
+	const finalAnimationsValues = {};
 	const sequenceAnimations = [];
 	const styles = [ // transform is always first in array for convenience
 		{
@@ -53,7 +54,11 @@ const createAnimations = (sequences, animatedValues) => {
 		const currentPartAnimations = [];
 
 		forEach(parallels, currentAnimation => {
-			const { animation, styling } = parseAnimation({ animation: currentAnimation, animatedValues });
+			const { animation, styling } = parseAnimation({
+				animation: currentAnimation,
+				animatedValues,
+				finalAnimationsValues
+			});
 
 			currentPartAnimations.push(animation);
 
@@ -75,7 +80,7 @@ const createAnimations = (sequences, animatedValues) => {
 	}
 };
 
-const parseAnimation = ({ animation, animatedValues }) => {
+const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) => {
 	let animatedValue;
 
 	switch (animation.type) {
@@ -129,44 +134,10 @@ const parseAnimation = ({ animation, animatedValues }) => {
 			};
 
 		case MOVE_X:
-			if (!animatedValues[MOVE_X]) {
-				animatedValues[MOVE_X] = new Animated.Value(0);
-			}
-
-			animatedValue = animatedValues[MOVE_X];
-
-			const xAnimation = Animated.timing(
-				animatedValue,
-				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
-			);
-
-			return {
-				animation: xAnimation,
-				styling: {
-					transform: true,
-					style: { translateX: animatedValue }
-				}
-			};
+			return moveX(animation, animatedValues, finalAnimationsValues);
 
 		case MOVE_Y:
-			if (!animatedValues[MOVE_Y]) {
-				animatedValues[MOVE_Y] = new Animated.Value(0);
-			}
-
-			animatedValue = animatedValues[MOVE_Y];
-
-			const yAnimation = Animated.timing(
-				animatedValue,
-				{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
-			);
-
-			return {
-				animation: yAnimation,
-				styling: {
-					transform: true,
-					style: { translateY: animatedValue }
-				}
-			};
+			return moveY(animation, animatedValues, finalAnimationsValues);
 
 		case SCALE:
 			if (!animatedValues[SCALE]) {
@@ -299,4 +270,54 @@ const parseAnimation = ({ animation, animatedValues }) => {
 				animation: Animated.delay(animation.duration)
 			};
 	}
+};
+
+const moveX = (animation, animatedValues, finalAnimationsValues) => {
+	if (!animatedValues[MOVE_X]) {
+		animatedValues[MOVE_X] = new Animated.Value(0);
+	}
+
+	if (!finalAnimationsValues[MOVE_X]) {
+		finalAnimationsValues[MOVE_X] = animation.value;
+	} else {
+		finalAnimationsValues[MOVE_X] = finalAnimationsValues[MOVE_X] + animation.value;
+	}
+
+	const xAnimation = Animated.timing(
+		animatedValues[MOVE_X],
+		{ toValue: finalAnimationsValues[MOVE_X], duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+	);
+
+	return {
+		animation: xAnimation,
+		styling: {
+			transform: true,
+			style: { translateX: animatedValues[MOVE_X] }
+		}
+	};
+};
+
+const moveY = (animation, animatedValues, finalAnimationsValues) => {
+	if (!animatedValues[MOVE_Y]) {
+		animatedValues[MOVE_Y] = new Animated.Value(0);
+	}
+
+	if (!finalAnimationsValues[MOVE_Y]) {
+		finalAnimationsValues[MOVE_Y] = animation.value;
+	} else {
+		finalAnimationsValues[MOVE_Y] = finalAnimationsValues[MOVE_Y] + animation.value;
+	}
+
+	const yAnimation = Animated.timing(
+		animatedValues[MOVE_Y],
+		{ toValue: finalAnimationsValues[MOVE_Y], duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+	);
+
+	return {
+		animation: yAnimation,
+		styling: {
+			transform: true,
+			style: { translateY: animatedValues[MOVE_Y] }
+		}
+	};
 };

@@ -6,9 +6,14 @@ import ChainAnimations from './chain-animations';
 export default class Root extends Component {
   moveBox() {
 		this.box
-      .moveX(50)
-      .wait()
-      .moveX(0)
+      .moveY(-20)
+			.moveX(20)
+      .wait(1000)
+      .moveY(-20)
+			.moveX(20)
+      .wait(1000)
+      .moveY(40)
+			.moveX(-40)
       .start()
   }
 
