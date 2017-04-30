@@ -160,7 +160,11 @@ const rotate = (animation, animatedValues, finalAnimationsValues) => {
 
 	const rotateAnimation = Animated.timing(
 		animatedValues[ROTATE],
-		{ toValue: finalAnimationsValues[ROTATE], duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+		{
+			toValue: finalAnimationsValues[ROTATE],
+			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+			delay: get(animation, 'options.delay') || 0
+		}
 	);
 
 	const rotationInterpolation = animatedValues[ROTATE].interpolate({
@@ -192,7 +196,11 @@ const backgroundColor = (animation, animatedValues, finalAnimationsValues) => {
 
 	const bgColorAnimation = Animated.timing(
 		animatedValues[BACKGROUND_COLOR],
-		{ toValue: 100, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+		{
+			toValue: 100,
+			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+			delay: get(animation, 'options.delay') || 0
+		}
 	);
 
 	const bgColorInterpolation = animatedValues[BACKGROUND_COLOR].interpolate({
@@ -219,7 +227,11 @@ const moveX = (animation, animatedValues, finalAnimationsValues) => {
 
 	const xAnimation = Animated.timing(
 		animatedValues[MOVE_X],
-		{ toValue: finalAnimationsValues[MOVE_X], duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+		{
+			toValue: finalAnimationsValues[MOVE_X],
+			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+			delay: get(animation, 'options.delay') || 0
+		}
 	);
 
 	return {
@@ -242,7 +254,11 @@ const moveY = (animation, animatedValues, finalAnimationsValues) => {
 
 	const yAnimation = Animated.timing(
 		animatedValues[MOVE_Y],
-		{ toValue: finalAnimationsValues[MOVE_Y], duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+		{
+			toValue: finalAnimationsValues[MOVE_Y],
+			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+			delay: get(animation, 'options.delay') || 0
+		}
 	);
 
 	return {
@@ -259,7 +275,11 @@ const scale = (animation, animatedValues) => {
 
 	const scaleAnimation = Animated.timing(
 		animatedValues[SCALE],
-		{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+		{
+			toValue: animation.value,
+			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+			delay: get(animation, 'options.delay') || 0
+		}
 	);
 
 	return {
@@ -276,7 +296,11 @@ const borderRadius = (animation, animatedValues) => {
 
 	const borderRadiusAnimation = Animated.timing(
 		animatedValues[BORDER_RADIUS],
-		{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+		{
+			toValue: animation.value,
+			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+			delay: get(animation, 'options.delay') || 0
+		}
 	);
 
 	return {
@@ -298,7 +322,11 @@ const height = (animation, animatedValues, finalAnimationsValues) => {
 
 	const heightAnimation = Animated.timing(
 		animatedValues[HEIGHT],
-		{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+		{
+			toValue: animation.value,
+			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+			delay: get(animation, 'options.delay') || 0
+		}
 	);
 
 	return {
@@ -320,7 +348,11 @@ const width = (animation, animatedValues, finalAnimationsValues) => {
 
 	const widthAnimation = Animated.timing(
 		animatedValues[WIDTH],
-		{ toValue: animation.value, duration: get(animation, 'options.duration') || DEFAULT_DURATION }
+		{
+			toValue: animation.value,
+			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+			delay: get(animation, 'options.delay') || 0
+		}
 	);
 
 	return {
