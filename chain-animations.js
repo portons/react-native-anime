@@ -145,6 +145,17 @@ export default class ChainAnimations extends React.Component {
 		this.dimensionsSet = true;
 	}
 
+	reset() {
+		this.scenario = [];
+		this.dimensionsSet = false;
+
+		this.setState({
+			styles: {},
+			animatedValues: null,
+			animating: false
+		});
+	}
+
 	render() {
 		const { styles } = this.state;
 
