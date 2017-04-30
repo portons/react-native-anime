@@ -11,7 +11,8 @@ import {
 	BACKGROUND_COLOR,
 	BORDER_RADIUS,
 	WIDTH,
-	HEIGHT
+	HEIGHT,
+	SPRING
 } from './constants';
 
 /*
@@ -158,14 +159,23 @@ const rotate = (animation, animatedValues, finalAnimationsValues) => {
 		startingPoint = finalAnimationsValues[ROTATE] - animation.value;
 	}
 
-	const rotateAnimation = Animated.timing(
-		animatedValues[ROTATE],
-		{
-			toValue: finalAnimationsValues[ROTATE],
-			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
-			delay: get(animation, 'options.delay') || 0
-		}
-	);
+	let rotateAnimation;
+
+	if (get(animation, 'options.type') === SPRING) {
+		rotateAnimation = Animated.spring(
+			animatedValues[ROTATE],
+			{ toValue: finalAnimationsValues[ROTATE] }
+		)
+	} else {
+		rotateAnimation = Animated.timing(
+			animatedValues[ROTATE],
+			{
+				toValue: finalAnimationsValues[ROTATE],
+				duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+				delay: get(animation, 'options.delay') || 0
+			}
+		)
+	}
 
 	const rotationInterpolation = animatedValues[ROTATE].interpolate({
 		outputRange: startingPoint > finalAnimationsValues[ROTATE]
@@ -194,14 +204,23 @@ const backgroundColor = (animation, animatedValues, finalAnimationsValues) => {
 		finalAnimationsValues[BACKGROUND_COLOR] = finalAnimationsValues[BACKGROUND_COLOR] + animation.value;
 	}
 
-	const bgColorAnimation = Animated.timing(
-		animatedValues[BACKGROUND_COLOR],
-		{
-			toValue: 100,
-			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
-			delay: get(animation, 'options.delay') || 0
-		}
-	);
+	let bgColorAnimation;
+
+	if (get(animation, 'options.type') === SPRING) {
+		bgColorAnimation = Animated.spring(
+			animatedValues[BACKGROUND_COLOR],
+			{ toValue: 100 }
+		);
+	} else {
+		bgColorAnimation = Animated.timing(
+			animatedValues[BACKGROUND_COLOR],
+			{
+				toValue: 100,
+				duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+				delay: get(animation, 'options.delay') || 0
+			}
+		);
+	}
 
 	const bgColorInterpolation = animatedValues[BACKGROUND_COLOR].interpolate({
 		inputRange: [0, 100],
@@ -225,14 +244,23 @@ const moveX = (animation, animatedValues, finalAnimationsValues) => {
 		finalAnimationsValues[MOVE_X] = finalAnimationsValues[MOVE_X] + animation.value;
 	}
 
-	const xAnimation = Animated.timing(
-		animatedValues[MOVE_X],
-		{
-			toValue: finalAnimationsValues[MOVE_X],
-			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
-			delay: get(animation, 'options.delay') || 0
-		}
-	);
+	let xAnimation;
+
+	if (get(animation, 'options.type') === SPRING) {
+		xAnimation = Animated.spring(
+			animatedValues[MOVE_X],
+			{ toValue: finalAnimationsValues[MOVE_X] }
+		);
+	} else {
+		xAnimation = Animated.timing(
+			animatedValues[MOVE_X],
+			{
+				toValue: finalAnimationsValues[MOVE_X],
+				duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+				delay: get(animation, 'options.delay') || 0
+			}
+		);
+	}
 
 	return {
 		animation: xAnimation,
@@ -252,14 +280,23 @@ const moveY = (animation, animatedValues, finalAnimationsValues) => {
 		finalAnimationsValues[MOVE_Y] = finalAnimationsValues[MOVE_Y] + animation.value;
 	}
 
-	const yAnimation = Animated.timing(
-		animatedValues[MOVE_Y],
-		{
-			toValue: finalAnimationsValues[MOVE_Y],
-			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
-			delay: get(animation, 'options.delay') || 0
-		}
-	);
+	let yAnimation;
+
+	if (get(animation, 'options.type') === SPRING) {
+		yAnimation = Animated.spring(
+			animatedValues[MOVE_Y],
+			{ toValue: finalAnimationsValues[MOVE_Y] }
+		);
+	} else {
+		yAnimation = Animated.timing(
+			animatedValues[MOVE_Y],
+			{
+				toValue: finalAnimationsValues[MOVE_Y],
+				duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+				delay: get(animation, 'options.delay') || 0
+			}
+		);
+	}
 
 	return {
 		animation: yAnimation,
@@ -273,14 +310,23 @@ const moveY = (animation, animatedValues, finalAnimationsValues) => {
 const scale = (animation, animatedValues) => {
 	animatedValues[SCALE] = animatedValues[SCALE] || new Animated.Value(1);
 
-	const scaleAnimation = Animated.timing(
-		animatedValues[SCALE],
-		{
-			toValue: animation.value,
-			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
-			delay: get(animation, 'options.delay') || 0
-		}
-	);
+	let scaleAnimation;
+
+	if (get(animation, 'options.type') === SPRING) {
+		scaleAnimation = Animated.spring(
+			animatedValues[SCALE],
+			{ toValue: animation.value }
+		);
+	} else {
+		scaleAnimation = Animated.timing(
+			animatedValues[SCALE],
+			{
+				toValue: animation.value,
+				duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+				delay: get(animation, 'options.delay') || 0
+			}
+		);
+	}
 
 	return {
 		animation: scaleAnimation,
@@ -294,14 +340,23 @@ const scale = (animation, animatedValues) => {
 const borderRadius = (animation, animatedValues) => {
 	animatedValues[BORDER_RADIUS] = animatedValues[BORDER_RADIUS] || new Animated.Value(0);
 
-	const borderRadiusAnimation = Animated.timing(
-		animatedValues[BORDER_RADIUS],
-		{
-			toValue: animation.value,
-			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
-			delay: get(animation, 'options.delay') || 0
-		}
-	);
+	let borderRadiusAnimation;
+
+	if (get(animation, 'options.type') === SPRING) {
+		borderRadiusAnimation = Animated.spring(
+			animatedValues[BORDER_RADIUS],
+			{ toValue: animation.value }
+		);
+	} else {
+		borderRadiusAnimation = Animated.timing(
+			animatedValues[BORDER_RADIUS],
+			{
+				toValue: animation.value,
+				duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+				delay: get(animation, 'options.delay') || 0
+			}
+		);
+	}
 
 	return {
 		animation: borderRadiusAnimation,
@@ -320,14 +375,23 @@ const height = (animation, animatedValues, finalAnimationsValues) => {
 		finalAnimationsValues[HEIGHT] = finalAnimationsValues[HEIGHT] + animation.value;
 	}
 
-	const heightAnimation = Animated.timing(
-		animatedValues[HEIGHT],
-		{
-			toValue: animation.value,
-			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
-			delay: get(animation, 'options.delay') || 0
-		}
-	);
+	let heightAnimation;
+
+	if (get(animation, 'options.type') === SPRING) {
+		heightAnimation = Animated.spring(
+			animatedValues[HEIGHT],
+			{ toValue: animation.value }
+		);
+	} else {
+		heightAnimation = Animated.timing(
+			animatedValues[HEIGHT],
+			{
+				toValue: animation.value,
+				duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+				delay: get(animation, 'options.delay') || 0
+			}
+		);
+	}
 
 	return {
 		animation: heightAnimation,
@@ -346,14 +410,23 @@ const width = (animation, animatedValues, finalAnimationsValues) => {
 		finalAnimationsValues[WIDTH] = finalAnimationsValues[WIDTH] + animation.value;
 	}
 
-	const widthAnimation = Animated.timing(
-		animatedValues[WIDTH],
-		{
-			toValue: animation.value,
-			duration: get(animation, 'options.duration') || DEFAULT_DURATION,
-			delay: get(animation, 'options.delay') || 0
-		}
-	);
+	let widthAnimation;
+
+	if (get(animation, 'options.type') === SPRING) {
+		widthAnimation = Animated.spring(
+			animatedValues[WIDTH],
+			{ toValue: animation.value }
+		);
+	} else {
+		widthAnimation = Animated.timing(
+			animatedValues[WIDTH],
+			{
+				toValue: animation.value,
+				duration: get(animation, 'options.duration') || DEFAULT_DURATION,
+				delay: get(animation, 'options.delay') || 0
+			}
+		);
+	}
 
 	return {
 		animation: widthAnimation,

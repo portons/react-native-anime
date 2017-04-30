@@ -6,9 +6,7 @@ import ChainAnimations from './chain-animations';
 export default class Root extends Component {
   moveBox() {
   	this.box
-			.moveX(10, { duration: 2000 })
-			.moveY(10, { duration: 1000, delay: 1000 })
-			.backgroundColor('red', { duration: 2000, delay: 2000 })
+			.width(150, { type: 'spring' })
 			.start();
   }
 
