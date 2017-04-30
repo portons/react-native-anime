@@ -14,6 +14,8 @@ import {
 	HEIGHT
 } from './constants';
 
+const noEasing = (value) => value;
+
 /*
  * Parses the whole scenario, and returns: final Animated object, updated styles, updated Animated values
  *
@@ -134,8 +136,6 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 			return wait(animation);
 	}
 };
-
-const noEasing = (value) => value;
 
 const createTimingAnimation = (toValue, options, animatedValue) => Animated.timing(
 	animatedValue,

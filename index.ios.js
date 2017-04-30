@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, View, TouchableOpacity, Text, Easing } from 'react-native';
+import { AppRegistry, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 
 import ChainAnimations from './chain-animations';
 
 export default class Root extends Component {
   moveBox() {
   	this.box
-			.width(150)
-			//.width(150, { type: 'spring' })
+			.moveX(50)
 			.start();
   }
 
@@ -78,7 +77,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: 'white',
   },
   box: {
     width: 50,
