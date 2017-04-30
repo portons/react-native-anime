@@ -1,18 +1,15 @@
 # React Native Easy Animations
----
 (Inspired by Cheetah for Swift: https://github.com/suguru/Cheetah)
 
 RNEasyAnimations is an animation utility. It can animate many of the style properties the Animated library works with.
 
 # Features
----
 * Animation with duration and delay
 * Parallel/Serial executions
 * Easings
 * Springs
 
 # Code Example
----
 ```javascript
 // Wrap your view with EasyAnimations component and save its reference
 render () {
@@ -30,7 +27,6 @@ onClick() {
 ```
 
 # Properties
----
 
 * moveX (move in X plane)
 * moveY (move in Y plane)
@@ -42,7 +38,6 @@ onClick() {
 * backgroundColor
 
 # Parallel execution
----
 EasyAnimations groups animation properties and execute them at once.
 
 ```javascript
@@ -54,7 +49,6 @@ EasyAnimations groups animation properties and execute them at once.
 ```
 
 # Sequence execution
----
 `wait` will wait until all animations placed before it completed. It can also receive seconds to wait to start next animation.
 
 ```javascript
@@ -66,7 +60,6 @@ EasyAnimations groups animation properties and execute them at once.
 ```
 
 # Duration, delay, easing
----
 Just like when using Animated, you can specify durations, delays, easings for your animations
 
 ```javascript
@@ -81,7 +74,6 @@ Just like when using Animated, you can specify durations, delays, easings for yo
 ```
 
 # Spring
----
 You can also use Animated's spring animations, together with all its options
 
 ```javascript
