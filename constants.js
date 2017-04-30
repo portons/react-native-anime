@@ -11,4 +11,3 @@ export const BORDER_RADIUS = 'borderRadius';
 
 // Other
 export const DEFAULT_DURATION = 500;
-export const SPRING = 'spring';

@@ -1,5 +1,5 @@
 import { Animated } from 'react-native';
-import { reduce, isEqual, last, forEach, get } from 'lodash';
+import { reduce, isEqual, last, forEach, get, isBoolean } from 'lodash';
 
 import {
 	DEFAULT_DURATION,
@@ -11,8 +11,7 @@ import {
 	BACKGROUND_COLOR,
 	BORDER_RADIUS,
 	WIDTH,
-	HEIGHT,
-	SPRING
+	HEIGHT
 } from './constants';
 
 /*
@@ -40,20 +39,10 @@ export const scenarioParser = ({ scenario, animatedValues }) => {
 };
 
 /*
- * Breaks a scenario into a sequence of parallel animations, when the wait() animation is the divider between them
- * For example, if given the following scenario: '.rotate(10).moveX(10).wait(100).moveY(10)', it will build:
- * Animated.sequence([
- * 	Animated.parallel([
- * 		Animated.timing(rotateAnimatedValue, { toValue: 10 }),
- * 		Animated.timing(translateXAnimatedValue, { toValue: 10 })
- * 	]),
- * 	Animated.parallel([
- * 		Animated.delay(100)
- * 	]),
- * 	Animated.parallel([
- * 		Animated.timing(translateYAnimatedValue, { toValue: 10 })
- * 	])
- * ])
+ * Breaks scenario into a sequence of parallel animations, when wait() animation is the divider between them
+ *
+ * For example, if given the following scenario: '.rotate(10).moveX(10).wait(100).moveY(10)', it will return:
+ * [[rotateConfig, moveXConfig], [delay], [moveYConfig]]
  *
  * @param scenario - a list of animations configs used to build the whole animation
  */
@@ -155,9 +144,13 @@ const createTimingAnimation = (toValue, options, animatedValue) => Animated.timi
 	}
 );
 
-const createSpringAnimation = (toValue, options, animatedValue) => Animated.spring(
-	animatedValue, { toValue }
-);
+const createSpringAnimation = (toValue, { spring }, animatedValue) => {
+	return isBoolean(spring)
+		? Animated.spring(animatedValue, { toValue })
+		: Animated.spring(
+			animatedValue, { toValue, ...spring }
+		);
+};
 
 const rotate = (animation, animatedValues, finalAnimationsValues) => {
 	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
@@ -174,7 +167,7 @@ const rotate = (animation, animatedValues, finalAnimationsValues) => {
 
 	let rotateAnimation;
 
-	if (get(animation, 'options.type') === SPRING) {
+	if (get(animation, 'options.spring')) {
 		rotateAnimation = createSpringAnimation(finalAnimationsValues[ROTATE], animation.options, animatedValues[ROTATE]);
 	} else {
 		rotateAnimation = createTimingAnimation(finalAnimationsValues[ROTATE], animation.options, animatedValues[ROTATE]);
@@ -209,7 +202,7 @@ const backgroundColor = (animation, animatedValues, finalAnimationsValues) => {
 
 	let bgColorAnimation;
 
-	if (get(animation, 'options.type') === SPRING) {
+	if (get(animation, 'options.spring')) {
 		bgColorAnimation = createSpringAnimation(100, animation.options, animatedValues[BACKGROUND_COLOR]);
 	} else {
 		bgColorAnimation = createTimingAnimation(100, animation.options, animatedValues[BACKGROUND_COLOR]);
@@ -239,7 +232,7 @@ const moveX = (animation, animatedValues, finalAnimationsValues) => {
 
 	let xAnimation;
 
-	if (get(animation, 'options.type') === SPRING) {
+	if (get(animation, 'options.spring')) {
 		xAnimation = createSpringAnimation(finalAnimationsValues[MOVE_X], animation.options, animatedValues[MOVE_X]);
 	} else {
 		xAnimation = createTimingAnimation(finalAnimationsValues[MOVE_X], animation.options, animatedValues[MOVE_X]);
@@ -265,7 +258,7 @@ const moveY = (animation, animatedValues, finalAnimationsValues) => {
 
 	let yAnimation;
 
-	if (get(animation, 'options.type') === SPRING) {
+	if (get(animation, 'options.spring')) {
 		yAnimation = createSpringAnimation(finalAnimationsValues[MOVE_Y], animation.options, animatedValues[MOVE_Y]);
 	} else {
 		yAnimation = createTimingAnimation(finalAnimationsValues[MOVE_Y], animation.options, animatedValues[MOVE_Y]);
@@ -285,7 +278,7 @@ const scale = (animation, animatedValues) => {
 
 	let scaleAnimation;
 
-	if (get(animation, 'options.type') === SPRING) {
+	if (get(animation, 'options.spring')) {
 		scaleAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[SCALE]);
 	} else {
 		scaleAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[SCALE]);
@@ -305,7 +298,7 @@ const borderRadius = (animation, animatedValues) => {
 
 	let borderRadiusAnimation;
 
-	if (get(animation, 'options.type') === SPRING) {
+	if (get(animation, 'options.spring')) {
 		borderRadiusAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[BORDER_RADIUS]);
 	} else {
 		borderRadiusAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[BORDER_RADIUS]);
@@ -330,7 +323,7 @@ const height = (animation, animatedValues, finalAnimationsValues) => {
 
 	let heightAnimation;
 
-	if (get(animation, 'options.type') === SPRING) {
+	if (get(animation, 'options.spring')) {
 		heightAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[HEIGHT]);
 	} else {
 		heightAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[HEIGHT]);
@@ -355,7 +348,7 @@ const width = (animation, animatedValues, finalAnimationsValues) => {
 
 	let widthAnimation;
 
-	if (get(animation, 'options.type') === SPRING) {
+	if (get(animation, 'options.spring')) {
 		widthAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[WIDTH]);
 	} else {
 		widthAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[WIDTH]);

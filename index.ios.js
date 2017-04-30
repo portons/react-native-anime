@@ -6,7 +6,7 @@ import ChainAnimations from './chain-animations';
 export default class Root extends Component {
   moveBox() {
   	this.box
-			.width(150)
+			.width(150, { spring: { tension: 20, friction: 3 } })
 			//.width(150, { type: 'spring' })
 			.start();
   }
