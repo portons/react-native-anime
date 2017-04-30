@@ -3,7 +3,7 @@ import { Animated } from 'react-native';
 import { assign } from 'lodash';
 
 import { scenarioParser } from './utils';
-import { ROTATE, MOVE_X, MOVE_Y, WAIT, DELAY, SCALE, BACKGROUND_COLOR, BORDER_RADIUS, WIDTH, HEIGHT } from './constants';
+import { ROTATE, MOVE_X, MOVE_Y, WAIT, SCALE, BACKGROUND_COLOR, BORDER_RADIUS, WIDTH, HEIGHT } from './constants';
 
 export default class ChainAnimations extends React.Component {
 	constructor() {
@@ -94,18 +94,7 @@ export default class ChainAnimations extends React.Component {
 			return this;
 		}
 
-
 		this.scenario.push({ type: HEIGHT, value, options, height: this.viewHeight });
-
-		return this;
-	}
-
-	delay(duration) {
-		if (this.state.animating) {
-			return this;
-		}
-
-		this.scenario.push({ type: DELAY, duration });
 
 		return this;
 	}
@@ -152,6 +141,7 @@ export default class ChainAnimations extends React.Component {
 	setDimensions({ height, width }) {
 		this.viewHeight = height;
 		this.viewWidth = width;
+
 		this.dimensionsSet = true;
 	}
 

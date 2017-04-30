@@ -5,48 +5,23 @@ import ChainAnimations from './chain-animations';
 
 export default class Root extends Component {
   moveBox() {
-		this.box
-			.rotate(360 * 200, { duration: 2500 })
-			.borderRadius(50, { duration: 2500 })
-			.scale(1.5, { duration: 1500 })
-			.height(150)
-			.width(25)
-			.wait(1000)
-			.height(50)
-			.backgroundColor('red')
-			.width(50)
+  	this.box
+			.moveX(10, { duration: 2000 })
+			.moveY(10, { duration: 1000 })
 			.start();
 
 		//this.box
-		//	.rotate(360 * 200, { duration: 2500 })
+		//	.rotate(360 * 20, { duration: 2500 })
 		//	.borderRadius(50, { duration: 2500 })
 		//	.scale(1.5, { duration: 1500 })
-     // .start();
-
-		//componentWillMount() {
-		//	this.rotation = new Animated.Value(0);
-		//	this.radius = new Animated.Value(0);
-		//	this.scale = new Animated.Value(0);
-		//
-		//	const rotate = Animated.timing(this.rotation, { toValue: 360 * 200, duration: 2500 });
-		//	const radius = Animated.timing(this.radius, { toValue: 50, duration: 2500 });
-		//	const scale = Animated.timing(this.scale, { toValue: 1.5, duration: 1500 });
-		//
-		//	Animated.parallel([
-		//		rotate,
-		//		radius,
-		//		scale
-		//	])
-		//}
-		//
-		//render() {
-		//	<Animated.View style={ [styles.container, {
-		//		borderRadius: this.borderRadius,
-		//		transform: [
-		//		{ rotate: this.rotation },
-		//		{ scale: this.scale }
-		//		] }] }/>
-		//}
+		//	.height(150)
+		//	.width(25)
+		//	.wait(1000)
+		//	.backgroundColor('red', { duration: 3000 })
+		//	.width(150)
+		//	.rotate(360 * 20, { duration: 2500 })
+		//	.borderRadius(150, { duration: 2500 })
+		//	.start();
   }
 
   stopBox() {

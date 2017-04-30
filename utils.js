@@ -1,9 +1,34 @@
 import { Animated } from 'react-native';
 import { reduce, isEqual, last, forEach, get } from 'lodash';
 
-import { DEFAULT_DURATION, ROTATE, MOVE_Y, MOVE_X, WAIT, DELAY, SCALE, BACKGROUND_COLOR, BORDER_RADIUS, WIDTH, HEIGHT } from './constants';
+import {
+	DEFAULT_DURATION,
+	ROTATE,
+	MOVE_Y,
+	MOVE_X,
+	WAIT,
+	SCALE,
+	BACKGROUND_COLOR,
+	BORDER_RADIUS,
+	WIDTH,
+	HEIGHT
+} from './constants';
 
+/*
+ * Parses the whole scenario, and returns: final Animated object, updated styles, updated Animated values
+ *
+ * @param scenario - a list of animation configs which are used to build the whole animation sequence
+ * @param animatedValues - an object consisting of 'type: animated.value' pairs. If the component was already animated,
+ * we use these values to 'continue' the animations from their last state and not start over from original state
+ *
+ * @return ({
+ *  - animations: the final Animated object, which is a sequence of parallel animations
+ *  - animatedValues: updated collection of animated values with new values for new types of animations
+ *  - styles: a list of styles connected to their Animated values
+ * })
+ */
 export const scenarioParser = ({ scenario, animatedValues }) => {
+	// Break the main scenario into sequence of parallel animations, and then build the final animation using previously used Animated values
 	const { sequenceAnimations, styles } = createAnimations(breakScenarioIntoSequences(scenario), animatedValues);
 
 	return {
@@ -13,24 +38,34 @@ export const scenarioParser = ({ scenario, animatedValues }) => {
 	}
 };
 
+/*
+ * Breaks a scenario into a sequence of parallel animations, when the wait() animation is the divider between them
+ * For example, if given the following scenario: '.rotate(10).moveX(10).wait(100).moveY(10)', it will build:
+ * Animated.sequence([
+ * 	Animated.parallel([
+ * 		Animated.timing(rotateAnimatedValue, { toValue: 10 }),
+ * 		Animated.timing(translateXAnimatedValue, { toValue: 10 })
+ * 	]),
+ * 	Animated.parallel([
+ * 		Animated.delay(100)
+ * 	]),
+ * 	Animated.parallel([
+ * 		Animated.timing(translateYAnimatedValue, { toValue: 10 })
+ * 	])
+ * ])
+ *
+ * @param scenario - a list of animations configs used to build the whole animation
+ */
 const breakScenarioIntoSequences = (scenario) => reduce(scenario, (acc, animation, index) => {
 	const lastAnimation = last(acc);
 
 	switch (animation.type) {
-		// WAIT animation breaks the main animation into sequences. Each sequence runs animations in parallel
 		case WAIT:
 			if (!isEqual(index, scenario.length - 1)) {
 				acc.push([animation]);
 				acc.push([]);
 			}
 
-			break;
-
-		// Pushes Animated.delay before the last added animation
-		case DELAY:
-			const arrayLen = lastAnimation.length;
-
-			lastAnimation.splice(arrayLen - 1, 0, animation);
 			break;
 
 		default:
@@ -106,8 +141,7 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 			return width(animation, animatedValues, finalAnimationsValues);
 
 		case WAIT:
-		case DELAY:
-			return { animation: Animated.delay(animation.duration) };
+			return wait(animation);
 	}
 };
 
@@ -296,3 +330,5 @@ const width = (animation, animatedValues, finalAnimationsValues) => {
 		}
 	};
 };
+
+const wait = (animation) => ({ animation: Animated.delay(animation.duration) });
