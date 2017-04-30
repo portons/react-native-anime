@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import { AppRegistry, StyleSheet, View, TouchableOpacity, Text, Easing } from 'react-native';
 
 import ChainAnimations from './chain-animations';
 
 export default class Root extends Component {
   moveBox() {
   	this.box
-			.width(150, { spring: { tension: 20, friction: 3 } })
+			.width(150)
 			//.width(150, { type: 'spring' })
 			.start();
   }

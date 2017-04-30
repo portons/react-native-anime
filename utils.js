@@ -135,12 +135,15 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 	}
 };
 
+const noEasing = (value) => value;
+
 const createTimingAnimation = (toValue, options, animatedValue) => Animated.timing(
 	animatedValue,
 	{
 		toValue,
 		duration: options.duration || DEFAULT_DURATION,
-		delay: options.delay || 0
+		delay: options.delay || 0,
+		easing: options.easing || noEasing
 	}
 );
 
