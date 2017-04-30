@@ -130,8 +130,12 @@ const rotate = (animation, animatedValues, finalAnimationsValues) => {
 	);
 
 	const rotationInterpolation = animatedValues[ROTATE].interpolate({
-		inputRange: [startingPoint, finalAnimationsValues[ROTATE]],
-		outputRange: [`${startingPoint}deg`, `${finalAnimationsValues[ROTATE]}deg`]
+		outputRange: startingPoint > finalAnimationsValues[ROTATE]
+			? [`${finalAnimationsValues[ROTATE]}deg`, `${startingPoint}deg`]
+			: [`${startingPoint}deg`, `${finalAnimationsValues[ROTATE]}deg`],
+		inputRange: startingPoint > finalAnimationsValues[ROTATE]
+			? [finalAnimationsValues[ROTATE], startingPoint]
+			: [startingPoint, finalAnimationsValues[ROTATE]]
 	});
 
 	return {
