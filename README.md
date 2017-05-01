@@ -38,6 +38,10 @@ onClick() {
 * height
 * width
 * backgroundColor
+* borderColor
+* borderWidth
+* fontSize
+* opacity
 
 # Parallel execution
 EasyAnimations groups animation properties and execute them at once.
