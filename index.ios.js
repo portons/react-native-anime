@@ -22,6 +22,7 @@ export default class Root extends Component {
     return (
       <View style={ styles.container }>
         <EasyAnimation.View ref={ ref => this.box = ref }
+														onAnimationEnd={ () => console.log('lol') }
 												 		style={{ width: 50, height: 50, backgroundColor: 'blue' }}>
           <View style={ styles.box } />
         </EasyAnimation.View>
