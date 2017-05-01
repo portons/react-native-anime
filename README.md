@@ -10,10 +10,14 @@ React Native Anime is an animation utility. It can animate many of the style pro
 * Springs
 
 # Code Example
+1. Import Anime
+
 ```javascript
 import Anime from 'react-native-anime';
+```
 
-// Wrap your view with EasyAnimations component and save its reference
+2. Wrap your view with EasyAnimations component and save its reference
+```javascript
 render () {
     return (
         <Anime.View ref={ ref => this.easy = ref }>
@@ -21,8 +25,10 @@ render () {
         </Anime.View>
     )
 }
+```
 
-// Use the ref to animate your component
+3. Use the ref to animate your component
+```javascript
 onClick() {
     this.easy.moveX(10, { duration: 1000 }).start()
 }
