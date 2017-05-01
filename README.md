@@ -80,7 +80,7 @@ Just like with Animated, you can specify durations, delays and easings for your 
 
     animate() {
         this.easy
-        .moveX(50, { duration: 2000, easing: Easing.elastic })
+        .moveX(50, { duration: 2000, easing: Easing.bounce })
         .moveY(-50, { delay: 1000 })
         .start()
     }
