@@ -13,7 +13,9 @@ import {
 	BORDER_WIDTH,
 	WIDTH,
 	HEIGHT,
-	NUMBER,
+	ZERO,
+	ONE,
+	FONT,
 	COLOR,
 	DEFAULT_VALUES,
 	BORDER_COLOR,
@@ -25,8 +27,8 @@ import {
 // Utils methods
 const noEasing = (value) => value;
 
-const defaultStyle = (animation, styleName, type) => {
-	const style = get(animation, `defaultStyle.${styleName}`);
+const defaultStyle = (animationConfig, styleName, type) => {
+	const style = get(animationConfig, `defaultStyle.${styleName}`);
 
 	return style || DEFAULT_VALUES[type];
 };
@@ -52,28 +54,28 @@ const createSpringAnimation = (toValue, { spring }, animatedValue) => {
 };
 
 // Animation creators
-export const rotate = (animation, animatedValues, finalAnimationsValues) => {
+export const rotate = (animationConfig, animatedValues, finalAnimationsValues) => {
 	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
 
 	let startingPoint;
 
 	if (!finalAnimationsValues[ROTATE]) {
-		finalAnimationsValues[ROTATE] = animation.value;
+		finalAnimationsValues[ROTATE] = animationConfig.value;
 		startingPoint = 0;
 	} else {
-		finalAnimationsValues[ROTATE] = finalAnimationsValues[ROTATE] + animation.value;
-		startingPoint = finalAnimationsValues[ROTATE] - animation.value;
+		finalAnimationsValues[ROTATE] = finalAnimationsValues[ROTATE] + animationConfig.value;
+		startingPoint = finalAnimationsValues[ROTATE] - animationConfig.value;
 	}
 
-	let rotateAnimation;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		rotateAnimation = createSpringAnimation(finalAnimationsValues[ROTATE], animation.options, animatedValues[ROTATE]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(finalAnimationsValues[ROTATE], animationConfig.options, animatedValues[ROTATE]);
 	} else {
-		rotateAnimation = createTimingAnimation(finalAnimationsValues[ROTATE], animation.options, animatedValues[ROTATE]);
+		animation = createTimingAnimation(finalAnimationsValues[ROTATE], animationConfig.options, animatedValues[ROTATE]);
 	}
 
-	const rotationInterpolation = animatedValues[ROTATE].interpolate({
+	const interpolation = animatedValues[ROTATE].interpolate({
 		outputRange: startingPoint > finalAnimationsValues[ROTATE]
 			? [`${finalAnimationsValues[ROTATE]}deg`, `${startingPoint}deg`]
 			: [`${startingPoint}deg`, `${finalAnimationsValues[ROTATE]}deg`],
@@ -83,93 +85,93 @@ export const rotate = (animation, animatedValues, finalAnimationsValues) => {
 	});
 
 	return {
-		animation: rotateAnimation,
+		animation,
 		styling: {
 			transform: true,
-			style: { rotate: rotationInterpolation }
+			style: { rotate: interpolation }
 		}
 	};
 };
 
-export const backgroundColor = (animation, animatedValues, finalAnimationsValues) => {
+export const backgroundColor = (animationConfig, animatedValues, finalAnimationsValues) => {
 	animatedValues[BACKGROUND_COLOR] = animatedValues[BACKGROUND_COLOR] || new Animated.Value(0);
 
 	if (!finalAnimationsValues[BACKGROUND_COLOR]) {
-		finalAnimationsValues[BACKGROUND_COLOR] = animation.value;
+		finalAnimationsValues[BACKGROUND_COLOR] = animationConfig.value;
 	} else {
-		finalAnimationsValues[BACKGROUND_COLOR] = finalAnimationsValues[BACKGROUND_COLOR] + animation.value;
+		finalAnimationsValues[BACKGROUND_COLOR] = finalAnimationsValues[BACKGROUND_COLOR] + animationConfig.value;
 	}
 
-	let bgColorAnimation;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		bgColorAnimation = createSpringAnimation(100, animation.options, animatedValues[BACKGROUND_COLOR]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(100, animationConfig.options, animatedValues[BACKGROUND_COLOR]);
 	} else {
-		bgColorAnimation = createTimingAnimation(100, animation.options, animatedValues[BACKGROUND_COLOR]);
+		animation = createTimingAnimation(100, animationConfig.options, animatedValues[BACKGROUND_COLOR]);
 	}
 
-	const bgColorInterpolation = animatedValues[BACKGROUND_COLOR].interpolate({
+	const interpolation = animatedValues[BACKGROUND_COLOR].interpolate({
 		inputRange: [0, 100],
-		outputRange: [defaultStyle(animation, 'backgroundColor', COLOR), animation.value]
+		outputRange: [defaultStyle(animationConfig, 'backgroundColor', COLOR), animationConfig.value]
 	});
 
 	return {
-		animation: bgColorAnimation,
+		animation,
 		styling: {
-			style: { backgroundColor: bgColorInterpolation }
+			style: { backgroundColor: interpolation }
 		}
 	};
 };
 
-export const borderColor = (animation, animatedValues, finalAnimationsValues) => {
+export const borderColor = (animationConfig, animatedValues, finalAnimationsValues) => {
 	animatedValues[BORDER_COLOR] = animatedValues[BORDER_COLOR] || new Animated.Value(0);
 
 	if (!finalAnimationsValues[BORDER_COLOR]) {
-		finalAnimationsValues[BORDER_COLOR] = animation.value;
+		finalAnimationsValues[BORDER_COLOR] = animationConfig.value;
 	} else {
-		finalAnimationsValues[BORDER_COLOR] = finalAnimationsValues[BORDER_COLOR] + animation.value;
+		finalAnimationsValues[BORDER_COLOR] = finalAnimationsValues[BORDER_COLOR] + animationConfig.value;
 	}
 
-	let borderColor;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		borderColor = createSpringAnimation(100, animation.options, animatedValues[BORDER_COLOR]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(100, animationConfig.options, animatedValues[BORDER_COLOR]);
 	} else {
-		borderColor = createTimingAnimation(100, animation.options, animatedValues[BORDER_COLOR]);
+		animation = createTimingAnimation(100, animationConfig.options, animatedValues[BORDER_COLOR]);
 	}
 
-	const borderColorInterpolation = animatedValues[BORDER_COLOR].interpolate({
+	const interpolation = animatedValues[BORDER_COLOR].interpolate({
 		inputRange: [0, 100],
-		outputRange: [defaultStyle(animation, 'borderColor', COLOR), animation.value]
+		outputRange: [defaultStyle(animationConfig, 'borderColor', COLOR), animationConfig.value]
 	});
 
 	return {
-		animation: borderColor,
+		animation,
 		styling: {
-			style: { borderColor: borderColorInterpolation }
+			style: { borderColor: interpolation }
 		}
 	};
 };
 
-export const moveX = (animation, animatedValues, finalAnimationsValues) => {
+export const moveX = (animationConfig, animatedValues, finalAnimationsValues) => {
 	animatedValues[MOVE_X] = animatedValues[MOVE_X] || new Animated.Value(0);
 
 	if (!finalAnimationsValues[MOVE_X]) {
-		finalAnimationsValues[MOVE_X] = animation.value;
+		finalAnimationsValues[MOVE_X] = animationConfig.value;
 	} else {
-		finalAnimationsValues[MOVE_X] = finalAnimationsValues[MOVE_X] + animation.value;
+		finalAnimationsValues[MOVE_X] = finalAnimationsValues[MOVE_X] + animationConfig.value;
 	}
 
-	let xAnimation;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		xAnimation = createSpringAnimation(finalAnimationsValues[MOVE_X], animation.options, animatedValues[MOVE_X]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(finalAnimationsValues[MOVE_X], animationConfig.options, animatedValues[MOVE_X]);
 	} else {
-		xAnimation = createTimingAnimation(finalAnimationsValues[MOVE_X], animation.options, animatedValues[MOVE_X]);
+		animation = createTimingAnimation(finalAnimationsValues[MOVE_X], animationConfig.options, animatedValues[MOVE_X]);
 	}
 
 	return {
-		animation: xAnimation,
+		animation,
 		styling: {
 			transform: true,
 			style: { translateX: animatedValues[MOVE_X] }
@@ -177,25 +179,25 @@ export const moveX = (animation, animatedValues, finalAnimationsValues) => {
 	};
 };
 
-export const moveY = (animation, animatedValues, finalAnimationsValues) => {
+export const moveY = (animationConfig, animatedValues, finalAnimationsValues) => {
 	animatedValues[MOVE_Y] = animatedValues[MOVE_Y] || new Animated.Value(0);
 
 	if (!finalAnimationsValues[MOVE_Y]) {
-		finalAnimationsValues[MOVE_Y] = animation.value;
+		finalAnimationsValues[MOVE_Y] = animationConfig.value;
 	} else {
-		finalAnimationsValues[MOVE_Y] = finalAnimationsValues[MOVE_Y] + animation.value;
+		finalAnimationsValues[MOVE_Y] = finalAnimationsValues[MOVE_Y] + animationConfig.value;
 	}
 
-	let yAnimation;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		yAnimation = createSpringAnimation(finalAnimationsValues[MOVE_Y], animation.options, animatedValues[MOVE_Y]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(finalAnimationsValues[MOVE_Y], animationConfig.options, animatedValues[MOVE_Y]);
 	} else {
-		yAnimation = createTimingAnimation(finalAnimationsValues[MOVE_Y], animation.options, animatedValues[MOVE_Y]);
+		animation = createTimingAnimation(finalAnimationsValues[MOVE_Y], animationConfig.options, animatedValues[MOVE_Y]);
 	}
 
 	return {
-		animation: yAnimation,
+		animation,
 		styling: {
 			transform: true,
 			style: { translateY: animatedValues[MOVE_Y] }
@@ -203,19 +205,19 @@ export const moveY = (animation, animatedValues, finalAnimationsValues) => {
 	};
 };
 
-export const scale = (animation, animatedValues) => {
+export const scale = (animationConfig, animatedValues) => {
 	animatedValues[SCALE] = animatedValues[SCALE] || new Animated.Value(1);
 
-	let scaleAnimation;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		scaleAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[SCALE]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[SCALE]);
 	} else {
-		scaleAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[SCALE]);
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[SCALE]);
 	}
 
 	return {
-		animation: scaleAnimation,
+		animation,
 		styling: {
 			transform: true,
 			style: { scale: animatedValues[SCALE] }
@@ -223,136 +225,136 @@ export const scale = (animation, animatedValues) => {
 	};
 };
 
-export const borderRadius = (animation, animatedValues) => {
+export const borderRadius = (animationConfig, animatedValues) => {
 	animatedValues[BORDER_RADIUS] = animatedValues[BORDER_RADIUS] ||
-		new Animated.Value(defaultStyle(animation, 'borderRadius', NUMBER));
+		new Animated.Value(defaultStyle(animationConfig, 'borderRadius', ZERO));
 
-	let borderRadiusAnimation;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		borderRadiusAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[BORDER_RADIUS]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[BORDER_RADIUS]);
 	} else {
-		borderRadiusAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[BORDER_RADIUS]);
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[BORDER_RADIUS]);
 	}
 
 	return {
-		animation: borderRadiusAnimation,
+		animation,
 		styling: {
 			style: { borderRadius: animatedValues[BORDER_RADIUS] }
 		}
 	};
 };
 
-export const borderWidth = (animation, animatedValues) => {
+export const borderWidth = (animationConfig, animatedValues) => {
 	animatedValues[BORDER_WIDTH] = animatedValues[BORDER_WIDTH] ||
-		new Animated.Value(defaultStyle(animation, 'borderWidth', NUMBER));
+		new Animated.Value(defaultStyle(animationConfig, 'borderWidth', ZERO));
 
-	let borderWidthAnimation;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		borderWidthAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[BORDER_WIDTH]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[BORDER_WIDTH]);
 	} else {
-		borderWidthAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[BORDER_WIDTH]);
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[BORDER_WIDTH]);
 	}
 
 	return {
-		animation: borderWidthAnimation,
+		animation,
 		styling: {
 			style: { borderWidth: animatedValues[BORDER_WIDTH] }
 		}
 	};
 };
 
-export const height = (animation, animatedValues, finalAnimationsValues) => {
-	animatedValues[HEIGHT] = animatedValues[HEIGHT] || new Animated.Value(animation.height);
+export const height = (animationConfig, animatedValues, finalAnimationsValues) => {
+	animatedValues[HEIGHT] = animatedValues[HEIGHT] || new Animated.Value(animationConfig.height);
 
 	if (!finalAnimationsValues[HEIGHT]) {
-		finalAnimationsValues[HEIGHT] = animation.value;
+		finalAnimationsValues[HEIGHT] = animationConfig.value;
 	} else {
-		finalAnimationsValues[HEIGHT] = finalAnimationsValues[HEIGHT] + animation.value;
+		finalAnimationsValues[HEIGHT] = finalAnimationsValues[HEIGHT] + animationConfig.value;
 	}
 
-	let heightAnimation;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		heightAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[HEIGHT]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[HEIGHT]);
 	} else {
-		heightAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[HEIGHT]);
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[HEIGHT]);
 	}
 
 	return {
-		animation: heightAnimation,
+		animation,
 		styling: {
 			style: { height: animatedValues[HEIGHT] }
 		}
 	};
 };
 
-export const fontSize = (animation, animatedValues, finalAnimationsValues) => {
+export const fontSize = (animationConfig, animatedValues, finalAnimationsValues) => {
 	animatedValues[FONT_SIZE] = animatedValues[FONT_SIZE] ||
-													 new Animated.Value(defaultStyle(animation, 'fontSize', NUMBER));
+													 		new Animated.Value(defaultStyle(animationConfig, 'fontSize', FONT));
 
 	if (!finalAnimationsValues[FONT_SIZE]) {
-		finalAnimationsValues[FONT_SIZE] = animation.value;
+		finalAnimationsValues[FONT_SIZE] = animationConfig.value;
 	} else {
-		finalAnimationsValues[FONT_SIZE] = finalAnimationsValues[FONT_SIZE] + animation.value;
+		finalAnimationsValues[FONT_SIZE] = finalAnimationsValues[FONT_SIZE] + animationConfig.value;
 	}
 
-	let fontSizeAnimation;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		fontSizeAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[FONT_SIZE]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[FONT_SIZE]);
 	} else {
-		fontSizeAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[FONT_SIZE]);
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[FONT_SIZE]);
 	}
 
 	return {
-		animation: fontSizeAnimation,
+		animation,
 		styling: {
 			style: { fontSize: animatedValues[FONT_SIZE] }
 		}
 	};
 };
 
-export const width = (animation, animatedValues, finalAnimationsValues) => {
-	animatedValues[WIDTH] = animatedValues[WIDTH] || new Animated.Value(animation.width);
+export const width = (animationConfig, animatedValues, finalAnimationsValues) => {
+	animatedValues[WIDTH] = animatedValues[WIDTH] || new Animated.Value(animationConfig.width);
 
 	if (!finalAnimationsValues[WIDTH]) {
-		finalAnimationsValues[WIDTH] = animation.value;
+		finalAnimationsValues[WIDTH] = animationConfig.value;
 	} else {
-		finalAnimationsValues[WIDTH] = finalAnimationsValues[WIDTH] + animation.value;
+		finalAnimationsValues[WIDTH] = finalAnimationsValues[WIDTH] + animationConfig.value;
 	}
 
-	let widthAnimation;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		widthAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[WIDTH]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[WIDTH]);
 	} else {
-		widthAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[WIDTH]);
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[WIDTH]);
 	}
 
 	return {
-		animation: widthAnimation,
+		animation,
 		styling: {
 			style: { width: animatedValues[WIDTH] }
 		}
 	};
 };
 
-export const opacity = (animation, animatedValues) => {
+export const opacity = (animationConfig, animatedValues) => {
 	animatedValues[OPACITY] = animatedValues[OPACITY] ||
-														new Animated.Value(defaultStyle(animation, 'opacity', NUMBER));
+														new Animated.Value(defaultStyle(animationConfig, 'opacity', ONE));
 
-	let opacityAnimation;
+	let animation;
 
-	if (get(animation, 'options.spring')) {
-		opacityAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[OPACITY]);
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[OPACITY]);
 	} else {
-		opacityAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[OPACITY]);
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[OPACITY]);
 	}
 
 	return {
-		animation: opacityAnimation,
+		animation,
 		styling: {
 			style: { opacity: animatedValues[OPACITY] }
 		}

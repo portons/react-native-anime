@@ -15,10 +15,14 @@ export const OPACITY = 'opacity';
 
 // Other
 export const DEFAULT_DURATION = 500;
-export const NUMBER = 'number';
+export const ZERO = 'zero';
+export const ONE = 'one';
 export const COLOR = 'color';
+export const FONT = 'font';
 
 export const DEFAULT_VALUES = {
-	[NUMBER]: 0,
-	[COLOR]: 'white'
+	[ZERO]: 0,
+	[ONE]: 1,
+	[COLOR]: 'white',
+	[FONT]: 15
 };

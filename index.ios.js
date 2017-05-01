@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, View, TouchableOpacity, Text, Easing } from 'react-native';
+import { AppRegistry, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 
 import ChainAnimations from './chain-animations';
 
 export default class Root extends Component {
   moveBox() {
   	this.box
-			.borderRadius(0, { spring: { velocity: 5000 } })
+			.opacity(0.5, { spring: { velocity: 50 } })
 			.start();
   }
 
@@ -22,7 +22,13 @@ export default class Root extends Component {
     return (
       <View style={ styles.container }>
         <ChainAnimations ref={ ref => this.box = ref }
-												 style={{ width: 50, height: 50, backgroundColor: 'blue', borderRadius: 50, opacity: 0.5 }}>
+												 style={{
+													 width: 50,
+													 height: 50,
+													 backgroundColor: 'blue',
+													 borderWidth: 2,
+													 borderColor: 'red'
+												 }}>
           <View style={ styles.box }/>
         </ChainAnimations>
 

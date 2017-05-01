@@ -98,7 +98,7 @@ const createAnimations = (sequences, animatedValues) => {
 
 		forEach(parallels, currentAnimation => {
 			const { animation, styling } = parseAnimation({
-				animation: currentAnimation,
+				animationConfig: currentAnimation,
 				animatedValues,
 				finalAnimationsValues
 			});
@@ -123,45 +123,45 @@ const createAnimations = (sequences, animatedValues) => {
 	}
 };
 
-const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) => {
-	switch (animation.type) {
+const parseAnimation = ({ animationConfig, animatedValues, finalAnimationsValues }) => {
+	switch (animationConfig.type) {
 		case ROTATE:
-			return rotate(animation, animatedValues, finalAnimationsValues);
+			return rotate(animationConfig, animatedValues, finalAnimationsValues);
 
 		case BACKGROUND_COLOR:
-			return backgroundColor(animation, animatedValues, finalAnimationsValues);
+			return backgroundColor(animationConfig, animatedValues, finalAnimationsValues);
 
 		case BORDER_COLOR:
-			return borderColor(animation, animatedValues, finalAnimationsValues);
+			return borderColor(animationConfig, animatedValues, finalAnimationsValues);
 
 		case MOVE_X:
-			return moveX(animation, animatedValues, finalAnimationsValues);
+			return moveX(animationConfig, animatedValues, finalAnimationsValues);
 
 		case MOVE_Y:
-			return moveY(animation, animatedValues, finalAnimationsValues);
+			return moveY(animationConfig, animatedValues, finalAnimationsValues);
 
 		case SCALE:
-			return scale(animation, animatedValues);
+			return scale(animationConfig, animatedValues);
 
 		case BORDER_RADIUS:
-			return borderRadius(animation, animatedValues);
+			return borderRadius(animationConfig, animatedValues);
 
 		case BORDER_WIDTH:
-			return borderWidth(animation, animatedValues);
+			return borderWidth(animationConfig, animatedValues);
 
 		case OPACITY:
-			return opacity(animation, animatedValues);
+			return opacity(animationConfig, animatedValues);
 
 		case HEIGHT:
-			return height(animation, animatedValues, finalAnimationsValues);
+			return height(animationConfig, animatedValues, finalAnimationsValues);
 
 		case FONT_SIZE:
-			return fontSize(animation, animatedValues, finalAnimationsValues);
+			return fontSize(animationConfig, animatedValues, finalAnimationsValues);
 
 		case WIDTH:
-			return width(animation, animatedValues, finalAnimationsValues);
+			return width(animationConfig, animatedValues, finalAnimationsValues);
 
 		case WAIT:
-			return wait(animation);
+			return wait(animationConfig);
 	}
 };
