@@ -1,7 +1,7 @@
-# React Native Easy Animations
+# React Native Anime
 (Inspired by Cheetah for Swift: https://github.com/suguru/Cheetah)
 
-RNEasyAnimations is an animation utility. It can animate many of the style properties the Animated library works with.
+React Native Anime is an animation utility. It can animate many of the style properties the Animated library works with.
 
 # Features
 * Animation with duration and delay
@@ -11,14 +11,14 @@ RNEasyAnimations is an animation utility. It can animate many of the style prope
 
 # Code Example
 ```javascript
-import EasyAnimations from 'react-native-easy-animations';
+import Anime from 'react-native-anime';
 
 // Wrap your view with EasyAnimations component and save its reference
 render () {
     return (
-        <EasyAnimations.View ref={ ref => this.easy = ref }>
+        <Anime.View ref={ ref => this.easy = ref }>
             <View style={ styles.box }/>
-        </EasyAnimations.View>
+        </Anime.View>
     )
 }
 
@@ -42,7 +42,7 @@ onClick() {
 * opacity
 
 # Parallel execution
-EasyAnimations groups animation properties and execute them at once.
+Anime groups animation properties and execute them at once.
 
 ```javascript
     this.easy
@@ -92,16 +92,16 @@ You can also use Animated's spring animations, together with all its options
 ```
 
 # Also supports Image, Text and ScrollView
-Like with Animated module, you can also animate a Text or an Image component
+Like with Animated module, you can also animate Text, Image and ScrollView components
 
 ```javascript
-    import EasyAnimations from 'react-native-easy-animations';
+    import Anime from 'react-native-easy-animations';
 
     render() {
         return (
-            <EasyAnimations.Text>
+            <Anime.Text>
                 Very easy
-            </EasyAnimations.Text>
+            </Anime.Text>
         )
     }
 ```
