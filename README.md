@@ -91,7 +91,7 @@ You can also use Animated's spring animations, together with all its options
 
 ```javascript
     this.easy
-        .moveX(50, { spring: { friction: 1, velocity: 100 } })
+        .backgroundColor('red', { spring: { friction: 1, velocity: 100 } })
         .start()
         
     // or simply use `spring: true` for default spring behaviour
@@ -108,9 +108,16 @@ Like with Animated module, you can also animate Text, Image and ScrollView compo
 
     render() {
         return (
-            <Anime.Text>
+            <Anime.Text ref={ ref => this.text = ref }
+                        style={{ color: 'blue', fontSize: 12 }}>
                 Very easy
             </Anime.Text>
         )
+    }
+
+    animate() {
+        this.text
+            .color('red', { spring: { friction: 1, velocity: 100 } })
+            .fontSize(20, { spring: { friction: 1, velocity: 100 } })
     }
 ```

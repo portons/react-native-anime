@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import { AppRegistry, StyleSheet, View, TouchableOpacity, Text, Easing } from 'react-native';
 
 import Anime from './src';
 
 export default class Root extends Component {
   moveBox() {
   	this.box
-			.moveX(50, { duration: 1000, delay: 1000 })
-			.color('red', { duration: 2000 })
-			.wait(1000)
-			.color('blue', { duration: 2000 })
-			.moveX(-50, { spring: true })
-			.start();
+			.color('red', { spring: { friction: 1, velocity: 100 } })
+			.fontSize(20, { spring: { friction: 1, velocity: 100 } })
+			.start()
   }
 
   stopBox() {
@@ -26,12 +23,12 @@ export default class Root extends Component {
     return (
       <View style={ styles.container }>
         <Anime.Text ref={ ref => this.box = ref }
-												 		style={{ width: 50, height: 50 }}>
-          LOL
+										style={{ color: 'blue', fontSize: 12 }}>
+          VERY EASY
         </Anime.Text>
 
         <TouchableOpacity onPress={ () => this.moveBox() }>
-          <View style={{ marginTop: 50,
+          <View style={{ marginTop: 100,
                          width: 100,
                          height: 50,
                          borderRadius: 3,
@@ -39,7 +36,7 @@ export default class Root extends Component {
                          justifyContent: 'center',
                          alignItems: 'center' }}>
             <Text>
-              CLICK ME
+              ANIMATE
             </Text>
           </View>
         </TouchableOpacity>
