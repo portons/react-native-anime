@@ -88,7 +88,7 @@ You can also use Animated's spring animations, together with all its options
 ```
 
 # Supports Image and Text
-Like with Animated module, you can also animated a Text or an Image component
+Like with Animated module, you can also animate a Text or an Image component
 
 ```javascript
     import EasyAnimation from 'react-native-easy-animations';
