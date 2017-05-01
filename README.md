@@ -37,8 +37,6 @@ onClick() {
 * borderRadius
 * height
 * width
-* backgroundColor
-* borderColor
 * borderWidth
 * fontSize
 * opacity
@@ -93,7 +91,7 @@ You can also use Animated's spring animations, together with all its options
         .start()
 ```
 
-# Supports Image and Text
+# Also supports Image, Text and ScrollView
 Like with Animated module, you can also animate a Text or an Image component
 
 ```javascript
