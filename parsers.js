@@ -13,7 +13,9 @@ import {
 	BORDER_WIDTH,
 	WIDTH,
 	HEIGHT,
-	BORDER_COLOR
+	BORDER_COLOR,
+	FONT_SIZE,
+	OPACITY
 } from './constants';
 
 import {
@@ -27,8 +29,10 @@ import {
 	borderWidth,
 	height,
 	width,
-	wait
-} from './animations-creators';
+	fontSize,
+	wait,
+	opacity
+} from './animation-creators';
 /*
  * Parses the whole scenario, and returns: final Animated object, updated styles, updated Animated values
  *
@@ -145,8 +149,14 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 		case BORDER_WIDTH:
 			return borderWidth(animation, animatedValues);
 
+		case OPACITY:
+			return opacity(animation, animatedValues);
+
 		case HEIGHT:
 			return height(animation, animatedValues, finalAnimationsValues);
+
+		case FONT_SIZE:
+			return fontSize(animation, animatedValues, finalAnimationsValues);
 
 		case WIDTH:
 			return width(animation, animatedValues, finalAnimationsValues);

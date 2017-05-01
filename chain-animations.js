@@ -14,7 +14,9 @@ import {
 	BORDER_WIDTH,
 	WIDTH,
 	HEIGHT,
-	BORDER_COLOR
+	BORDER_COLOR,
+	FONT_SIZE,
+	OPACITY
 } from './constants';
 
 export default class ChainAnimations extends React.Component {
@@ -101,6 +103,16 @@ export default class ChainAnimations extends React.Component {
 		return this;
 	}
 
+	opacity(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: OPACITY, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
 	borderColor(value, options = {}) {
 		if (this.state.animating) {
 			return this;
@@ -127,6 +139,16 @@ export default class ChainAnimations extends React.Component {
 		}
 
 		this.scenario.push({ type: HEIGHT, value, options, height: this.viewHeight });
+
+		return this;
+	}
+
+	fontSize(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: FONT_SIZE, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}

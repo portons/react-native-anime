@@ -6,7 +6,7 @@ import ChainAnimations from './chain-animations';
 export default class Root extends Component {
   moveBox() {
   	this.box
-			.borderColor('red', { easing: Easing.bounce })
+			.borderRadius(0, { spring: { velocity: 5000 } })
 			.start();
   }
 
@@ -22,7 +22,7 @@ export default class Root extends Component {
     return (
       <View style={ styles.container }>
         <ChainAnimations ref={ ref => this.box = ref }
-												 style={{ width: 50, height: 50, backgroundColor: 'blue', borderWidth: 1 }}>
+												 style={{ width: 50, height: 50, backgroundColor: 'blue', borderRadius: 50, opacity: 0.5 }}>
           <View style={ styles.box }/>
         </ChainAnimations>
 

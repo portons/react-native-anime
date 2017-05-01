@@ -16,12 +16,15 @@ import {
 	NUMBER,
 	COLOR,
 	DEFAULT_VALUES,
-	BORDER_COLOR
+	BORDER_COLOR,
+	FONT_SIZE,
+	OPACITY
 } from './constants';
 
 
 // Utils methods
 const noEasing = (value) => value;
+
 const defaultStyle = (animation, styleName, type) => {
 	const style = get(animation, `defaultStyle.${styleName}`);
 
@@ -285,6 +288,32 @@ export const height = (animation, animatedValues, finalAnimationsValues) => {
 	};
 };
 
+export const fontSize = (animation, animatedValues, finalAnimationsValues) => {
+	animatedValues[FONT_SIZE] = animatedValues[FONT_SIZE] ||
+													 new Animated.Value(defaultStyle(animation, 'fontSize', NUMBER));
+
+	if (!finalAnimationsValues[FONT_SIZE]) {
+		finalAnimationsValues[FONT_SIZE] = animation.value;
+	} else {
+		finalAnimationsValues[FONT_SIZE] = finalAnimationsValues[FONT_SIZE] + animation.value;
+	}
+
+	let fontSizeAnimation;
+
+	if (get(animation, 'options.spring')) {
+		fontSizeAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[FONT_SIZE]);
+	} else {
+		fontSizeAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[FONT_SIZE]);
+	}
+
+	return {
+		animation: fontSizeAnimation,
+		styling: {
+			style: { fontSize: animatedValues[FONT_SIZE] }
+		}
+	};
+};
+
 export const width = (animation, animatedValues, finalAnimationsValues) => {
 	animatedValues[WIDTH] = animatedValues[WIDTH] || new Animated.Value(animation.width);
 
@@ -306,6 +335,26 @@ export const width = (animation, animatedValues, finalAnimationsValues) => {
 		animation: widthAnimation,
 		styling: {
 			style: { width: animatedValues[WIDTH] }
+		}
+	};
+};
+
+export const opacity = (animation, animatedValues) => {
+	animatedValues[OPACITY] = animatedValues[OPACITY] ||
+														new Animated.Value(defaultStyle(animation, 'opacity', NUMBER));
+
+	let opacityAnimation;
+
+	if (get(animation, 'options.spring')) {
+		opacityAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[OPACITY]);
+	} else {
+		opacityAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[OPACITY]);
+	}
+
+	return {
+		animation: opacityAnimation,
+		styling: {
+			style: { opacity: animatedValues[OPACITY] }
 		}
 	};
 };
