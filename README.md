@@ -11,6 +11,8 @@ RNEasyAnimations is an animation utility. It can animate many of the style prope
 
 # Code Example
 ```javascript
+import EasyAnimation from 'react-native-easy-animations';
+
 // Wrap your view with EasyAnimations component and save its reference
 render () {
     return (
