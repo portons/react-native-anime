@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import { AppRegistry, StyleSheet, View, TouchableOpacity, Text, Easing } from 'react-native';
 
 import EasyAnimation from './src';
 
 export default class Root extends Component {
   moveBox() {
-  	//this.box
-			//.opacity(0.5, { spring: { velocity: 50 } })
-			//.start();
+  	this.box
+			.opacity(0.5, { spring: { velocity: 50 } })
+			.start();
 
   	this.text
 			.fontSize(15, { spring: { velocity: 50 } })
-			.start()
+			.start();
+
+		this.image.rotate(70, { easing: Easing.bounce }).start();
   }
 
   stopBox() {
@@ -20,6 +22,8 @@ export default class Root extends Component {
 
   reset() {
 		this.box.reset();
+		this.text.reset();
+		this.image.reset();
 	}
 
   render() {
@@ -37,9 +41,13 @@ export default class Root extends Component {
         </EasyAnimation.View>
 
 				<EasyAnimation.Text ref={ ref => this.text = ref }
-														style={{ fontSize: 12, backgroundColor: '#dedede' }}>
+														style={{ fontSize: 12, marginTop: 50, backgroundColor: '#dedede' }}>
 					Lol
 				</EasyAnimation.Text>
+
+				<EasyAnimation.Image source={{ uri: "https://www.google.co.il/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" }}
+														 ref={ ref => this.image = ref }
+														 style={{ width: 100, height: 60, marginTop: 50 }}/>
 
         <TouchableOpacity onPress={ () => this.moveBox() }>
           <View style={{ marginTop: 50,

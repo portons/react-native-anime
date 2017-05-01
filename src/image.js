@@ -203,8 +203,8 @@ export default class View extends React.Component {
 		const { styles } = this.state;
 
 		return (
-			<Animated.Image style={ [this.props.style, styles] }
-											source={ this.props.source }
+			<Animated.Image { ...this.props }
+											style={ [this.props.style, styles] }
 										 	onLayout={ (event) => !this.dimensionsSet && this.setDimensions(event.nativeEvent.layout) } />
 		)
 	}
