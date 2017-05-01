@@ -14,9 +14,9 @@ RNEasyAnimations is an animation utility. It can animate many of the style prope
 // Wrap your view with EasyAnimations component and save its reference
 render () {
     return (
-        <EasyAnimations ref={ ref => this.easy = ref }>
+        <EasyAnimations.View ref={ ref => this.easy = ref }>
             <View style={ styles.box }/>
-        </EasyAnimations>
+        </EasyAnimations.View>
     )
 }
 
@@ -85,4 +85,19 @@ You can also use Animated's spring animations, together with all its options
     this.easy
         .moveX(50, { spring: true })
         .start()
+```
+
+# Supports Image and Text
+Like with Animated module, you can also animated a Text or an Image component
+
+```javascript
+    import EasyAnimation from 'react-native-easy-animations';
+
+    render() {
+        return (
+            <EasyAnimations.Text>
+                Very easy
+            </EasyAnimations.Text>
+        )
+    }
 ```
