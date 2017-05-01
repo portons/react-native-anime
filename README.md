@@ -73,7 +73,7 @@ Anime groups animation properties and execute them at once.
 ```
 
 # Duration, delay, easing
-Just like with Animated, you can specify durations, delays, easings for your animations
+Just like with Animated, you can specify durations, delays and easings for your animations
 
 ```javascript
     import { Easing } from 'react-native';
@@ -104,7 +104,7 @@ You can also use Animated's spring animations, together with all its options
 Like with Animated module, you can also animate Text, Image and ScrollView components
 
 ```javascript
-    import Anime from 'react-native-easy-animations';
+    import Anime from 'react-native-anime';
 
     render() {
         return (
