@@ -11,7 +11,7 @@ RNEasyAnimations is an animation utility. It can animate many of the style prope
 
 # Code Example
 ```javascript
-import EasyAnimation from 'react-native-easy-animations';
+import EasyAnimations from 'react-native-easy-animations';
 
 // Wrap your view with EasyAnimations component and save its reference
 render () {
@@ -93,7 +93,7 @@ You can also use Animated's spring animations, together with all its options
 Like with Animated module, you can also animate a Text or an Image component
 
 ```javascript
-    import EasyAnimation from 'react-native-easy-animations';
+    import EasyAnimations from 'react-native-easy-animations';
 
     render() {
         return (
