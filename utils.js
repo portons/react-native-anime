@@ -10,8 +10,12 @@ import {
 	SCALE,
 	BACKGROUND_COLOR,
 	BORDER_RADIUS,
+	BORDER_WIDTH,
 	WIDTH,
-	HEIGHT
+	HEIGHT,
+	NUMBER,
+	COLOR,
+	DEFAULT_VALUES
 } from './constants';
 
 const noEasing = (value) => value;
@@ -126,6 +130,9 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 		case BORDER_RADIUS:
 			return borderRadius(animation, animatedValues);
 
+		case BORDER_WIDTH:
+			return borderWidth(animation, animatedValues);
+
 		case HEIGHT:
 			return height(animation, animatedValues, finalAnimationsValues);
 
@@ -135,24 +142,6 @@ const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) =>
 		case WAIT:
 			return wait(animation);
 	}
-};
-
-const createTimingAnimation = (toValue, options, animatedValue) => Animated.timing(
-	animatedValue,
-	{
-		toValue,
-		duration: options.duration || DEFAULT_DURATION,
-		delay: options.delay || 0,
-		easing: options.easing || noEasing
-	}
-);
-
-const createSpringAnimation = (toValue, { spring }, animatedValue) => {
-	return isBoolean(spring)
-		? Animated.spring(animatedValue, { toValue })
-		: Animated.spring(
-			animatedValue, { toValue, ...spring }
-		);
 };
 
 const rotate = (animation, animatedValues, finalAnimationsValues) => {
@@ -213,7 +202,7 @@ const backgroundColor = (animation, animatedValues, finalAnimationsValues) => {
 
 	const bgColorInterpolation = animatedValues[BACKGROUND_COLOR].interpolate({
 		inputRange: [0, 100],
-		outputRange: [animation.startingColor, animation.value]
+		outputRange: [defaultStyle(animation, 'backgroundColor', COLOR), animation.value]
 	});
 
 	return {
@@ -297,7 +286,8 @@ const scale = (animation, animatedValues) => {
 };
 
 const borderRadius = (animation, animatedValues) => {
-	animatedValues[BORDER_RADIUS] = animatedValues[BORDER_RADIUS] || new Animated.Value(0);
+	animatedValues[BORDER_RADIUS] = animatedValues[BORDER_RADIUS] ||
+																	new Animated.Value(defaultStyle(animation, 'borderRadius', NUMBER));
 
 	let borderRadiusAnimation;
 
@@ -311,6 +301,26 @@ const borderRadius = (animation, animatedValues) => {
 		animation: borderRadiusAnimation,
 		styling: {
 			style: { borderRadius: animatedValues[BORDER_RADIUS] }
+		}
+	};
+};
+
+const borderWidth = (animation, animatedValues) => {
+	animatedValues[BORDER_WIDTH] = animatedValues[BORDER_WIDTH] ||
+																 new Animated.Value(defaultStyle(animation, 'borderWidth', NUMBER));
+
+	let borderWidthAnimation;
+
+	if (get(animation, 'options.spring')) {
+		borderWidthAnimation = createSpringAnimation(animation.value, animation.options, animatedValues[BORDER_WIDTH]);
+	} else {
+		borderWidthAnimation = createTimingAnimation(animation.value, animation.options, animatedValues[BORDER_WIDTH]);
+	}
+
+	return {
+		animation: borderWidthAnimation,
+		styling: {
+			style: { borderWidth: animatedValues[BORDER_WIDTH] }
 		}
 	};
 };
@@ -366,3 +376,29 @@ const width = (animation, animatedValues, finalAnimationsValues) => {
 };
 
 const wait = (animation) => ({ animation: Animated.delay(animation.duration) });
+
+const defaultStyle = (animation, styleName, type) => {
+	const style = get(animation, `defaultStyle.${styleName}`);
+
+	return style || DEFAULT_VALUES[type];
+};
+
+const createTimingAnimation = (toValue, options, animatedValue) => {
+	return Animated.timing(
+		animatedValue,
+		{
+			toValue,
+			duration: options.duration || DEFAULT_DURATION,
+			delay: options.delay || 0,
+			easing: options.easing || noEasing
+		}
+	);
+};
+
+const createSpringAnimation = (toValue, { spring }, animatedValue) => {
+	return isBoolean(spring)
+		? Animated.spring(animatedValue, { toValue })
+		: Animated.spring(
+			animatedValue, { toValue, ...spring }
+		);
+};

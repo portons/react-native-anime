@@ -3,7 +3,18 @@ import { Animated } from 'react-native';
 import { assign } from 'lodash';
 
 import { scenarioParser } from './utils';
-import { ROTATE, MOVE_X, MOVE_Y, WAIT, SCALE, BACKGROUND_COLOR, BORDER_RADIUS, WIDTH, HEIGHT } from './constants';
+import {
+	ROTATE,
+	MOVE_X,
+	MOVE_Y,
+	WAIT,
+	SCALE,
+	BACKGROUND_COLOR,
+	BORDER_RADIUS,
+	BORDER_WIDTH,
+	WIDTH,
+	HEIGHT
+} from './constants';
 
 export default class ChainAnimations extends React.Component {
 	constructor() {
@@ -64,7 +75,7 @@ export default class ChainAnimations extends React.Component {
 			return this;
 		}
 
-		this.scenario.push({ type: BACKGROUND_COLOR, value, options, startingColor: this.props.style.backgroundColor});
+		this.scenario.push({ type: BACKGROUND_COLOR, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}
@@ -74,7 +85,17 @@ export default class ChainAnimations extends React.Component {
 			return this;
 		}
 
-		this.scenario.push({ type: BORDER_RADIUS, value, options });
+		this.scenario.push({ type: BORDER_RADIUS, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	borderWidth(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: BORDER_WIDTH, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}
