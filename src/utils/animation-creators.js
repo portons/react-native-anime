@@ -54,6 +54,98 @@ const createSpringAnimation = (toValue, { spring }, animatedValue) => {
 };
 
 // Animation creators
+
+// TODO: Make colors work when more than 1 color animation
+//export const backgroundColor = (animationConfig, animatedValues, finalAnimationsValues) => {
+//	animatedValues[BACKGROUND_COLOR] = animatedValues[BACKGROUND_COLOR] || new Animated.Value(0);
+//
+//	if (!finalAnimationsValues[BACKGROUND_COLOR]) {
+//		finalAnimationsValues[BACKGROUND_COLOR] = animationConfig.value;
+//	} else {
+//		finalAnimationsValues[BACKGROUND_COLOR] = finalAnimationsValues[BACKGROUND_COLOR] + animationConfig.value;
+//	}
+//
+//	let animation;
+//
+//	if (get(animationConfig, 'options.spring')) {
+//		animation = createSpringAnimation(100, animationConfig.options, animatedValues[BACKGROUND_COLOR]);
+//	} else {
+//		animation = createTimingAnimation(100, animationConfig.options, animatedValues[BACKGROUND_COLOR]);
+//	}
+//
+//	const interpolation = animatedValues[BACKGROUND_COLOR].interpolate({
+//		inputRange: [0, 100],
+//		outputRange: [defaultStyle(animationConfig, 'backgroundColor', COLOR), animationConfig.value]
+//	});
+//
+//	return {
+//		animation,
+//		styling: {
+//			style: { backgroundColor: interpolation }
+//		}
+//	};
+//};
+
+//export const borderColor = (animationConfig, animatedValues, finalAnimationsValues) => {
+//	animatedValues[BORDER_COLOR] = animatedValues[BORDER_COLOR] || new Animated.Value(0);
+//
+//	if (!finalAnimationsValues[BORDER_COLOR]) {
+//		finalAnimationsValues[BORDER_COLOR] = animationConfig.value;
+//	} else {
+//		finalAnimationsValues[BORDER_COLOR] = finalAnimationsValues[BORDER_COLOR] + animationConfig.value;
+//	}
+//
+//	let animation;
+//
+//	if (get(animationConfig, 'options.spring')) {
+//		animation = createSpringAnimation(100, animationConfig.options, animatedValues[BORDER_COLOR]);
+//	} else {
+//		animation = createTimingAnimation(100, animationConfig.options, animatedValues[BORDER_COLOR]);
+//	}
+//
+//	const interpolation = animatedValues[BORDER_COLOR].interpolate({
+//		inputRange: [0, 100],
+//		outputRange: [defaultStyle(animationConfig, 'borderColor', COLOR), animationConfig.value]
+//	});
+//
+//	return {
+//		animation,
+//		styling: {
+//			style: { borderColor: interpolation }
+//		}
+//	};
+//};
+
+//export const color = (animationConfig, animatedValues, finalAnimationsValues) => {
+//	animatedValues[COLOR] = animatedValues[COLOR] || new Animated.Value(0);
+//
+//	if (!finalAnimationsValues[COLOR]) {
+//		finalAnimationsValues[COLOR] = animationConfig.value;
+//	} else {
+//		finalAnimationsValues[COLOR] = finalAnimationsValues[COLOR] + animationConfig.value;
+//	}
+//
+//	let animation;
+//
+//	if (get(animationConfig, 'options.spring')) {
+//		animation = createSpringAnimation(100, animationConfig.options, animatedValues[COLOR]);
+//	} else {
+//		animation = createTimingAnimation(100, animationConfig.options, animatedValues[COLOR]);
+//	}
+//
+//	const interpolation = animatedValues[COLOR].interpolate({
+//		inputRange: [0, 100],
+//		outputRange: [defaultStyle(animationConfig, 'color', COLOR), animationConfig.value]
+//	});
+//
+//	return {
+//		animation,
+//		styling: {
+//			style: { color: interpolation }
+//		}
+//	};
+//};
+
 export const rotate = (animationConfig, animatedValues, finalAnimationsValues) => {
 	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
 
@@ -89,66 +181,6 @@ export const rotate = (animationConfig, animatedValues, finalAnimationsValues) =
 		styling: {
 			transform: true,
 			style: { rotate: interpolation }
-		}
-	};
-};
-
-export const backgroundColor = (animationConfig, animatedValues, finalAnimationsValues) => {
-	animatedValues[BACKGROUND_COLOR] = animatedValues[BACKGROUND_COLOR] || new Animated.Value(0);
-
-	if (!finalAnimationsValues[BACKGROUND_COLOR]) {
-		finalAnimationsValues[BACKGROUND_COLOR] = animationConfig.value;
-	} else {
-		finalAnimationsValues[BACKGROUND_COLOR] = finalAnimationsValues[BACKGROUND_COLOR] + animationConfig.value;
-	}
-
-	let animation;
-
-	if (get(animationConfig, 'options.spring')) {
-		animation = createSpringAnimation(100, animationConfig.options, animatedValues[BACKGROUND_COLOR]);
-	} else {
-		animation = createTimingAnimation(100, animationConfig.options, animatedValues[BACKGROUND_COLOR]);
-	}
-
-	const interpolation = animatedValues[BACKGROUND_COLOR].interpolate({
-		inputRange: [0, 100],
-		outputRange: [defaultStyle(animationConfig, 'backgroundColor', COLOR), animationConfig.value]
-	});
-
-	return {
-		animation,
-		styling: {
-			style: { backgroundColor: interpolation }
-		}
-	};
-};
-
-export const borderColor = (animationConfig, animatedValues, finalAnimationsValues) => {
-	animatedValues[BORDER_COLOR] = animatedValues[BORDER_COLOR] || new Animated.Value(0);
-
-	if (!finalAnimationsValues[BORDER_COLOR]) {
-		finalAnimationsValues[BORDER_COLOR] = animationConfig.value;
-	} else {
-		finalAnimationsValues[BORDER_COLOR] = finalAnimationsValues[BORDER_COLOR] + animationConfig.value;
-	}
-
-	let animation;
-
-	if (get(animationConfig, 'options.spring')) {
-		animation = createSpringAnimation(100, animationConfig.options, animatedValues[BORDER_COLOR]);
-	} else {
-		animation = createTimingAnimation(100, animationConfig.options, animatedValues[BORDER_COLOR]);
-	}
-
-	const interpolation = animatedValues[BORDER_COLOR].interpolate({
-		inputRange: [0, 100],
-		outputRange: [defaultStyle(animationConfig, 'borderColor', COLOR), animationConfig.value]
-	});
-
-	return {
-		animation,
-		styling: {
-			style: { borderColor: interpolation }
 		}
 	};
 };
@@ -312,36 +344,6 @@ export const fontSize = (animationConfig, animatedValues, finalAnimationsValues)
 		animation,
 		styling: {
 			style: { fontSize: animatedValues[FONT_SIZE] }
-		}
-	};
-};
-
-export const color = (animationConfig, animatedValues, finalAnimationsValues) => {
-	animatedValues[COLOR] = animatedValues[COLOR] || new Animated.Value(0);
-
-	if (!finalAnimationsValues[COLOR]) {
-		finalAnimationsValues[COLOR] = animationConfig.value;
-	} else {
-		finalAnimationsValues[COLOR] = finalAnimationsValues[COLOR] + animationConfig.value;
-	}
-
-	let animation;
-
-	if (get(animationConfig, 'options.spring')) {
-		animation = createSpringAnimation(100, animationConfig.options, animatedValues[COLOR]);
-	} else {
-		animation = createTimingAnimation(100, animationConfig.options, animatedValues[COLOR]);
-	}
-
-	const interpolation = animatedValues[COLOR].interpolate({
-		inputRange: [0, 100],
-		outputRange: [defaultStyle(animationConfig, 'color', COLOR), animationConfig.value]
-	});
-
-	return {
-		animation,
-		styling: {
-			style: { color: interpolation }
 		}
 	};
 };

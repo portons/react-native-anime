@@ -6,7 +6,9 @@ import EasyAnimation from './src';
 export default class Root extends Component {
   moveBox() {
   	this.box
-			.color('red', { easing: Easing.bounce })
+			.moveX(50)
+			.wait(1000)
+			.moveX(-50)
 			.start();
   }
 
@@ -21,13 +23,10 @@ export default class Root extends Component {
   render() {
     return (
       <View style={ styles.container }>
-        <EasyAnimation.Text ref={ ref => this.box = ref }
-														onAnimationStart={ () => console.log('started') }
-														onAnimationEnd={ () => console.log('ended') }
-												 		style={{ width: 50, height: 50, backgroundColor: 'blue', color: 'white' }}>
-          {/*<View style={ styles.box } />*/}
-          Lol
-        </EasyAnimation.Text>
+        <EasyAnimation.View ref={ ref => this.box = ref }
+												 		style={{ width: 50, height: 50, backgroundColor: 'blue' }}>
+          <View style={ styles.box } />
+        </EasyAnimation.View>
 
         <TouchableOpacity onPress={ () => this.moveBox() }>
           <View style={{ marginTop: 50,
