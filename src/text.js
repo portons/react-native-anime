@@ -2,7 +2,7 @@ import React from 'react';
 import { Animated } from 'react-native';
 import { assign } from 'lodash';
 
-import { scenarioParser } from './parsers';
+import { scenarioParser } from './utils/parsers';
 import {
 	ROTATE,
 	MOVE_X,
@@ -17,20 +17,20 @@ import {
 	BORDER_COLOR,
 	FONT_SIZE,
 	OPACITY
-} from './constants';
+} from './utils/constants';
 
-export default class ChainAnimations extends React.Component {
+export default class Text extends React.Component {
 	constructor() {
-	  super();
+		super();
 
-	  this.state = {
-	  	styles: {},
+		this.state = {
+			styles: {},
 			animatedValues: null,
 			animating: false
 		};
 
-	  this.scenario = [];
-	  this.dimensionsSet = false;
+		this.scenario = [];
+		this.dimensionsSet = false;
 	}
 
 	moveX(value, options = {}) {
@@ -213,11 +213,11 @@ export default class ChainAnimations extends React.Component {
 	render() {
 		const { styles } = this.state;
 
-	  return (
-	    <Animated.View style={ [this.props.style, styles] }
-			               onLayout={ (event) => !this.dimensionsSet && this.setDimensions(event.nativeEvent.layout) }>
+		return (
+			<Animated.Text style={ [this.props.style, styles] }
+										 onLayout={ (event) => !this.dimensionsSet && this.setDimensions(event.nativeEvent.layout) }>
 				{ this.props.children }
-			</Animated.View>
-	  )
+			</Animated.Text>
+		)
 	}
 }

@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 
-import ChainAnimations from './chain-animations';
+import EasyAnimation from './src';
 
 export default class Root extends Component {
   moveBox() {
-  	this.box
-			.opacity(0.5, { spring: { velocity: 50 } })
-			.start();
+  	//this.box
+			//.opacity(0.5, { spring: { velocity: 50 } })
+			//.start();
+
+  	this.text
+			.fontSize(15, { spring: { velocity: 50 } })
+			.start()
   }
 
   stopBox() {
@@ -21,16 +25,21 @@ export default class Root extends Component {
   render() {
     return (
       <View style={ styles.container }>
-        <ChainAnimations ref={ ref => this.box = ref }
-												 style={{
-													 width: 50,
-													 height: 50,
-													 backgroundColor: 'blue',
-													 borderWidth: 2,
-													 borderColor: 'red'
-												 }}>
+        <EasyAnimation.View ref={ ref => this.box = ref }
+												 		style={{
+															 width: 50,
+															 height: 50,
+															 backgroundColor: 'blue',
+															 borderWidth: 2,
+															 borderColor: 'red'
+												 		}}>
           <View style={ styles.box }/>
-        </ChainAnimations>
+        </EasyAnimation.View>
+
+				<EasyAnimation.Text ref={ ref => this.text = ref }
+														style={{ fontSize: 12, backgroundColor: '#dedede' }}>
+					Lol
+				</EasyAnimation.Text>
 
         <TouchableOpacity onPress={ () => this.moveBox() }>
           <View style={{ marginTop: 50,
