@@ -15,7 +15,8 @@ import {
 	HEIGHT,
 	BORDER_COLOR,
 	OPACITY,
-	FONT_SIZE
+	FONT_SIZE,
+	COLOR
 } from './utils/constants';
 
 export default class EasyAnimations extends React.Component {
@@ -128,6 +129,16 @@ export default class EasyAnimations extends React.Component {
 		}
 
 		this.scenario.push({ type: FONT_SIZE, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	color(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: COLOR, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}

@@ -316,6 +316,36 @@ export const fontSize = (animationConfig, animatedValues, finalAnimationsValues)
 	};
 };
 
+export const color = (animationConfig, animatedValues, finalAnimationsValues) => {
+	animatedValues[COLOR] = animatedValues[COLOR] || new Animated.Value(0);
+
+	if (!finalAnimationsValues[COLOR]) {
+		finalAnimationsValues[COLOR] = animationConfig.value;
+	} else {
+		finalAnimationsValues[COLOR] = finalAnimationsValues[COLOR] + animationConfig.value;
+	}
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(100, animationConfig.options, animatedValues[COLOR]);
+	} else {
+		animation = createTimingAnimation(100, animationConfig.options, animatedValues[COLOR]);
+	}
+
+	const interpolation = animatedValues[COLOR].interpolate({
+		inputRange: [0, 100],
+		outputRange: [defaultStyle(animationConfig, 'color', COLOR), animationConfig.value]
+	});
+
+	return {
+		animation,
+		styling: {
+			style: { color: interpolation }
+		}
+	};
+};
+
 export const width = (animationConfig, animatedValues, finalAnimationsValues) => {
 	animatedValues[WIDTH] = animatedValues[WIDTH] || new Animated.Value(animationConfig.width);
 

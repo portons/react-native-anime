@@ -12,12 +12,12 @@ export const BORDER_WIDTH = 'borderWidth';
 export const BORDER_COLOR = 'borderColor';
 export const FONT_SIZE = 'fontSize';
 export const OPACITY = 'opacity';
+export const COLOR = 'color';
 
 // Other
 export const DEFAULT_DURATION = 500;
 export const ZERO = 'zero';
 export const ONE = 'one';
-export const COLOR = 'color';
 export const FONT = 'font';
 
 export const DEFAULT_VALUES = {
