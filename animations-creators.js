@@ -1,12 +1,12 @@
 import { Animated } from 'react-native';
-import { reduce, isEqual, last, forEach, get, isBoolean } from 'lodash';
+
+import { get, isBoolean } from 'lodash';
 
 import {
 	DEFAULT_DURATION,
 	ROTATE,
 	MOVE_Y,
 	MOVE_X,
-	WAIT,
 	SCALE,
 	BACKGROUND_COLOR,
 	BORDER_RADIUS,
@@ -15,136 +15,41 @@ import {
 	HEIGHT,
 	NUMBER,
 	COLOR,
-	DEFAULT_VALUES
+	DEFAULT_VALUES,
+	BORDER_COLOR
 } from './constants';
 
+
+// Utils methods
 const noEasing = (value) => value;
+const defaultStyle = (animation, styleName, type) => {
+	const style = get(animation, `defaultStyle.${styleName}`);
 
-/*
- * Parses the whole scenario, and returns: final Animated object, updated styles, updated Animated values
- *
- * @param scenario - a list of animation configs which are used to build the whole animation sequence
- * @param animatedValues - an object consisting of 'type: animated.value' pairs. If the component was already animated,
- * we use these values to 'continue' the animations from their last state and not start over from original state
- *
- * @return ({
- *  - animations: the final Animated object, which is a sequence of parallel animations
- *  - animatedValues: updated collection of animated values with new values for new types of animations
- *  - styles: a list of styles connected to their Animated values
- * })
- */
-export const scenarioParser = ({ scenario, animatedValues }) => {
-	// Break the main scenario into sequence of parallel animations, and then build the final animation using previously used Animated values
-	const { sequenceAnimations, styles } = createAnimations(breakScenarioIntoSequences(scenario), animatedValues);
-
-	return {
-		animations: Animated.sequence(sequenceAnimations),
-		animatedValues,
-		styles
-	}
+	return style || DEFAULT_VALUES[type];
 };
 
-/*
- * Breaks scenario into a sequence of parallel animations, when wait() animation is the divider between them
- *
- * For example, if given the following scenario: '.rotate(10).moveX(10).wait(100).moveY(10)', it will return:
- * [[rotateConfig, moveXConfig], [delay], [moveYConfig]]
- *
- * @param scenario - a list of animations configs used to build the whole animation
- */
-const breakScenarioIntoSequences = (scenario) => reduce(scenario, (acc, animation, index) => {
-	const lastAnimation = last(acc);
-
-	switch (animation.type) {
-		case WAIT:
-			if (!isEqual(index, scenario.length - 1)) {
-				acc.push([animation]);
-				acc.push([]);
-			}
-
-			break;
-
-		default:
-			lastAnimation.push(animation);
-	}
-
-	return acc;
-}, [[]]);
-
-const createAnimations = (sequences, animatedValues) => {
-	const finalAnimationsValues = {};
-	const sequenceAnimations = [];
-	const styles = [ // transform is always first in array for convenience
+const createTimingAnimation = (toValue, options, animatedValue) => {
+	return Animated.timing(
+		animatedValue,
 		{
-			transform: []
+			toValue,
+			duration: options.duration || DEFAULT_DURATION,
+			delay: options.delay || 0,
+			easing: options.easing || noEasing
 		}
-	];
-
-	forEach(sequences, (parallels) => {
-		const currentPartAnimations = [];
-
-		forEach(parallels, currentAnimation => {
-			const { animation, styling } = parseAnimation({
-				animation: currentAnimation,
-				animatedValues,
-				finalAnimationsValues
-			});
-
-			currentPartAnimations.push(animation);
-
-			if (styling) {
-				if (styling.transform) {
-					styles[0].transform.push(styling.style)
-				} else {
-					styles.push(styling.style)
-				}
-			}
-		});
-
-		sequenceAnimations.push(Animated.parallel(currentPartAnimations));
-	});
-
-	return {
-		sequenceAnimations,
-		styles
-	}
+	);
 };
 
-const parseAnimation = ({ animation, animatedValues, finalAnimationsValues }) => {
-	switch (animation.type) {
-		case ROTATE:
-			return rotate(animation, animatedValues, finalAnimationsValues);
-
-		case BACKGROUND_COLOR:
-			return backgroundColor(animation, animatedValues, finalAnimationsValues);
-
-		case MOVE_X:
-			return moveX(animation, animatedValues, finalAnimationsValues);
-
-		case MOVE_Y:
-			return moveY(animation, animatedValues, finalAnimationsValues);
-
-		case SCALE:
-			return scale(animation, animatedValues);
-
-		case BORDER_RADIUS:
-			return borderRadius(animation, animatedValues);
-
-		case BORDER_WIDTH:
-			return borderWidth(animation, animatedValues);
-
-		case HEIGHT:
-			return height(animation, animatedValues, finalAnimationsValues);
-
-		case WIDTH:
-			return width(animation, animatedValues, finalAnimationsValues);
-
-		case WAIT:
-			return wait(animation);
-	}
+const createSpringAnimation = (toValue, { spring }, animatedValue) => {
+	return isBoolean(spring)
+		? Animated.spring(animatedValue, { toValue })
+		: Animated.spring(
+			animatedValue, { toValue, ...spring }
+		);
 };
 
-const rotate = (animation, animatedValues, finalAnimationsValues) => {
+// Animation creators
+export const rotate = (animation, animatedValues, finalAnimationsValues) => {
 	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
 
 	let startingPoint;
@@ -183,7 +88,7 @@ const rotate = (animation, animatedValues, finalAnimationsValues) => {
 	};
 };
 
-const backgroundColor = (animation, animatedValues, finalAnimationsValues) => {
+export const backgroundColor = (animation, animatedValues, finalAnimationsValues) => {
 	animatedValues[BACKGROUND_COLOR] = animatedValues[BACKGROUND_COLOR] || new Animated.Value(0);
 
 	if (!finalAnimationsValues[BACKGROUND_COLOR]) {
@@ -213,7 +118,37 @@ const backgroundColor = (animation, animatedValues, finalAnimationsValues) => {
 	};
 };
 
-const moveX = (animation, animatedValues, finalAnimationsValues) => {
+export const borderColor = (animation, animatedValues, finalAnimationsValues) => {
+	animatedValues[BORDER_COLOR] = animatedValues[BORDER_COLOR] || new Animated.Value(0);
+
+	if (!finalAnimationsValues[BORDER_COLOR]) {
+		finalAnimationsValues[BORDER_COLOR] = animation.value;
+	} else {
+		finalAnimationsValues[BORDER_COLOR] = finalAnimationsValues[BORDER_COLOR] + animation.value;
+	}
+
+	let borderColor;
+
+	if (get(animation, 'options.spring')) {
+		borderColor = createSpringAnimation(100, animation.options, animatedValues[BORDER_COLOR]);
+	} else {
+		borderColor = createTimingAnimation(100, animation.options, animatedValues[BORDER_COLOR]);
+	}
+
+	const borderColorInterpolation = animatedValues[BORDER_COLOR].interpolate({
+		inputRange: [0, 100],
+		outputRange: [defaultStyle(animation, 'borderColor', COLOR), animation.value]
+	});
+
+	return {
+		animation: borderColor,
+		styling: {
+			style: { borderColor: borderColorInterpolation }
+		}
+	};
+};
+
+export const moveX = (animation, animatedValues, finalAnimationsValues) => {
 	animatedValues[MOVE_X] = animatedValues[MOVE_X] || new Animated.Value(0);
 
 	if (!finalAnimationsValues[MOVE_X]) {
@@ -239,7 +174,7 @@ const moveX = (animation, animatedValues, finalAnimationsValues) => {
 	};
 };
 
-const moveY = (animation, animatedValues, finalAnimationsValues) => {
+export const moveY = (animation, animatedValues, finalAnimationsValues) => {
 	animatedValues[MOVE_Y] = animatedValues[MOVE_Y] || new Animated.Value(0);
 
 	if (!finalAnimationsValues[MOVE_Y]) {
@@ -265,7 +200,7 @@ const moveY = (animation, animatedValues, finalAnimationsValues) => {
 	};
 };
 
-const scale = (animation, animatedValues) => {
+export const scale = (animation, animatedValues) => {
 	animatedValues[SCALE] = animatedValues[SCALE] || new Animated.Value(1);
 
 	let scaleAnimation;
@@ -285,9 +220,9 @@ const scale = (animation, animatedValues) => {
 	};
 };
 
-const borderRadius = (animation, animatedValues) => {
+export const borderRadius = (animation, animatedValues) => {
 	animatedValues[BORDER_RADIUS] = animatedValues[BORDER_RADIUS] ||
-																	new Animated.Value(defaultStyle(animation, 'borderRadius', NUMBER));
+		new Animated.Value(defaultStyle(animation, 'borderRadius', NUMBER));
 
 	let borderRadiusAnimation;
 
@@ -305,9 +240,9 @@ const borderRadius = (animation, animatedValues) => {
 	};
 };
 
-const borderWidth = (animation, animatedValues) => {
+export const borderWidth = (animation, animatedValues) => {
 	animatedValues[BORDER_WIDTH] = animatedValues[BORDER_WIDTH] ||
-																 new Animated.Value(defaultStyle(animation, 'borderWidth', NUMBER));
+		new Animated.Value(defaultStyle(animation, 'borderWidth', NUMBER));
 
 	let borderWidthAnimation;
 
@@ -325,7 +260,7 @@ const borderWidth = (animation, animatedValues) => {
 	};
 };
 
-const height = (animation, animatedValues, finalAnimationsValues) => {
+export const height = (animation, animatedValues, finalAnimationsValues) => {
 	animatedValues[HEIGHT] = animatedValues[HEIGHT] || new Animated.Value(animation.height);
 
 	if (!finalAnimationsValues[HEIGHT]) {
@@ -350,7 +285,7 @@ const height = (animation, animatedValues, finalAnimationsValues) => {
 	};
 };
 
-const width = (animation, animatedValues, finalAnimationsValues) => {
+export const width = (animation, animatedValues, finalAnimationsValues) => {
 	animatedValues[WIDTH] = animatedValues[WIDTH] || new Animated.Value(animation.width);
 
 	if (!finalAnimationsValues[WIDTH]) {
@@ -375,30 +310,4 @@ const width = (animation, animatedValues, finalAnimationsValues) => {
 	};
 };
 
-const wait = (animation) => ({ animation: Animated.delay(animation.duration) });
-
-const defaultStyle = (animation, styleName, type) => {
-	const style = get(animation, `defaultStyle.${styleName}`);
-
-	return style || DEFAULT_VALUES[type];
-};
-
-const createTimingAnimation = (toValue, options, animatedValue) => {
-	return Animated.timing(
-		animatedValue,
-		{
-			toValue,
-			duration: options.duration || DEFAULT_DURATION,
-			delay: options.delay || 0,
-			easing: options.easing || noEasing
-		}
-	);
-};
-
-const createSpringAnimation = (toValue, { spring }, animatedValue) => {
-	return isBoolean(spring)
-		? Animated.spring(animatedValue, { toValue })
-		: Animated.spring(
-			animatedValue, { toValue, ...spring }
-		);
-};
+export const wait = (animation) => ({ animation: Animated.delay(animation.duration) });

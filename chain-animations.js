@@ -2,7 +2,7 @@ import React from 'react';
 import { Animated } from 'react-native';
 import { assign } from 'lodash';
 
-import { scenarioParser } from './utils';
+import { scenarioParser } from './parsers';
 import {
 	ROTATE,
 	MOVE_X,
@@ -13,7 +13,8 @@ import {
 	BORDER_RADIUS,
 	BORDER_WIDTH,
 	WIDTH,
-	HEIGHT
+	HEIGHT,
+	BORDER_COLOR
 } from './constants';
 
 export default class ChainAnimations extends React.Component {
@@ -96,6 +97,16 @@ export default class ChainAnimations extends React.Component {
 		}
 
 		this.scenario.push({ type: BORDER_WIDTH, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	borderColor(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: BORDER_COLOR, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}
