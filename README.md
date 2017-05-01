@@ -1,10 +1,10 @@
 # React Native Anime
 (Inspired by Cheetah for Swift: https://github.com/suguru/Cheetah)
 
-React Native Anime is an animation utility. It can animate many of the style properties the Animated library works with.
+React Native Anime is an animation utility. It can animate many of the style properties the Animated library works with. It's purpose is to make the animations much easier and accessible.
 
 # Features
-* Animation with duration and delay
+* Animations with durations and delays
 * Parallel/Serial executions
 * Easings
 * Springs
@@ -40,6 +40,9 @@ onClick() {
 * borderWidth
 * fontSize
 * opacity
+* backgroundColor
+* borderColor
+* color
 
 # Parallel execution
 Anime groups animation properties and execute them at once.
@@ -53,7 +56,7 @@ Anime groups animation properties and execute them at once.
 ```
 
 # Sequence execution
-`wait` will wait until all animations placed before it completed. It can also receive seconds to wait to start next animation.
+`wait` will wait until all animations placed before it completed. It can also receive milliseconds to wait to start next animation
 
 ```javascript
     this.easy
@@ -64,7 +67,7 @@ Anime groups animation properties and execute them at once.
 ```
 
 # Duration, delay, easing
-Just like when using Animated, you can specify durations, delays, easings for your animations
+Just like with Animated, you can specify durations, delays, easings for your animations
 
 ```javascript
     import { Easing } from 'react-native';
