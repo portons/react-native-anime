@@ -36,8 +36,8 @@ onClick() {
 
 # Properties
 
-* moveX (move in X plane)
-* moveY (move in Y plane)
+* moveX (translateX, relative to current position)
+* moveY (translateY, relative to current position)
 * scale
 * rotate
 * borderRadius
