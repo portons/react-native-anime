@@ -6,7 +6,7 @@ import EasyAnimation from './src';
 export default class Root extends Component {
   moveBox() {
   	this.box
-			.moveX(50, { duration: 100 })
+			.backgroundColor('red', { easing: Easing.bounce })
 			.start();
   }
 
@@ -22,7 +22,8 @@ export default class Root extends Component {
     return (
       <View style={ styles.container }>
         <EasyAnimation.View ref={ ref => this.box = ref }
-														onAnimationEnd={ () => console.log('lol') }
+														onAnimationStart={ () => console.log('started') }
+														onAnimationEnd={ () => console.log('ended') }
 												 		style={{ width: 50, height: 50, backgroundColor: 'blue' }}>
           <View style={ styles.box } />
         </EasyAnimation.View>

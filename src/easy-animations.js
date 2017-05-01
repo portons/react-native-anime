@@ -175,6 +175,7 @@ export default class EasyAnimations extends React.Component {
 		this.setState({ styles, animatedValues, animating: true }, () => {
 			this.currentAnimation = animations;
 
+			this.props.onAnimationStart();
 			this.currentAnimation.start(({ finished }) => {
 				if (finished) {
 					this.props.onAnimationEnd();
