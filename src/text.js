@@ -1,9 +1,9 @@
 import React from 'react';
 import { Animated } from 'react-native';
 
-import EasyAnimations from './easy-animations';
+import Anime from './anime';
 
-export default class Text extends EasyAnimations {
+export default class Text extends Anime {
 	render() {
 		const { styles } = this.state;
 

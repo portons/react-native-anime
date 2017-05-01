@@ -55,97 +55,6 @@ const createSpringAnimation = (toValue, { spring }, animatedValue) => {
 
 // Animation creators
 
-// TODO: Make colors work when more than 1 color animation
-//export const backgroundColor = (animationConfig, animatedValues, finalAnimationsValues) => {
-//	animatedValues[BACKGROUND_COLOR] = animatedValues[BACKGROUND_COLOR] || new Animated.Value(0);
-//
-//	if (!finalAnimationsValues[BACKGROUND_COLOR]) {
-//		finalAnimationsValues[BACKGROUND_COLOR] = animationConfig.value;
-//	} else {
-//		finalAnimationsValues[BACKGROUND_COLOR] = finalAnimationsValues[BACKGROUND_COLOR] + animationConfig.value;
-//	}
-//
-//	let animation;
-//
-//	if (get(animationConfig, 'options.spring')) {
-//		animation = createSpringAnimation(100, animationConfig.options, animatedValues[BACKGROUND_COLOR]);
-//	} else {
-//		animation = createTimingAnimation(100, animationConfig.options, animatedValues[BACKGROUND_COLOR]);
-//	}
-//
-//	const interpolation = animatedValues[BACKGROUND_COLOR].interpolate({
-//		inputRange: [0, 100],
-//		outputRange: [defaultStyle(animationConfig, 'backgroundColor', COLOR), animationConfig.value]
-//	});
-//
-//	return {
-//		animation,
-//		styling: {
-//			style: { backgroundColor: interpolation }
-//		}
-//	};
-//};
-
-//export const borderColor = (animationConfig, animatedValues, finalAnimationsValues) => {
-//	animatedValues[BORDER_COLOR] = animatedValues[BORDER_COLOR] || new Animated.Value(0);
-//
-//	if (!finalAnimationsValues[BORDER_COLOR]) {
-//		finalAnimationsValues[BORDER_COLOR] = animationConfig.value;
-//	} else {
-//		finalAnimationsValues[BORDER_COLOR] = finalAnimationsValues[BORDER_COLOR] + animationConfig.value;
-//	}
-//
-//	let animation;
-//
-//	if (get(animationConfig, 'options.spring')) {
-//		animation = createSpringAnimation(100, animationConfig.options, animatedValues[BORDER_COLOR]);
-//	} else {
-//		animation = createTimingAnimation(100, animationConfig.options, animatedValues[BORDER_COLOR]);
-//	}
-//
-//	const interpolation = animatedValues[BORDER_COLOR].interpolate({
-//		inputRange: [0, 100],
-//		outputRange: [defaultStyle(animationConfig, 'borderColor', COLOR), animationConfig.value]
-//	});
-//
-//	return {
-//		animation,
-//		styling: {
-//			style: { borderColor: interpolation }
-//		}
-//	};
-//};
-
-//export const color = (animationConfig, animatedValues, finalAnimationsValues) => {
-//	animatedValues[COLOR] = animatedValues[COLOR] || new Animated.Value(0);
-//
-//	if (!finalAnimationsValues[COLOR]) {
-//		finalAnimationsValues[COLOR] = animationConfig.value;
-//	} else {
-//		finalAnimationsValues[COLOR] = finalAnimationsValues[COLOR] + animationConfig.value;
-//	}
-//
-//	let animation;
-//
-//	if (get(animationConfig, 'options.spring')) {
-//		animation = createSpringAnimation(100, animationConfig.options, animatedValues[COLOR]);
-//	} else {
-//		animation = createTimingAnimation(100, animationConfig.options, animatedValues[COLOR]);
-//	}
-//
-//	const interpolation = animatedValues[COLOR].interpolate({
-//		inputRange: [0, 100],
-//		outputRange: [defaultStyle(animationConfig, 'color', COLOR), animationConfig.value]
-//	});
-//
-//	return {
-//		animation,
-//		styling: {
-//			style: { color: interpolation }
-//		}
-//	};
-//};
-
 export const rotate = (animationConfig, animatedValues, finalAnimationsValues) => {
 	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
 
@@ -394,3 +303,223 @@ export const opacity = (animationConfig, animatedValues) => {
 };
 
 export const wait = (animation) => ({ animation: Animated.delay(animation.duration) });
+
+// COLOR INTERPOLATIONS: MUCH MORE DIFFICULT THAT REGULAR ANIMATIONS
+
+/*
+ * The problem with colors animations is that we have to interpolate. We can't just make Animated.Value('blue') and then
+ * change it with Animated.timing(toValue: 'red'). We have to interpolate it based on a numeric Animated value. But, if there
+ * are numerous color changes on same scenario, then we also have to update the interpolation for each new animation,
+ * and not simply create a new one. That's the reason for all the 'complicated' logic.
+ */
+export const backgroundColor = (animationConfig, animatedValues, finalAnimationsValues) => {
+	// Check for previously initiated backgroundColor Animated value.
+	// 'backgroundAnimatedValue' holds the Animated.Value we're changing, and 'lastAnimationValues'	holds the data for
+	// the interpolation, for last used color, and for the last numValue we use to animate to with our Animated value.
+	const backgroundAnimatedValue = animatedValues[BACKGROUND_COLOR];
+	const lastAnimationValues = finalAnimationsValues[BACKGROUND_COLOR];
+
+	// Initiate the backgroundColor Animated value
+	animatedValues[BACKGROUND_COLOR] = backgroundAnimatedValue || new Animated.Value(0);
+
+	// The value should run from last Animated.Value._value to += 100, or,
+	// if it's the first bgColor animation, from 0 to 100
+	const toValue = lastAnimationValues ? lastAnimationValues.numValue : 100;
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(toValue, animationConfig.options, animatedValues[BACKGROUND_COLOR]);
+	} else {
+		animation = createTimingAnimation(toValue, animationConfig.options, animatedValues[BACKGROUND_COLOR]);
+	}
+
+	let interpolation;
+	let newInputRange;
+	let newOutputRange;
+
+	// If there's an 'interpolation', then it's not the first animation of the background color. In this case, we have
+	// to adjust this specific animation to take into consideration all the previous bgColor animations to make it continuous.
+	if (lastAnimationValues) {
+		const { inputRange, outputRange } = lastAnimationValues.interpolation;
+		newInputRange = [...inputRange, toValue];
+		newOutputRange = [...outputRange, animationConfig.value];
+
+		interpolation = animatedValues[BACKGROUND_COLOR].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	} else {
+		newInputRange  = [0, 100];
+		newOutputRange = [defaultStyle(animationConfig, 'backgroundColor', COLOR), animationConfig.value];
+
+		interpolation = animatedValues[BACKGROUND_COLOR].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	}
+
+	// Update the last used background color, the numeric value on which we interpolate, and the interpolation ranges
+	if (finalAnimationsValues[BACKGROUND_COLOR]) {
+		finalAnimationsValues[BACKGROUND_COLOR] = {
+			color: animationConfig.value,
+			numValue: finalAnimationsValues[BACKGROUND_COLOR].numValue + 100,
+			interpolation: {
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	} else {
+		finalAnimationsValues[BACKGROUND_COLOR] = {
+			color: animationConfig.value,
+			numValue: 200,
+			interpolation: {
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	}
+
+	return {
+		animation,
+		styling: {
+			style: { backgroundColor: interpolation }
+		}
+	};
+};
+
+export const borderColor = (animationConfig, animatedValues, finalAnimationsValues) => {
+	const backgroundAnimatedValue = animatedValues[BORDER_COLOR];
+	const lastAnimationValues = finalAnimationsValues[BORDER_COLOR];
+
+	animatedValues[BORDER_COLOR] = backgroundAnimatedValue || new Animated.Value(0);
+
+	const toValue = lastAnimationValues ? lastAnimationValues.numValue : 100;
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(toValue, animationConfig.options, animatedValues[BORDER_COLOR]);
+	} else {
+		animation = createTimingAnimation(toValue, animationConfig.options, animatedValues[BORDER_COLOR]);
+	}
+
+	let interpolation;
+	let newInputRange;
+	let newOutputRange;
+
+	if (lastAnimationValues) {
+		const { inputRange, outputRange } = lastAnimationValues.interpolation;
+		newInputRange = [...inputRange, toValue];
+		newOutputRange = [...outputRange, animationConfig.value];
+
+		interpolation = animatedValues[BORDER_COLOR].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	} else {
+		newInputRange  = [0, 100];
+		newOutputRange = [defaultStyle(animationConfig, 'borderColor', COLOR), animationConfig.value];
+
+		interpolation = animatedValues[BORDER_COLOR].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	}
+
+	// Update the last used background color, the numeric value on which we interpolate, and the interpolation ranges
+	if (finalAnimationsValues[BORDER_COLOR]) {
+		finalAnimationsValues[BORDER_COLOR] = {
+			color: animationConfig.value,
+			numValue: finalAnimationsValues[BORDER_COLOR].numValue + 100,
+			interpolation: {
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	} else {
+		finalAnimationsValues[BORDER_COLOR] = {
+			color: animationConfig.value,
+			numValue: 200,
+			interpolation: {
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	}
+
+	return {
+		animation,
+		styling: {
+			style: { borderColor: interpolation }
+		}
+	};
+};
+
+export const color = (animationConfig, animatedValues, finalAnimationsValues) => {
+	const backgroundAnimatedValue = animatedValues[COLOR];
+	const lastAnimationValues = finalAnimationsValues[COLOR];
+
+	animatedValues[COLOR] = backgroundAnimatedValue || new Animated.Value(0);
+
+	const toValue = lastAnimationValues ? lastAnimationValues.numValue : 100;
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(toValue, animationConfig.options, animatedValues[COLOR]);
+	} else {
+		animation = createTimingAnimation(toValue, animationConfig.options, animatedValues[COLOR]);
+	}
+
+	let interpolation;
+	let newInputRange;
+	let newOutputRange;
+
+	if (lastAnimationValues) {
+		const { inputRange, outputRange } = lastAnimationValues.interpolation;
+		newInputRange = [...inputRange, toValue];
+		newOutputRange = [...outputRange, animationConfig.value];
+
+		interpolation = animatedValues[COLOR].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	} else {
+		newInputRange  = [0, 100];
+		newOutputRange = [defaultStyle(animationConfig, 'color', COLOR), animationConfig.value];
+
+		interpolation = animatedValues[COLOR].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	}
+
+	// Update the last used background color, the numeric value on which we interpolate, and the interpolation ranges
+	if (finalAnimationsValues[COLOR]) {
+		finalAnimationsValues[COLOR] = {
+			color: animationConfig.value,
+			numValue: finalAnimationsValues[COLOR].numValue + 100,
+			interpolation: {
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	} else {
+		finalAnimationsValues[COLOR] = {
+			color: animationConfig.value,
+			numValue: 200,
+			interpolation: {
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	}
+
+	return {
+		animation,
+		styling: {
+			style: { color: interpolation }
+		}
+	};
+};

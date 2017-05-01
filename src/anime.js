@@ -19,7 +19,7 @@ import {
 	COLOR
 } from './utils/constants';
 
-export default class EasyAnimations extends React.Component {
+export default class Anime extends React.Component {
 	constructor() {
 		super();
 

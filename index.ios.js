@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, View, TouchableOpacity, Text, Easing } from 'react-native';
+import { AppRegistry, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 
-import EasyAnimation from './src';
+import Anime from './src';
 
 export default class Root extends Component {
   moveBox() {
   	this.box
-			.moveX(50)
+			.moveX(50, { duration: 1000, delay: 1000 })
+			.color('red', { duration: 2000 })
 			.wait(1000)
-			.moveX(-50)
+			.color('blue', { duration: 2000 })
+			.moveX(-50, { spring: true })
 			.start();
   }
 
@@ -23,10 +25,10 @@ export default class Root extends Component {
   render() {
     return (
       <View style={ styles.container }>
-        <EasyAnimation.View ref={ ref => this.box = ref }
-												 		style={{ width: 50, height: 50, backgroundColor: 'blue' }}>
-          <View style={ styles.box } />
-        </EasyAnimation.View>
+        <Anime.Text ref={ ref => this.box = ref }
+												 		style={{ width: 50, height: 50 }}>
+          LOL
+        </Anime.Text>
 
         <TouchableOpacity onPress={ () => this.moveBox() }>
           <View style={{ marginTop: 50,
