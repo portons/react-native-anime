@@ -10,6 +10,8 @@ import {
 	MOVE_Y,
 	MOVE_X,
 	SCALE,
+	SCALE_X,
+	SCALE_Y,
 	BACKGROUND_COLOR,
 	BORDER_RADIUS,
 	BORDER_WIDTH,
@@ -354,6 +356,48 @@ export const scale = (animationConfig, animatedValues) => {
 		styling: {
 			transform: true,
 			style: { scale: animatedValues[SCALE] }
+		}
+	};
+};
+
+export const scaleX = (animationConfig, animatedValues) => {
+	animatedValues[SCALE_X] = animatedValues[SCALE_X] ||
+		new Animated.Value(defaultTransformStyle(animationConfig, 'scaleX', ONE));
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[SCALE_X]);
+	} else {
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[SCALE_X]);
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { scaleX: animatedValues[SCALE_X] }
+		}
+	};
+};
+
+export const scaleY = (animationConfig, animatedValues) => {
+	animatedValues[SCALE_Y] = animatedValues[SCALE_Y] ||
+		new Animated.Value(defaultTransformStyle(animationConfig, 'scaleY', ONE));
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[SCALE_Y]);
+	} else {
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[SCALE_Y]);
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { scaleY: animatedValues[SCALE_Y] }
 		}
 	};
 };

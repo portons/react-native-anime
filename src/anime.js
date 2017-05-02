@@ -10,6 +10,8 @@ import {
 	MOVE_Y,
 	WAIT,
 	SCALE,
+	SCALE_X,
+	SCALE_Y,
 	BACKGROUND_COLOR,
 	BORDER_RADIUS,
 	BORDER_WIDTH,
@@ -55,6 +57,16 @@ export default class Anime extends React.Component {
 		return this;
 	}
 
+	rotate(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: ROTATE_Z, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
 	rotateZ(value, options = {}) {
 		if (this.state.animating) {
 			return this;
@@ -91,6 +103,26 @@ export default class Anime extends React.Component {
 		}
 
 		this.scenario.push({ type: SCALE, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	scaleX(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: SCALE_X, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	scaleY(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: SCALE_Y, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}

@@ -10,6 +10,8 @@ import {
 	MOVE_X,
 	WAIT,
 	SCALE,
+	SCALE_X,
+	SCALE_Y,
 	BACKGROUND_COLOR,
 	BORDER_RADIUS,
 	BORDER_WIDTH,
@@ -30,6 +32,8 @@ import {
 	moveX,
 	moveY,
 	scale,
+	scaleX,
+	scaleY,
 	borderRadius,
 	borderWidth,
 	height,
@@ -165,6 +169,12 @@ const parseAnimation = ({ animationConfig, animatedValues, finalAnimationsValues
 
 		case SCALE:
 			return scale(animationConfig, animatedValues);
+
+		case SCALE_X:
+			return scaleX(animationConfig, animatedValues);
+
+		case SCALE_Y:
+			return scaleY(animationConfig, animatedValues);
 
 		case BORDER_RADIUS:
 			return borderRadius(animationConfig, animatedValues);
