@@ -15,6 +15,7 @@ import {
 	SCALE_X,
 	SCALE_Y,
 	Z_INDEX,
+	PERSPECTIVE,
 	BACKGROUND_COLOR,
 	BORDER_RADIUS,
 	BORDER_WIDTH,
@@ -156,6 +157,16 @@ export default class Anime extends React.Component {
 		}
 
 		this.scenario.push({ type: Z_INDEX, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	perspective(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: PERSPECTIVE, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}

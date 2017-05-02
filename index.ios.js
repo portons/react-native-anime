@@ -6,9 +6,8 @@ import Anime from './src';
 export default class Root extends Component {
 	animateLogin() {
 		this.button
-			.zIndex(2, { spring: true })
-			.wait()
-			.zIndex(1, { spring: true })
+			.rotateY(60, { spring: true })
+			.rotateX(70, { spring: true })
 			.start();
 	}
 

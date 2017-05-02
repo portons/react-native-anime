@@ -28,7 +28,8 @@ import {
 	BORDER_COLOR,
 	FONT_SIZE,
 	OPACITY,
-	ZERO_DEG
+	ZERO_DEG,
+	PERSPECTIVE
 } from './constants';
 
 // Utils methods
@@ -552,6 +553,27 @@ export const zIndex = (animationConfig, animatedValues) => {
 		animation,
 		styling: {
 			style: { zIndex: animatedValues[Z_INDEX] }
+		}
+	};
+};
+
+export const perspective = (animationConfig, animatedValues) => {
+	animatedValues[PERSPECTIVE] = animatedValues[PERSPECTIVE] ||
+		new Animated.Value(defaultTransformStyle(animationConfig, 'perspective', ONE));
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[PERSPECTIVE]);
+	} else {
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[PERSPECTIVE]);
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { perspective: animatedValues[PERSPECTIVE] }
 		}
 	};
 };

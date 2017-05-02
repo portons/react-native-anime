@@ -15,6 +15,7 @@ import {
 	SCALE_X,
 	SCALE_Y,
 	Z_INDEX,
+	PERSPECTIVE,
 	BACKGROUND_COLOR,
 	BORDER_RADIUS,
 	BORDER_WIDTH,
@@ -40,6 +41,7 @@ import {
 	scaleX,
 	scaleY,
 	zIndex,
+	perspective,
 	borderRadius,
 	borderWidth,
 	height,
@@ -190,6 +192,9 @@ const parseAnimation = ({ animationConfig, animatedValues, finalAnimationsValues
 
 		case Z_INDEX:
 			return zIndex(animationConfig, animatedValues);
+
+		case PERSPECTIVE:
+			return perspective(animationConfig, animatedValues);
 
 		case BORDER_RADIUS:
 			return borderRadius(animationConfig, animatedValues);
