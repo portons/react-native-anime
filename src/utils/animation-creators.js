@@ -1,6 +1,6 @@
 import { Animated } from 'react-native';
 
-import { get, isBoolean } from 'lodash';
+import { get, isBoolean, property } from 'lodash';
 
 import {
 	DEFAULT_DURATION,
@@ -23,7 +23,6 @@ import {
 	OPACITY
 } from './constants';
 
-
 // Utils methods
 const noEasing = (value) => value;
 
@@ -31,6 +30,16 @@ const defaultStyle = (animationConfig, styleName, type) => {
 	const style = get(animationConfig, `defaultStyle.${styleName}`);
 
 	return style || DEFAULT_VALUES[type];
+};
+
+const defaultTransformStyle = (animationConfig, styleName, type) => {
+	const transform = get(animationConfig, `defaultStyle.transform`);
+
+	if (!transform) return DEFAULT_VALUES[type];
+
+	const style = transform.map(property(styleName));
+
+	return style[0] || DEFAULT_VALUES[type];
 };
 
 const createTimingAnimation = (toValue, options, animatedValue) => {
@@ -55,6 +64,63 @@ const createSpringAnimation = (toValue, { spring }, animatedValue) => {
 
 // Animation creators
 
+export const moveX = (animationConfig, animatedValues, finalAnimationsValues) => {
+	const defaultMoveXValue = defaultTransformStyle(animationConfig, 'translateX', ZERO);
+
+	animatedValues[MOVE_X] = animatedValues[MOVE_X] || new Animated.Value(defaultMoveXValue);
+
+	if (!finalAnimationsValues[MOVE_X]) {
+		finalAnimationsValues[MOVE_X] = animationConfig.value + defaultMoveXValue;
+	} else {
+		finalAnimationsValues[MOVE_X] = finalAnimationsValues[MOVE_X] + animationConfig.value;
+	}
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(finalAnimationsValues[MOVE_X], animationConfig.options, animatedValues[MOVE_X]);
+	} else {
+		animation = createTimingAnimation(finalAnimationsValues[MOVE_X], animationConfig.options, animatedValues[MOVE_X]);
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { translateX: animatedValues[MOVE_X] }
+		}
+	};
+};
+
+export const moveY = (animationConfig, animatedValues, finalAnimationsValues) => {
+	const defaultMoveYValue = defaultTransformStyle(animationConfig, 'translateY', ZERO);
+
+	animatedValues[MOVE_Y] = animatedValues[MOVE_Y] || new Animated.Value(defaultMoveYValue);
+
+	if (!finalAnimationsValues[MOVE_Y]) {
+		finalAnimationsValues[MOVE_Y] = animationConfig.value + defaultMoveYValue;
+	} else {
+		finalAnimationsValues[MOVE_Y] = finalAnimationsValues[MOVE_Y] + animationConfig.value;
+	}
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(finalAnimationsValues[MOVE_Y], animationConfig.options, animatedValues[MOVE_Y]);
+	} else {
+		animation = createTimingAnimation(finalAnimationsValues[MOVE_Y], animationConfig.options, animatedValues[MOVE_Y]);
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { translateY: animatedValues[MOVE_Y] }
+		}
+	};
+};
+
+// TODO: Fix when default style provided. Uses interpolation :(
 export const rotate = (animationConfig, animatedValues, finalAnimationsValues) => {
 	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
 
@@ -94,60 +160,10 @@ export const rotate = (animationConfig, animatedValues, finalAnimationsValues) =
 	};
 };
 
-export const moveX = (animationConfig, animatedValues, finalAnimationsValues) => {
-	animatedValues[MOVE_X] = animatedValues[MOVE_X] || new Animated.Value(0);
-
-	if (!finalAnimationsValues[MOVE_X]) {
-		finalAnimationsValues[MOVE_X] = animationConfig.value;
-	} else {
-		finalAnimationsValues[MOVE_X] = finalAnimationsValues[MOVE_X] + animationConfig.value;
-	}
-
-	let animation;
-
-	if (get(animationConfig, 'options.spring')) {
-		animation = createSpringAnimation(finalAnimationsValues[MOVE_X], animationConfig.options, animatedValues[MOVE_X]);
-	} else {
-		animation = createTimingAnimation(finalAnimationsValues[MOVE_X], animationConfig.options, animatedValues[MOVE_X]);
-	}
-
-	return {
-		animation,
-		styling: {
-			transform: true,
-			style: { translateX: animatedValues[MOVE_X] }
-		}
-	};
-};
-
-export const moveY = (animationConfig, animatedValues, finalAnimationsValues) => {
-	animatedValues[MOVE_Y] = animatedValues[MOVE_Y] || new Animated.Value(0);
-
-	if (!finalAnimationsValues[MOVE_Y]) {
-		finalAnimationsValues[MOVE_Y] = animationConfig.value;
-	} else {
-		finalAnimationsValues[MOVE_Y] = finalAnimationsValues[MOVE_Y] + animationConfig.value;
-	}
-
-	let animation;
-
-	if (get(animationConfig, 'options.spring')) {
-		animation = createSpringAnimation(finalAnimationsValues[MOVE_Y], animationConfig.options, animatedValues[MOVE_Y]);
-	} else {
-		animation = createTimingAnimation(finalAnimationsValues[MOVE_Y], animationConfig.options, animatedValues[MOVE_Y]);
-	}
-
-	return {
-		animation,
-		styling: {
-			transform: true,
-			style: { translateY: animatedValues[MOVE_Y] }
-		}
-	};
-};
-
+// TODO: Fix scale when more than 1 animation
 export const scale = (animationConfig, animatedValues) => {
-	animatedValues[SCALE] = animatedValues[SCALE] || new Animated.Value(1);
+	animatedValues[SCALE] = animatedValues[SCALE] ||
+													new Animated.Value(defaultTransformStyle(animationConfig, 'scale', ONE));
 
 	let animation;
 

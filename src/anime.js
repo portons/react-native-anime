@@ -38,7 +38,7 @@ export default class Anime extends React.Component {
 			return this;
 		}
 
-		this.scenario.push({ type: MOVE_X, value, options });
+		this.scenario.push({ type: MOVE_X, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}
@@ -48,7 +48,7 @@ export default class Anime extends React.Component {
 			return this;
 		}
 
-		this.scenario.push({ type: MOVE_Y, value, options });
+		this.scenario.push({ type: MOVE_Y, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}
@@ -58,7 +58,7 @@ export default class Anime extends React.Component {
 			return this;
 		}
 
-		this.scenario.push({ type: ROTATE, value, options });
+		this.scenario.push({ type: ROTATE, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}
@@ -68,7 +68,7 @@ export default class Anime extends React.Component {
 			return this;
 		}
 
-		this.scenario.push({ type: SCALE, value, options });
+		this.scenario.push({ type: SCALE, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}
@@ -173,7 +173,7 @@ export default class Anime extends React.Component {
 		return this;
 	}
 
-	start() {
+	start(onAnimationEnd) {
 		if (this.state.animating) {
 			return;
 		}
@@ -184,44 +184,45 @@ export default class Anime extends React.Component {
 		});
 
 		this.currentAnimation = animations;
+		this.onAnimationEnd = onAnimationEnd;
 
 		this.setState({ styles, animatedValues, animating: true }, () => {
-			this.props.onAnimationStart && this.props.onAnimationStart();
-
 			this.currentAnimation.start(({ finished }) => {
 				if (!finished) {
 					return;
 				}
 
-				this.props.onAnimationEnd && this.props.onAnimationEnd();
+				this.onAnimationEnd && this.onAnimationEnd();
 
 				this.scenario = [];
 				this.currentAnimation = null;
+				this.onAnimationEnd = null;
 				this.setState({ animating: false });
 			});
 		});
 	}
 
-	repeat(count) {
+	repeat(count, onAnimationEnd) {
 		const { animations, styles, animatedValues } = scenarioParser({
 			scenario: this.scenario,
 			animatedValues: assign({}, this.state.animatedValues)
 		});
 
 		this.currentAnimation = animations;
+		this.onAnimationEnd = onAnimationEnd;
 
 		this.setState({ styles, animatedValues, animating: true }, () => {
-			this.props.onAnimationStart && this.props.onAnimationStart();
-
 			this.currentAnimation.start(({ finished }) => {
 				if (!finished) {
 					return;
 				}
 
 				if (count === 1) {
-					this.props.onAnimationEnd && this.props.onAnimationEnd();
+					this.onAnimationEnd && this.onAnimationEnd();
+
 					this.scenario = [];
 					this.currentAnimation = null;
+					this.onAnimationEnd = null;
 					this.setState({ animating: false });
 				} else {
 					this.repeat(count - 1);
@@ -239,8 +240,6 @@ export default class Anime extends React.Component {
 		this.currentAnimation = animations;
 
 		this.setState({ styles, animatedValues, animating: true }, () => {
-			this.props.onAnimationStart && this.props.onAnimationStart();
-
 			this.currentAnimation.start(({ finished }) => {
 				if (!finished) {
 					return;
