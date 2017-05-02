@@ -183,63 +183,73 @@ export default class Anime extends React.Component {
 			animatedValues: assign({}, this.state.animatedValues)
 		});
 
-		this.setState({ styles, animatedValues, animating: true }, () => {
-			this.currentAnimation = animations;
+		this.currentAnimation = animations;
 
+		this.setState({ styles, animatedValues, animating: true }, () => {
 			this.props.onAnimationStart && this.props.onAnimationStart();
 
 			this.currentAnimation.start(({ finished }) => {
-				if (finished) {
-					this.props.onAnimationEnd && this.props.onAnimationEnd();
+				if (!finished) {
+					return;
+				}
 
+				this.props.onAnimationEnd && this.props.onAnimationEnd();
+
+				this.scenario = [];
+				this.currentAnimation = null;
+				this.setState({ animating: false });
+			});
+		});
+	}
+
+	repeat(count) {
+		const { animations, styles, animatedValues } = scenarioParser({
+			scenario: this.scenario,
+			animatedValues: assign({}, this.state.animatedValues)
+		});
+
+		this.currentAnimation = animations;
+
+		this.setState({ styles, animatedValues, animating: true }, () => {
+			this.props.onAnimationStart && this.props.onAnimationStart();
+
+			this.currentAnimation.start(({ finished }) => {
+				if (!finished) {
+					return;
+				}
+
+				if (count === 1) {
+					this.props.onAnimationEnd && this.props.onAnimationEnd();
 					this.scenario = [];
+					this.currentAnimation = null;
 					this.setState({ animating: false });
+				} else {
+					this.repeat(count - 1);
 				}
 			});
 		});
 	}
 
-	// TODO: Need to do :)
-	//repeat(numOfIterations) {
-	//	if (numOfIterations === 0) {
-	//		this.scenario = [];
-	//		this.setState({ animating: false });
-	//
-	//		return;
-	//	}
-	//
-	//	const { animations, styles, animatedValues } = scenarioParser({
-	//		scenario: this.scenario,
-	//		animatedValues: assign({}, this.state.animatedValues)
-	//	});
-	//
-	//	this.setState({ styles, animatedValues, animating: true }, () => {
-	//		this.currentAnimation = animations;
-	//
-	//		this.currentAnimation.start(({ finished }) => {
-	//			if (finished) {
-	//				this.repeat(numOfIterations - 1)
-	//			}
-	//		});
-	//	});
-	//}
-	//
-	//infinite() {
-	//	const { animations, styles, animatedValues } = scenarioParser({
-	//		scenario: this.scenario,
-	//		animatedValues: assign({}, this.state.animatedValues)
-	//	});
-	//
-	//	this.setState({ styles, animatedValues, animating: true }, () => {
-	//		this.currentAnimation = animations;
-	//
-	//		this.currentAnimation.start(({ finished }) => {
-	//			if (finished) {
-	//				this.infinite();
-	//			}
-	//		});
-	//	});
-	//}
+	infinite() {
+		const { animations, styles, animatedValues } = scenarioParser({
+			scenario: this.scenario,
+			animatedValues: assign({}, this.state.animatedValues)
+		});
+
+		this.currentAnimation = animations;
+
+		this.setState({ styles, animatedValues, animating: true }, () => {
+			this.props.onAnimationStart && this.props.onAnimationStart();
+
+			this.currentAnimation.start(({ finished }) => {
+				if (!finished) {
+					return;
+				}
+
+				return this.infinite();
+			});
+		});
+	}
 
 	stop() {
 		if (this.state.animating) {
@@ -259,7 +269,6 @@ export default class Anime extends React.Component {
 
 	reset() {
 		this.scenario = [];
-		this.dimensionsSet = false;
 
 		this.setState({
 			styles: {},

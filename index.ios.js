@@ -6,9 +6,14 @@ import Anime from './src';
 export default class Root extends Component {
   moveBox() {
   	this.box
-			.color('red', { spring: { friction: 1, velocity: 100 } })
-			.fontSize(20, { spring: { friction: 1, velocity: 100 } })
-			.start()
+			.backgroundColor('red')
+			.scale(2)
+			.borderRadius(50)
+			.wait(0)
+			.backgroundColor('blue')
+			.scale(1)
+			.borderRadius(0)
+			.infinite()
   }
 
   stopBox() {
@@ -22,10 +27,10 @@ export default class Root extends Component {
   render() {
     return (
       <View style={ styles.container }>
-        <Anime.Text ref={ ref => this.box = ref }
-										style={{ color: 'blue', fontSize: 12 }}>
-          VERY EASY
-        </Anime.Text>
+        <Anime.View ref={ ref => this.box = ref }
+										style={{ backgroundColor: 'blue', width: 50, height: 50 }}>
+          <View style={ styles.box }/>
+        </Anime.View>
 
         <TouchableOpacity onPress={ () => this.moveBox() }>
           <View style={{ marginTop: 100,
