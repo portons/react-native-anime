@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, View, TouchableOpacity, Text, Easing } from 'react-native';
+import { AppRegistry, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 
 import Anime from './src';
 
