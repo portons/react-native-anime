@@ -1,5 +1,7 @@
 // Animation types
-export const ROTATE = 'rotate';
+export const ROTATE_Z = 'rotateZ';
+export const ROTATE_X = 'rotateX';
+export const ROTATE_Y = 'rotateY';
 export const MOVE_X = 'moveX';
 export const MOVE_Y = 'moveY';
 export const WAIT = 'wait';

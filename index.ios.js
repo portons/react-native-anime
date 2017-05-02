@@ -6,9 +6,9 @@ import Anime from './src';
 export default class Root extends Component {
 	animateLogin() {
 		this.button
-			.backgroundColor('red', { duration: 500 })
+			.rotateZ(360, { spring: true })
 			.wait()
-			.backgroundColor('blue', { duration: 500 })
+			.rotateX(360, { spring: true })
 			.start();
 	}
 

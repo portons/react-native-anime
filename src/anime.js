@@ -3,7 +3,9 @@ import { assign } from 'lodash';
 
 import { scenarioParser } from './utils/parsers';
 import {
-	ROTATE,
+	ROTATE_Z,
+	ROTATE_X,
+	ROTATE_Y,
 	MOVE_X,
 	MOVE_Y,
 	WAIT,
@@ -53,12 +55,32 @@ export default class Anime extends React.Component {
 		return this;
 	}
 
-	rotate(value, options = {}) {
+	rotateZ(value, options = {}) {
 		if (this.state.animating) {
 			return this;
 		}
 
-		this.scenario.push({ type: ROTATE, value, options, defaultStyle: this.props.style });
+		this.scenario.push({ type: ROTATE_Z, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	rotateX(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: ROTATE_X, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	rotateY(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: ROTATE_Y, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}

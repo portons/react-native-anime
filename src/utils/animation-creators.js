@@ -4,7 +4,9 @@ import { get, isBoolean, property } from 'lodash';
 
 import {
 	DEFAULT_DURATION,
-	ROTATE,
+	ROTATE_X,
+	ROTATE_Y,
+	ROTATE_Z,
 	MOVE_Y,
 	MOVE_X,
 	SCALE,
@@ -121,45 +123,218 @@ export const moveY = (animationConfig, animatedValues, finalAnimationsValues) =>
 	};
 };
 
-// TODO: Fix when default style provided. Uses interpolation :(
-//export const rotate = (animationConfig, animatedValues, finalAnimationsValues) => {
-//	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
-//
-//	let startingPoint;
-//
-//	if (!finalAnimationsValues[ROTATE]) {
-//		finalAnimationsValues[ROTATE] = animationConfig.value;
-//		startingPoint = 0;
-//	} else {
-//		finalAnimationsValues[ROTATE] = finalAnimationsValues[ROTATE] + animationConfig.value;
-//		startingPoint = finalAnimationsValues[ROTATE] - animationConfig.value;
-//	}
-//
-//	let animation;
-//
-//	if (get(animationConfig, 'options.spring')) {
-//		animation = createSpringAnimation(finalAnimationsValues[ROTATE], animationConfig.options, animatedValues[ROTATE]);
-//	} else {
-//		animation = createTimingAnimation(finalAnimationsValues[ROTATE], animationConfig.options, animatedValues[ROTATE]);
-//	}
-//
-//	const interpolation = animatedValues[ROTATE].interpolate({
-//		outputRange: startingPoint > finalAnimationsValues[ROTATE]
-//			? [`${finalAnimationsValues[ROTATE]}deg`, `${startingPoint}deg`]
-//			: [`${startingPoint}deg`, `${finalAnimationsValues[ROTATE]}deg`],
-//		inputRange: startingPoint > finalAnimationsValues[ROTATE]
-//			? [finalAnimationsValues[ROTATE], startingPoint]
-//			: [startingPoint, finalAnimationsValues[ROTATE]]
-//	});
-//
-//	return {
-//		animation,
-//		styling: {
-//			transform: true,
-//			style: { rotate: interpolation }
-//		}
-//	};
-//};
+export const rotateX = (animationConfig, animatedValues, finalAnimationsValues) => {
+	const lastAnimationValues = finalAnimationsValues[ROTATE_X];
+
+	animatedValues[ROTATE_X] = animatedValues[ROTATE_X] || new Animated.Value(0);
+
+	const toValue = lastAnimationValues ? lastAnimationValues.numValue : 100;
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(toValue, animationConfig.options, animatedValues[ROTATE_X]);
+	} else {
+		animation = createTimingAnimation(toValue, animationConfig.options, animatedValues[ROTATE_X]);
+	}
+
+	let interpolation;
+	let newInputRange;
+	let newOutputRange;
+
+	if (lastAnimationValues) {
+		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
+		const toValueInterpolated = degree + animationConfig.value;
+
+		newInputRange = [...inputRange, toValue];
+		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
+
+		interpolation = animatedValues[ROTATE_X].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	} else {
+		newInputRange  = [0, 100];
+		newOutputRange = [`${defaultTransformStyle(animationConfig, 'rotateX', ZERO_DEG)}`, `${animationConfig.value}deg`];
+
+		interpolation = animatedValues[ROTATE_X].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	}
+
+	if (finalAnimationsValues[ROTATE_X]) {
+		finalAnimationsValues[ROTATE_X] = {
+			numValue: finalAnimationsValues[ROTATE_X].numValue + 100,
+			interpolationObject: interpolation,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	} else {
+		finalAnimationsValues[ROTATE_X] = {
+			numValue: 200,
+			interpolationObject: interpolation,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { rotateX: interpolation }
+		}
+	};
+};
+
+export const rotateZ = (animationConfig, animatedValues, finalAnimationsValues) => {
+	const lastAnimationValues = finalAnimationsValues[ROTATE_Z];
+
+	animatedValues[ROTATE_Z] = animatedValues[ROTATE_Z] || new Animated.Value(0);
+
+	const toValue = lastAnimationValues ? lastAnimationValues.numValue : 100;
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(toValue, animationConfig.options, animatedValues[ROTATE_Z]);
+	} else {
+		animation = createTimingAnimation(toValue, animationConfig.options, animatedValues[ROTATE_Z]);
+	}
+
+	let interpolation;
+	let newInputRange;
+	let newOutputRange;
+
+	if (lastAnimationValues) {
+		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
+		const toValueInterpolated = degree + animationConfig.value;
+
+		newInputRange = [...inputRange, toValue];
+		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
+
+		interpolation = animatedValues[ROTATE_Z].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	} else {
+		newInputRange  = [0, 100];
+		newOutputRange = [`${defaultTransformStyle(animationConfig, 'rotateZ', ZERO_DEG)}`, `${animationConfig.value}deg`];
+
+		interpolation = animatedValues[ROTATE_Z].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	}
+
+	if (finalAnimationsValues[ROTATE_Z]) {
+		finalAnimationsValues[ROTATE_Z] = {
+			numValue: finalAnimationsValues[ROTATE_Z].numValue + 100,
+			interpolationObject: interpolation,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	} else {
+		finalAnimationsValues[ROTATE_Z] = {
+			numValue: 200,
+			interpolationObject: interpolation,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { rotateZ: interpolation }
+		}
+	};
+};
+
+export const rotateY = (animationConfig, animatedValues, finalAnimationsValues) => {
+	const lastAnimationValues = finalAnimationsValues[ROTATE_Y];
+
+	animatedValues[ROTATE_Y] = animatedValues[ROTATE_Y] || new Animated.Value(0);
+
+	const toValue = lastAnimationValues ? lastAnimationValues.numValue : 100;
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(toValue, animationConfig.options, animatedValues[ROTATE_Y]);
+	} else {
+		animation = createTimingAnimation(toValue, animationConfig.options, animatedValues[ROTATE_Y]);
+	}
+
+	let interpolation;
+	let newInputRange;
+	let newOutputRange;
+
+	if (lastAnimationValues) {
+		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
+		const toValueInterpolated = degree + animationConfig.value;
+
+		newInputRange = [...inputRange, toValue];
+		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
+
+		interpolation = animatedValues[ROTATE_Y].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	} else {
+		newInputRange  = [0, 100];
+		newOutputRange = [`${defaultTransformStyle(animationConfig, 'rotateY', ZERO_DEG)}`, `${animationConfig.value}deg`];
+
+		interpolation = animatedValues[ROTATE_Y].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	}
+
+	if (finalAnimationsValues[ROTATE_Y]) {
+		finalAnimationsValues[ROTATE_Y] = {
+			numValue: finalAnimationsValues[ROTATE_Y].numValue + 100,
+			interpolationObject: interpolation,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	} else {
+		finalAnimationsValues[ROTATE_Y] = {
+			numValue: 200,
+			interpolationObject: interpolation,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { rotateY: interpolation }
+		}
+	};
+};
 
 // TODO: Fix scale when more than 1 animation
 export const scale = (animationConfig, animatedValues) => {
@@ -401,77 +576,6 @@ export const backgroundColor = (animationConfig, animatedValues, finalAnimations
 		animation,
 		styling: {
 			style: { backgroundColor: interpolation }
-		}
-	};
-};
-
-export const rotate = (animationConfig, animatedValues, finalAnimationsValues) => {
-	const lastAnimationValues = finalAnimationsValues[ROTATE];
-
-	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
-
-	const toValue = lastAnimationValues ? lastAnimationValues.numValue : 100;
-
-	let animation;
-
-	if (get(animationConfig, 'options.spring')) {
-		animation = createSpringAnimation(toValue, animationConfig.options, animatedValues[ROTATE]);
-	} else {
-		animation = createTimingAnimation(toValue, animationConfig.options, animatedValues[ROTATE]);
-	}
-
-	let interpolation;
-	let newInputRange;
-	let newOutputRange;
-
-	if (lastAnimationValues) {
-		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
-		const toValueInterpolated = degree + animationConfig.value;
-
-		newInputRange = [...inputRange, toValue];
-		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
-
-		interpolation = animatedValues[ROTATE].interpolate({
-			inputRange: newInputRange,
-			outputRange: newOutputRange
-		});
-	} else {
-		newInputRange  = [0, 100];
-		newOutputRange = [`${defaultTransformStyle(animationConfig, 'rotate', ZERO_DEG)}`, `${animationConfig.value}deg`];
-
-		interpolation = animatedValues[ROTATE].interpolate({
-			inputRange: newInputRange,
-			outputRange: newOutputRange
-		});
-	}
-
-	if (finalAnimationsValues[ROTATE]) {
-		finalAnimationsValues[ROTATE] = {
-			numValue: finalAnimationsValues[ROTATE].numValue + 100,
-			interpolationObject: interpolation,
-			interpolation: {
-				degree: animationConfig.value,
-				inputRange: newInputRange,
-				outputRange: newOutputRange
-			}
-		}
-	} else {
-		finalAnimationsValues[ROTATE] = {
-			numValue: 200,
-			interpolationObject: interpolation,
-			interpolation: {
-				degree: animationConfig.value,
-				inputRange: newInputRange,
-				outputRange: newOutputRange
-			}
-		}
-	}
-
-	return {
-		animation,
-		styling: {
-			transform: true,
-			style: { rotate: interpolation }
 		}
 	};
 };

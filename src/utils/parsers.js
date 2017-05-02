@@ -3,7 +3,9 @@ import { Animated } from 'react-native';
 import { reduce, isEqual, last, forEach, findIndex, has } from 'lodash';
 
 import {
-	ROTATE,
+	ROTATE_Z,
+	ROTATE_X,
+	ROTATE_Y,
 	MOVE_Y,
 	MOVE_X,
 	WAIT,
@@ -20,7 +22,9 @@ import {
 } from './constants';
 
 import {
-	rotate,
+	rotateZ,
+	rotateY,
+	rotateX,
 	backgroundColor,
 	borderColor,
 	moveX,
@@ -135,8 +139,14 @@ const createAnimations = (sequences, animatedValues) => {
 
 const parseAnimation = ({ animationConfig, animatedValues, finalAnimationsValues }) => {
 	switch (animationConfig.type) {
-		case ROTATE:
-			return rotate(animationConfig, animatedValues, finalAnimationsValues);
+		case ROTATE_Z:
+			return rotateZ(animationConfig, animatedValues, finalAnimationsValues);
+
+		case ROTATE_X:
+			return rotateX(animationConfig, animatedValues, finalAnimationsValues);
+
+		case ROTATE_Y:
+			return rotateY(animationConfig, animatedValues, finalAnimationsValues);
 
 		case BACKGROUND_COLOR:
 			return backgroundColor(animationConfig, animatedValues, finalAnimationsValues);
