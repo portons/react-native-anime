@@ -6,6 +6,8 @@ import {
 	ROTATE_Z,
 	ROTATE_X,
 	ROTATE_Y,
+	SKEW_X,
+	SKEW_Y,
 	MOVE_Y,
 	MOVE_X,
 	WAIT,
@@ -27,6 +29,8 @@ import {
 	rotateZ,
 	rotateY,
 	rotateX,
+	skewX,
+	skewY,
 	backgroundColor,
 	borderColor,
 	moveX,
@@ -151,6 +155,12 @@ const parseAnimation = ({ animationConfig, animatedValues, finalAnimationsValues
 
 		case ROTATE_Y:
 			return rotateY(animationConfig, animatedValues, finalAnimationsValues);
+
+		case SKEW_X:
+			return skewX(animationConfig, animatedValues, finalAnimationsValues);
+
+		case SKEW_Y:
+			return skewY(animationConfig, animatedValues, finalAnimationsValues);
 
 		case BACKGROUND_COLOR:
 			return backgroundColor(animationConfig, animatedValues, finalAnimationsValues);

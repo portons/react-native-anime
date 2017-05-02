@@ -6,6 +6,8 @@ import {
 	ROTATE_Z,
 	ROTATE_X,
 	ROTATE_Y,
+	SKEW_X,
+	SKEW_Y,
 	MOVE_X,
 	MOVE_Y,
 	WAIT,
@@ -93,6 +95,26 @@ export default class Anime extends React.Component {
 		}
 
 		this.scenario.push({ type: ROTATE_Y, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	skewX(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: SKEW_X, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	skewY(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: SKEW_Y, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}

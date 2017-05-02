@@ -7,6 +7,8 @@ import {
 	ROTATE_X,
 	ROTATE_Y,
 	ROTATE_Z,
+	SKEW_X,
+	SKEW_Y,
 	MOVE_Y,
 	MOVE_X,
 	SCALE,
@@ -168,7 +170,6 @@ export const rotateX = (animationConfig, animatedValues, finalAnimationsValues) 
 	if (finalAnimationsValues[ROTATE_X]) {
 		finalAnimationsValues[ROTATE_X] = {
 			numValue: finalAnimationsValues[ROTATE_X].numValue + 100,
-			interpolationObject: interpolation,
 			interpolation: {
 				degree: animationConfig.value,
 				inputRange: newInputRange,
@@ -178,7 +179,6 @@ export const rotateX = (animationConfig, animatedValues, finalAnimationsValues) 
 	} else {
 		finalAnimationsValues[ROTATE_X] = {
 			numValue: 200,
-			interpolationObject: interpolation,
 			interpolation: {
 				degree: animationConfig.value,
 				inputRange: newInputRange,
@@ -239,7 +239,6 @@ export const rotateZ = (animationConfig, animatedValues, finalAnimationsValues) 
 	if (finalAnimationsValues[ROTATE_Z]) {
 		finalAnimationsValues[ROTATE_Z] = {
 			numValue: finalAnimationsValues[ROTATE_Z].numValue + 100,
-			interpolationObject: interpolation,
 			interpolation: {
 				degree: animationConfig.value,
 				inputRange: newInputRange,
@@ -249,7 +248,6 @@ export const rotateZ = (animationConfig, animatedValues, finalAnimationsValues) 
 	} else {
 		finalAnimationsValues[ROTATE_Z] = {
 			numValue: 200,
-			interpolationObject: interpolation,
 			interpolation: {
 				degree: animationConfig.value,
 				inputRange: newInputRange,
@@ -310,7 +308,6 @@ export const rotateY = (animationConfig, animatedValues, finalAnimationsValues) 
 	if (finalAnimationsValues[ROTATE_Y]) {
 		finalAnimationsValues[ROTATE_Y] = {
 			numValue: finalAnimationsValues[ROTATE_Y].numValue + 100,
-			interpolationObject: interpolation,
 			interpolation: {
 				degree: animationConfig.value,
 				inputRange: newInputRange,
@@ -320,7 +317,6 @@ export const rotateY = (animationConfig, animatedValues, finalAnimationsValues) 
 	} else {
 		finalAnimationsValues[ROTATE_Y] = {
 			numValue: 200,
-			interpolationObject: interpolation,
 			interpolation: {
 				degree: animationConfig.value,
 				inputRange: newInputRange,
@@ -334,6 +330,144 @@ export const rotateY = (animationConfig, animatedValues, finalAnimationsValues) 
 		styling: {
 			transform: true,
 			style: { rotateY: interpolation }
+		}
+	};
+};
+
+export const skewX = (animationConfig, animatedValues, finalAnimationsValues) => {
+	const lastAnimationValues = finalAnimationsValues[SKEW_X];
+
+	animatedValues[SKEW_X] = animatedValues[SKEW_X] || new Animated.Value(0);
+
+	const toValue = lastAnimationValues ? lastAnimationValues.numValue : 100;
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(toValue, animationConfig.options, animatedValues[SKEW_X]);
+	} else {
+		animation = createTimingAnimation(toValue, animationConfig.options, animatedValues[SKEW_X]);
+	}
+
+	let interpolation;
+	let newInputRange;
+	let newOutputRange;
+
+	if (lastAnimationValues) {
+		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
+		const toValueInterpolated = degree + animationConfig.value;
+
+		newInputRange = [...inputRange, toValue];
+		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
+
+		interpolation = animatedValues[SKEW_X].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	} else {
+		newInputRange  = [0, 100];
+		newOutputRange = [`${defaultTransformStyle(animationConfig, 'skewX', ZERO_DEG)}`, `${animationConfig.value}deg`];
+
+		interpolation = animatedValues[SKEW_X].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	}
+
+	if (finalAnimationsValues[SKEW_X]) {
+		finalAnimationsValues[SKEW_X] = {
+			numValue: finalAnimationsValues[SKEW_X].numValue + 100,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	} else {
+		finalAnimationsValues[SKEW_X] = {
+			numValue: 200,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { skewX: interpolation }
+		}
+	};
+};
+
+export const skewY = (animationConfig, animatedValues, finalAnimationsValues) => {
+	const lastAnimationValues = finalAnimationsValues[SKEW_Y];
+
+	animatedValues[SKEW_Y] = animatedValues[SKEW_Y] || new Animated.Value(0);
+
+	const toValue = lastAnimationValues ? lastAnimationValues.numValue : 100;
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(toValue, animationConfig.options, animatedValues[SKEW_Y]);
+	} else {
+		animation = createTimingAnimation(toValue, animationConfig.options, animatedValues[SKEW_Y]);
+	}
+
+	let interpolation;
+	let newInputRange;
+	let newOutputRange;
+
+	if (lastAnimationValues) {
+		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
+		const toValueInterpolated = degree + animationConfig.value;
+
+		newInputRange = [...inputRange, toValue];
+		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
+
+		interpolation = animatedValues[SKEW_Y].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	} else {
+		newInputRange  = [0, 100];
+		newOutputRange = [`${defaultTransformStyle(animationConfig, 'skewY', ZERO_DEG)}`, `${animationConfig.value}deg`];
+
+		interpolation = animatedValues[SKEW_Y].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	}
+
+	if (finalAnimationsValues[SKEW_Y]) {
+		finalAnimationsValues[SKEW_Y] = {
+			numValue: finalAnimationsValues[SKEW_Y].numValue + 100,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	} else {
+		finalAnimationsValues[SKEW_Y] = {
+			numValue: 200,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { skewY: interpolation }
 		}
 	};
 };

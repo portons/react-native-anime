@@ -6,9 +6,9 @@ import Anime from './src';
 export default class Root extends Component {
 	animateLogin() {
 		this.button
-			.scaleY(2, { spring: true })
+			.skewY(10, { spring: true })
 			.wait()
-			.scaleX(2, { spring: true })
+			.skewY(-10, { spring: true })
 			.start();
 	}
 
