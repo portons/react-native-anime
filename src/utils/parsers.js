@@ -1,6 +1,6 @@
 import { Animated } from 'react-native';
 
-import { reduce, isEqual, last, forEach } from 'lodash';
+import { reduce, isEqual, last, forEach, findIndex, has } from 'lodash';
 
 import {
 	ROTATE,
@@ -109,9 +109,17 @@ const createAnimations = (sequences, animatedValues) => {
 
 			if (styling) {
 				if (styling.transform) {
-					styles[0].transform.push(styling.style)
+					const sameStyleIndex = findIndex(styles[0].transform, style => has(style, currentAnimation.type));
+
+					sameStyleIndex === -1
+						? styles[0].transform.push(styling.style)
+						: styles[0].transform[sameStyleIndex] = styling.style;
 				} else {
-					styles.push(styling.style)
+					const sameStyleIndex = findIndex(styles, style => has(style, currentAnimation.type));
+
+					sameStyleIndex === -1
+						? styles.push(styling.style)
+						: styles[sameStyleIndex] = styling.style;
 				}
 			}
 		});

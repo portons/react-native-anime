@@ -20,7 +20,8 @@ import {
 	DEFAULT_VALUES,
 	BORDER_COLOR,
 	FONT_SIZE,
-	OPACITY
+	OPACITY,
+	ZERO_DEG
 } from './constants';
 
 // Utils methods
@@ -121,44 +122,44 @@ export const moveY = (animationConfig, animatedValues, finalAnimationsValues) =>
 };
 
 // TODO: Fix when default style provided. Uses interpolation :(
-export const rotate = (animationConfig, animatedValues, finalAnimationsValues) => {
-	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
-
-	let startingPoint;
-
-	if (!finalAnimationsValues[ROTATE]) {
-		finalAnimationsValues[ROTATE] = animationConfig.value;
-		startingPoint = 0;
-	} else {
-		finalAnimationsValues[ROTATE] = finalAnimationsValues[ROTATE] + animationConfig.value;
-		startingPoint = finalAnimationsValues[ROTATE] - animationConfig.value;
-	}
-
-	let animation;
-
-	if (get(animationConfig, 'options.spring')) {
-		animation = createSpringAnimation(finalAnimationsValues[ROTATE], animationConfig.options, animatedValues[ROTATE]);
-	} else {
-		animation = createTimingAnimation(finalAnimationsValues[ROTATE], animationConfig.options, animatedValues[ROTATE]);
-	}
-
-	const interpolation = animatedValues[ROTATE].interpolate({
-		outputRange: startingPoint > finalAnimationsValues[ROTATE]
-			? [`${finalAnimationsValues[ROTATE]}deg`, `${startingPoint}deg`]
-			: [`${startingPoint}deg`, `${finalAnimationsValues[ROTATE]}deg`],
-		inputRange: startingPoint > finalAnimationsValues[ROTATE]
-			? [finalAnimationsValues[ROTATE], startingPoint]
-			: [startingPoint, finalAnimationsValues[ROTATE]]
-	});
-
-	return {
-		animation,
-		styling: {
-			transform: true,
-			style: { rotate: interpolation }
-		}
-	};
-};
+//export const rotate = (animationConfig, animatedValues, finalAnimationsValues) => {
+//	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
+//
+//	let startingPoint;
+//
+//	if (!finalAnimationsValues[ROTATE]) {
+//		finalAnimationsValues[ROTATE] = animationConfig.value;
+//		startingPoint = 0;
+//	} else {
+//		finalAnimationsValues[ROTATE] = finalAnimationsValues[ROTATE] + animationConfig.value;
+//		startingPoint = finalAnimationsValues[ROTATE] - animationConfig.value;
+//	}
+//
+//	let animation;
+//
+//	if (get(animationConfig, 'options.spring')) {
+//		animation = createSpringAnimation(finalAnimationsValues[ROTATE], animationConfig.options, animatedValues[ROTATE]);
+//	} else {
+//		animation = createTimingAnimation(finalAnimationsValues[ROTATE], animationConfig.options, animatedValues[ROTATE]);
+//	}
+//
+//	const interpolation = animatedValues[ROTATE].interpolate({
+//		outputRange: startingPoint > finalAnimationsValues[ROTATE]
+//			? [`${finalAnimationsValues[ROTATE]}deg`, `${startingPoint}deg`]
+//			: [`${startingPoint}deg`, `${finalAnimationsValues[ROTATE]}deg`],
+//		inputRange: startingPoint > finalAnimationsValues[ROTATE]
+//			? [finalAnimationsValues[ROTATE], startingPoint]
+//			: [startingPoint, finalAnimationsValues[ROTATE]]
+//	});
+//
+//	return {
+//		animation,
+//		styling: {
+//			transform: true,
+//			style: { rotate: interpolation }
+//		}
+//	};
+//};
 
 // TODO: Fix scale when more than 1 animation
 export const scale = (animationConfig, animatedValues) => {
@@ -320,7 +321,7 @@ export const opacity = (animationConfig, animatedValues) => {
 
 export const wait = (animation) => ({ animation: Animated.delay(animation.duration) });
 
-// COLOR INTERPOLATIONS: MUCH MORE DIFFICULT THAT REGULAR ANIMATIONS
+// COLOR INTERPOLATIONS: MUCH MORE DIFFICULT THAN REGULAR ANIMATIONS
 
 /*
  * The problem with colors animations is that we have to interpolate. We can't just make Animated.Value('blue') and then
@@ -400,6 +401,77 @@ export const backgroundColor = (animationConfig, animatedValues, finalAnimations
 		animation,
 		styling: {
 			style: { backgroundColor: interpolation }
+		}
+	};
+};
+
+export const rotate = (animationConfig, animatedValues, finalAnimationsValues) => {
+	const lastAnimationValues = finalAnimationsValues[ROTATE];
+
+	animatedValues[ROTATE] = animatedValues[ROTATE] || new Animated.Value(0);
+
+	const toValue = lastAnimationValues ? lastAnimationValues.numValue : 100;
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(toValue, animationConfig.options, animatedValues[ROTATE]);
+	} else {
+		animation = createTimingAnimation(toValue, animationConfig.options, animatedValues[ROTATE]);
+	}
+
+	let interpolation;
+	let newInputRange;
+	let newOutputRange;
+
+	if (lastAnimationValues) {
+		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
+		const toValueInterpolated = degree + animationConfig.value;
+
+		newInputRange = [...inputRange, toValue];
+		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
+
+		interpolation = animatedValues[ROTATE].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	} else {
+		newInputRange  = [0, 100];
+		newOutputRange = [`${defaultTransformStyle(animationConfig, 'rotate', ZERO_DEG)}`, `${animationConfig.value}deg`];
+
+		interpolation = animatedValues[ROTATE].interpolate({
+			inputRange: newInputRange,
+			outputRange: newOutputRange
+		});
+	}
+
+	if (finalAnimationsValues[ROTATE]) {
+		finalAnimationsValues[ROTATE] = {
+			numValue: finalAnimationsValues[ROTATE].numValue + 100,
+			interpolationObject: interpolation,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	} else {
+		finalAnimationsValues[ROTATE] = {
+			numValue: 200,
+			interpolationObject: interpolation,
+			interpolation: {
+				degree: animationConfig.value,
+				inputRange: newInputRange,
+				outputRange: newOutputRange
+			}
+		}
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { rotate: interpolation }
 		}
 	};
 };

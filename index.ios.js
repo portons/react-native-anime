@@ -1,29 +1,15 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, View, Dimensions, TouchableOpacity, TouchableWithoutFeedback, Text } from 'react-native';
+import { AppRegistry, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
 
 import Anime from './src';
 
 export default class Root extends Component {
 	animateLogin() {
 		this.button
-			.scale(2, { duration: 1000 })
+			.backgroundColor('red', { duration: 500 })
 			.wait()
-			.scale(1, { duration: 1000 })
+			.backgroundColor('blue', { duration: 500 })
 			.start();
-
-		//this.button
-		//	.height(100)
-		//	.wait(0)
-		//	.rotate(360 * 20, { duration: 2000 })
-		//	.borderRadius(100, { duration: 2000 })
-		//	.wait(0)
-		//	.height(height)
-		//	.width(width)
-		//	.borderRadius(0, { duration: 0 })
-		//	.wait(1000)
-		//	.backgroundColor('transparent')
-		//	.moveX(width)
-		//	.start(() => console.log('lol'))
 	}
 
   render() {
@@ -101,7 +87,9 @@ const styles = StyleSheet.create({
   },
   box: {
     width: 50,
-    height: 50
+    height: 50,
+		backgroundColor: 'red',
+		marginTop: 20
   }
 });
 
