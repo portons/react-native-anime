@@ -14,6 +14,7 @@ import {
 	SCALE,
 	SCALE_X,
 	SCALE_Y,
+	Z_INDEX,
 	BACKGROUND_COLOR,
 	BORDER_RADIUS,
 	BORDER_WIDTH,
@@ -145,6 +146,16 @@ export default class Anime extends React.Component {
 		}
 
 		this.scenario.push({ type: SCALE_Y, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	zIndex(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: Z_INDEX, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}

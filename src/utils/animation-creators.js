@@ -14,6 +14,7 @@ import {
 	SCALE,
 	SCALE_X,
 	SCALE_Y,
+	Z_INDEX,
 	BACKGROUND_COLOR,
 	BORDER_RADIUS,
 	BORDER_WIDTH,
@@ -472,7 +473,6 @@ export const skewY = (animationConfig, animatedValues, finalAnimationsValues) =>
 	};
 };
 
-// TODO: Fix scale when more than 1 animation
 export const scale = (animationConfig, animatedValues) => {
 	animatedValues[SCALE] = animatedValues[SCALE] ||
 													new Animated.Value(defaultTransformStyle(animationConfig, 'scale', ONE));
@@ -532,6 +532,26 @@ export const scaleY = (animationConfig, animatedValues) => {
 		styling: {
 			transform: true,
 			style: { scaleY: animatedValues[SCALE_Y] }
+		}
+	};
+};
+
+export const zIndex = (animationConfig, animatedValues) => {
+	animatedValues[Z_INDEX] = animatedValues[Z_INDEX] ||
+		new Animated.Value(defaultTransformStyle(animationConfig, 'zIndex', ZERO));
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[Z_INDEX]);
+	} else {
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[Z_INDEX]);
+	}
+
+	return {
+		animation,
+		styling: {
+			style: { zIndex: animatedValues[Z_INDEX] }
 		}
 	};
 };

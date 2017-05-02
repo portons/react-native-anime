@@ -10,6 +10,7 @@ export const SCALE_X = 'scaleX';
 export const SCALE_Y = 'scaleY';
 export const SKEW_X = 'skewX';
 export const SKEW_Y = 'skewY';
+export const Z_INDEX = 'zIndex';
 export const WIDTH = 'width';
 export const HEIGHT = 'height';
 export const BACKGROUND_COLOR = 'backgroundColor';
