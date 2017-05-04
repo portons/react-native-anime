@@ -10,6 +10,8 @@ import {
 	SKEW_Y,
 	MOVE_X,
 	MOVE_Y,
+	TRANSLATE_X,
+	TRANSLATE_Y,
 	WAIT,
 	SCALE,
 	SCALE_X,
@@ -57,6 +59,26 @@ export default class Anime extends React.Component {
 		}
 
 		this.scenario.push({ type: MOVE_Y, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	translateX(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: TRANSLATE_X, value, options, defaultStyle: this.props.style });
+
+		return this;
+	}
+
+	translateY(value, options = {}) {
+		if (this.state.animating) {
+			return this;
+		}
+
+		this.scenario.push({ type: TRANSLATE_Y, value, options, defaultStyle: this.props.style });
 
 		return this;
 	}

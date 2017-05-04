@@ -11,6 +11,8 @@ import {
 	SKEW_Y,
 	MOVE_Y,
 	MOVE_X,
+	TRANSLATE_X,
+	TRANSLATE_Y,
 	SCALE,
 	SCALE_X,
 	SCALE_Y,
@@ -76,27 +78,27 @@ const createSpringAnimation = (toValue, { spring }, animatedValue) => {
 export const moveX = (animationConfig, animatedValues, finalAnimationsValues) => {
 	const defaultMoveXValue = defaultTransformStyle(animationConfig, 'translateX', ZERO);
 
-	animatedValues[MOVE_X] = animatedValues[MOVE_X] || new Animated.Value(defaultMoveXValue);
+	animatedValues[TRANSLATE_X] = animatedValues[TRANSLATE_X] || new Animated.Value(defaultMoveXValue);
 
-	if (!finalAnimationsValues[MOVE_X]) {
-		finalAnimationsValues[MOVE_X] = animationConfig.value + defaultMoveXValue;
+	if (!finalAnimationsValues[TRANSLATE_X]) {
+		finalAnimationsValues[TRANSLATE_X] = animationConfig.value + defaultMoveXValue;
 	} else {
-		finalAnimationsValues[MOVE_X] = finalAnimationsValues[MOVE_X] + animationConfig.value;
+		finalAnimationsValues[TRANSLATE_X] = finalAnimationsValues[TRANSLATE_X] + animationConfig.value;
 	}
 
 	let animation;
 
 	if (get(animationConfig, 'options.spring')) {
-		animation = createSpringAnimation(finalAnimationsValues[MOVE_X], animationConfig.options, animatedValues[MOVE_X]);
+		animation = createSpringAnimation(finalAnimationsValues[TRANSLATE_X], animationConfig.options, animatedValues[TRANSLATE_X]);
 	} else {
-		animation = createTimingAnimation(finalAnimationsValues[MOVE_X], animationConfig.options, animatedValues[MOVE_X]);
+		animation = createTimingAnimation(finalAnimationsValues[TRANSLATE_X], animationConfig.options, animatedValues[TRANSLATE_X]);
 	}
 
 	return {
 		animation,
 		styling: {
 			transform: true,
-			style: { translateX: animatedValues[MOVE_X] }
+			style: { translateX: animatedValues[TRANSLATE_X] }
 		}
 	};
 };
@@ -104,27 +106,71 @@ export const moveX = (animationConfig, animatedValues, finalAnimationsValues) =>
 export const moveY = (animationConfig, animatedValues, finalAnimationsValues) => {
 	const defaultMoveYValue = defaultTransformStyle(animationConfig, 'translateY', ZERO);
 
-	animatedValues[MOVE_Y] = animatedValues[MOVE_Y] || new Animated.Value(defaultMoveYValue);
+	animatedValues[TRANSLATE_Y] = animatedValues[TRANSLATE_Y] || new Animated.Value(defaultMoveYValue);
 
-	if (!finalAnimationsValues[MOVE_Y]) {
-		finalAnimationsValues[MOVE_Y] = animationConfig.value + defaultMoveYValue;
+	if (!finalAnimationsValues[TRANSLATE_Y]) {
+		finalAnimationsValues[TRANSLATE_Y] = animationConfig.value + defaultMoveYValue;
 	} else {
-		finalAnimationsValues[MOVE_Y] = finalAnimationsValues[MOVE_Y] + animationConfig.value;
+		finalAnimationsValues[TRANSLATE_Y] = finalAnimationsValues[TRANSLATE_Y] + animationConfig.value;
 	}
 
 	let animation;
 
 	if (get(animationConfig, 'options.spring')) {
-		animation = createSpringAnimation(finalAnimationsValues[MOVE_Y], animationConfig.options, animatedValues[MOVE_Y]);
+		animation = createSpringAnimation(finalAnimationsValues[TRANSLATE_Y], animationConfig.options, animatedValues[TRANSLATE_Y]);
 	} else {
-		animation = createTimingAnimation(finalAnimationsValues[MOVE_Y], animationConfig.options, animatedValues[MOVE_Y]);
+		animation = createTimingAnimation(finalAnimationsValues[TRANSLATE_Y], animationConfig.options, animatedValues[TRANSLATE_Y]);
 	}
 
 	return {
 		animation,
 		styling: {
 			transform: true,
-			style: { translateY: animatedValues[MOVE_Y] }
+			style: { translateY: animatedValues[TRANSLATE_Y] }
+		}
+	};
+};
+
+export const translateX = (animationConfig, animatedValues) => {
+	const defaultMoveXValue = defaultTransformStyle(animationConfig, 'translateX', ZERO);
+
+	animatedValues[TRANSLATE_X] = animatedValues[TRANSLATE_X] || new Animated.Value(defaultMoveXValue);
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[TRANSLATE_X]);
+	} else {
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[TRANSLATE_X]);
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { translateX: animatedValues[TRANSLATE_X] }
+		}
+	};
+};
+
+export const translateY = (animationConfig, animatedValues) => {
+	const defaultMoveYValue = defaultTransformStyle(animationConfig, 'translateY', ZERO);
+
+	animatedValues[TRANSLATE_Y] = animatedValues[TRANSLATE_Y] || new Animated.Value(defaultMoveYValue);
+
+	let animation;
+
+	if (get(animationConfig, 'options.spring')) {
+		animation = createSpringAnimation(animationConfig.value, animationConfig.options, animatedValues[TRANSLATE_Y]);
+	} else {
+		animation = createTimingAnimation(animationConfig.value, animationConfig.options, animatedValues[TRANSLATE_Y]);
+	}
+
+	return {
+		animation,
+		styling: {
+			transform: true,
+			style: { translateY: animatedValues[TRANSLATE_Y] }
 		}
 	};
 };

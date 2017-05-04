@@ -10,6 +10,8 @@ import {
 	SKEW_Y,
 	MOVE_Y,
 	MOVE_X,
+	TRANSLATE_Y,
+	TRANSLATE_X,
 	WAIT,
 	SCALE,
 	SCALE_X,
@@ -37,6 +39,8 @@ import {
 	borderColor,
 	moveX,
 	moveY,
+	translateX,
+	translateY,
 	scale,
 	scaleX,
 	scaleY,
@@ -180,6 +184,12 @@ const parseAnimation = ({ animationConfig, animatedValues, finalAnimationsValues
 
 		case MOVE_Y:
 			return moveY(animationConfig, animatedValues, finalAnimationsValues);
+
+		case TRANSLATE_X:
+			return translateX(animationConfig, animatedValues);
+
+		case TRANSLATE_Y:
+			return translateY(animationConfig, animatedValues);
 
 		case SCALE:
 			return scale(animationConfig, animatedValues);

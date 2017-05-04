@@ -5,11 +5,13 @@ import Anime from './src';
 
 export default class Root extends Component {
 	animateButton() {
-		const button = this.button.scale(0.5);
-		const text = this.text.scale(2);
-
-		const parallel = new Anime.Parallel([button, text]);
-		parallel.start(parallel.reset);
+		this.button
+			.moveY(-20)
+			.wait(1000)
+			.moveY(-20)
+			.wait(1000)
+			.translateY(0)
+			.start();
 	}
 
   render() {
