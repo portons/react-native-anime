@@ -156,6 +156,9 @@ Like with Animated module, you can also animate Text, Image and ScrollView compo
         const box = this.box.rotate(90);
         const text = this.text.fontColor('red');
 
-        const parallel = new Anime.Parallel([box, text]).start(() => parallel.reset());
+        const parallel = new Anime.Parallel([box, text]);
+
+        // Start parallel animation for both components, and reset them both when it ends
+        parallel.start(() => parallel.reset())
     }
 ```
