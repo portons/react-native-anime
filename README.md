@@ -130,10 +130,10 @@ Like with Animated module, you can also animate Text, Image and ScrollView compo
         return (
             <View>
             	<Anime.View ref={ ref => this.box = ref }
-            							style={{ width: 50, height: 50, backgroundColor: 'blue' }}/>
+            				style={{ width: 50, height: 50, backgroundColor: 'blue' }}/>
 
             	<Anime.Text ref={ ref => this.text = ref }
-            							style={{ color: 'blue', fontSize: 12 }}>
+            				style={{ color: 'blue', fontSize: 12 }}>
             		Very easy
             	</Anime.Text>
             </View>
