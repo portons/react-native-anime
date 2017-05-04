@@ -1,19 +1,34 @@
 import { Animated } from 'react-native';
 
-const parallel = (componentsReferences) => ({
-	start: () => Animated.parallel(
-		componentsReferences.map(component => {
-			const { animations, styles, animatedValues } = component._getAnimation();
+export default class Parallel {
+	componentsReferences = [];
+	animation = null;
 
-			component._prepareForAnimation(styles, animatedValues);
+	constructor(componentsReferences) {
+		this.componentsReferences = componentsReferences;
+	}
 
-			return animations.start(({ finished }) => {
-				if (finished) {
-					componentsReferences.forEach(component => component._animationEnd());
-				}
-			});
-		})
-	)
-});
+	start(onAnimationEnd) {
+		this.animation = Animated.parallel(
+			this.componentsReferences.map(component => {
+				const { animations, styles, animatedValues } = component._getAnimation();
 
-export default parallel;
+				component._prepareForAnimation(styles, animatedValues);
+
+				return animations;
+			})
+		);
+
+		this.animation.start(({ finished }) => {
+			if (finished) {
+				onAnimationEnd && onAnimationEnd();
+
+				this.componentsReferences.forEach(component => component._animationEnd());
+			}
+		});
+	}
+
+	stop = () => this.animation && this.animation.stop();
+
+	reset = () => this.componentsReferences.forEach(component => component.reset());
+}
