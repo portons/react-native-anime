@@ -50,7 +50,7 @@ onClick() {
 * backgroundColor
 * borderColor
 * zIndex
-* color*
+* color
 * perspective
 
 # Parallel execution
