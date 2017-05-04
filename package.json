@@ -1,7 +1,7 @@
 {
 	"name": "react-native-anime",
 	"version": "0.0.1",
-	"homepage": "http://github.com/portons/react-native-anime#readme"
+	"homepage": "http://github.com/portons/react-native-anime#readme",
 	"repository": {
 		"type": "git",
     		"url": "http://github.com/portons/react-native-anime"
