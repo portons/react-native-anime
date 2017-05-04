@@ -271,6 +271,24 @@ export default class Anime extends React.Component {
 		return this;
 	}
 
+	_getAnimation() {
+		return scenarioParser({
+			scenario: this.scenario,
+			animatedValues: assign({}, this.state.animatedValues)
+		});
+	}
+
+	_prepareForAnimation(styles, animatedValues) {
+		this.setState({ styles, animatedValues, animating: true });
+	}
+
+	_animationEnd() {
+		this.scenario = [];
+		this.currentAnimation = null;
+		this.onAnimationEnd = null;
+		this.setState({ animating: false });
+	}
+
 	start(onAnimationEnd) {
 		if (this.state.animating) {
 			return;
@@ -292,10 +310,7 @@ export default class Anime extends React.Component {
 
 				this.onAnimationEnd && this.onAnimationEnd();
 
-				this.scenario = [];
-				this.currentAnimation = null;
-				this.onAnimationEnd = null;
-				this.setState({ animating: false });
+				this._animationEnd();
 			});
 		});
 	}
@@ -357,7 +372,7 @@ export default class Anime extends React.Component {
 		}
 	}
 
-	setDimensions({ height, width }) {
+	_setDimensions({ height, width }) {
 		this.viewHeight = height;
 		this.viewWidth = width;
 

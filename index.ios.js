@@ -1,78 +1,45 @@
 import React, { Component } from 'react';
-import { AppRegistry, StyleSheet, View, TouchableWithoutFeedback } from 'react-native';
+import { AppRegistry, StyleSheet, View, TouchableWithoutFeedback, Easing, Dimensions } from 'react-native';
 
 import Anime from './src';
 
 export default class Root extends Component {
-	animateLogin() {
-		this.button
-			.rotateY(60, { spring: true })
-			.rotateX(70, { spring: true })
-			.start();
+	animateButton() {
+		const button = this.button
+			.skewX(20)
+			.wait()
+			.skewX(0);
+
+		const text = this.text
+			.skewX(-20)
+			.wait()
+			.skewX(0);
+
+		Anime.parallel([button, text]).start();
 	}
 
   render() {
     return (
-      <View style={ styles.container }>
-				<TouchableWithoutFeedback onPress={ () => this.animateLogin() }>
+      <Anime.View style={ styles.container }
+									ref={ ref => this.container = ref }>
+				<TouchableWithoutFeedback onPress={ () => this.animateButton() }>
 					<Anime.View ref={ ref => this.button = ref }
 											style={{
-												backgroundColor: 'blue',
-												width: 100,
+												width: 150,
 												height: 50,
-												borderRadius: 5,
+												borderRadius: 50,
+												borderWidth: 2,
+												borderColor: '#1ECD97',
 												justifyContent: 'center',
 												alignItems: 'center'
 											}}>
 						<Anime.Text ref={ ref => this.text = ref }
-												style={{ fontSize: 15, color: 'white' }}>
-							Login
+												style={{ color: '#1ECD97', position: 'absolute' }}>
+							LOGIN
 						</Anime.Text>
 					</Anime.View>
 				</TouchableWithoutFeedback>
-
-				{/*<TouchableOpacity onPress={ () => this.moveBox() }>*/}
-          {/*<View style={{ marginTop: 100,*/}
-                         {/*width: 100,*/}
-                         {/*height: 50,*/}
-                         {/*borderRadius: 3,*/}
-                         {/*backgroundColor: '#dedede',*/}
-                         {/*justifyContent: 'center',*/}
-                         {/*alignItems: 'center' }}>*/}
-            {/*<Text>*/}
-              {/*ANIMATE*/}
-            {/*</Text>*/}
-          {/*</View>*/}
-				{/*</TouchableOpacity>*/}
-
-				{/*<TouchableOpacity onPress={ () => this.stopBox() }>*/}
-          {/*<View style={{ marginTop: 50,*/}
-						{/*width: 100,*/}
-						{/*height: 50,*/}
-						{/*borderRadius: 3,*/}
-						{/*backgroundColor: '#dedede',*/}
-						{/*justifyContent: 'center',*/}
-						{/*alignItems: 'center' }}>*/}
-            {/*<Text>*/}
-              {/*STOP ME*/}
-            {/*</Text>*/}
-          {/*</View>*/}
-				{/*</TouchableOpacity>*/}
-
-				{/*<TouchableOpacity onPress={ () => this.reset() }>*/}
-					{/*<View style={{ marginTop: 50,*/}
-						{/*width: 100,*/}
-						{/*height: 50,*/}
-						{/*borderRadius: 3,*/}
-						{/*backgroundColor: '#dedede',*/}
-						{/*justifyContent: 'center',*/}
-						{/*alignItems: 'center' }}>*/}
-						{/*<Text>*/}
-							{/*RESET*/}
-						{/*</Text>*/}
-					{/*</View>*/}
-				{/*</TouchableOpacity>*/}
-      </View>
+      </Anime.View>
     );
   }
 }

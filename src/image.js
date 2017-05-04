@@ -10,7 +10,7 @@ export default class View extends Anime {
 		return (
 			<Animated.Image { ...this.props }
 											style={ [this.props.style, styles] }
-										 	onLayout={ (event) => !this.dimensionsSet && this.setDimensions(event.nativeEvent.layout) } />
+										 	onLayout={ (event) => !this.dimensionsSet && this._setDimensions(event.nativeEvent.layout) } />
 		)
 	}
 }

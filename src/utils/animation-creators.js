@@ -149,8 +149,8 @@ export const rotateX = (animationConfig, animatedValues, finalAnimationsValues) 
 	let newOutputRange;
 
 	if (lastAnimationValues) {
-		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
-		const toValueInterpolated = degree + animationConfig.value;
+		const { inputRange, outputRange } = lastAnimationValues.interpolation;
+		const toValueInterpolated = animationConfig.value;
 
 		newInputRange = [...inputRange, toValue];
 		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
@@ -173,7 +173,6 @@ export const rotateX = (animationConfig, animatedValues, finalAnimationsValues) 
 		finalAnimationsValues[ROTATE_X] = {
 			numValue: finalAnimationsValues[ROTATE_X].numValue + 100,
 			interpolation: {
-				degree: animationConfig.value,
 				inputRange: newInputRange,
 				outputRange: newOutputRange
 			}
@@ -182,7 +181,6 @@ export const rotateX = (animationConfig, animatedValues, finalAnimationsValues) 
 		finalAnimationsValues[ROTATE_X] = {
 			numValue: 200,
 			interpolation: {
-				degree: animationConfig.value,
 				inputRange: newInputRange,
 				outputRange: newOutputRange
 			}
@@ -218,8 +216,8 @@ export const rotateZ = (animationConfig, animatedValues, finalAnimationsValues) 
 	let newOutputRange;
 
 	if (lastAnimationValues) {
-		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
-		const toValueInterpolated = degree + animationConfig.value;
+		const { inputRange, outputRange } = lastAnimationValues.interpolation;
+		const toValueInterpolated = animationConfig.value;
 
 		newInputRange = [...inputRange, toValue];
 		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
@@ -242,7 +240,6 @@ export const rotateZ = (animationConfig, animatedValues, finalAnimationsValues) 
 		finalAnimationsValues[ROTATE_Z] = {
 			numValue: finalAnimationsValues[ROTATE_Z].numValue + 100,
 			interpolation: {
-				degree: animationConfig.value,
 				inputRange: newInputRange,
 				outputRange: newOutputRange
 			}
@@ -251,7 +248,6 @@ export const rotateZ = (animationConfig, animatedValues, finalAnimationsValues) 
 		finalAnimationsValues[ROTATE_Z] = {
 			numValue: 200,
 			interpolation: {
-				degree: animationConfig.value,
 				inputRange: newInputRange,
 				outputRange: newOutputRange
 			}
@@ -287,8 +283,8 @@ export const rotateY = (animationConfig, animatedValues, finalAnimationsValues) 
 	let newOutputRange;
 
 	if (lastAnimationValues) {
-		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
-		const toValueInterpolated = degree + animationConfig.value;
+		const { inputRange, outputRange } = lastAnimationValues.interpolation;
+		const toValueInterpolated = animationConfig.value;
 
 		newInputRange = [...inputRange, toValue];
 		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
@@ -311,7 +307,6 @@ export const rotateY = (animationConfig, animatedValues, finalAnimationsValues) 
 		finalAnimationsValues[ROTATE_Y] = {
 			numValue: finalAnimationsValues[ROTATE_Y].numValue + 100,
 			interpolation: {
-				degree: animationConfig.value,
 				inputRange: newInputRange,
 				outputRange: newOutputRange
 			}
@@ -320,7 +315,6 @@ export const rotateY = (animationConfig, animatedValues, finalAnimationsValues) 
 		finalAnimationsValues[ROTATE_Y] = {
 			numValue: 200,
 			interpolation: {
-				degree: animationConfig.value,
 				inputRange: newInputRange,
 				outputRange: newOutputRange
 			}
@@ -356,8 +350,8 @@ export const skewX = (animationConfig, animatedValues, finalAnimationsValues) =>
 	let newOutputRange;
 
 	if (lastAnimationValues) {
-		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
-		const toValueInterpolated = degree + animationConfig.value;
+		const { inputRange, outputRange } = lastAnimationValues.interpolation;
+		const toValueInterpolated = animationConfig.value;
 
 		newInputRange = [...inputRange, toValue];
 		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
@@ -389,7 +383,6 @@ export const skewX = (animationConfig, animatedValues, finalAnimationsValues) =>
 		finalAnimationsValues[SKEW_X] = {
 			numValue: 200,
 			interpolation: {
-				degree: animationConfig.value,
 				inputRange: newInputRange,
 				outputRange: newOutputRange
 			}
@@ -425,8 +418,8 @@ export const skewY = (animationConfig, animatedValues, finalAnimationsValues) =>
 	let newOutputRange;
 
 	if (lastAnimationValues) {
-		const { inputRange, outputRange, degree } = lastAnimationValues.interpolation;
-		const toValueInterpolated = degree + animationConfig.value;
+		const { inputRange, outputRange } = lastAnimationValues.interpolation;
+		const toValueInterpolated = animationConfig.value;
 
 		newInputRange = [...inputRange, toValue];
 		newOutputRange = [...outputRange, `${toValueInterpolated}deg`];
@@ -449,7 +442,6 @@ export const skewY = (animationConfig, animatedValues, finalAnimationsValues) =>
 		finalAnimationsValues[SKEW_Y] = {
 			numValue: finalAnimationsValues[SKEW_Y].numValue + 100,
 			interpolation: {
-				degree: animationConfig.value,
 				inputRange: newInputRange,
 				outputRange: newOutputRange
 			}
@@ -458,7 +450,6 @@ export const skewY = (animationConfig, animatedValues, finalAnimationsValues) =>
 		finalAnimationsValues[SKEW_Y] = {
 			numValue: 200,
 			interpolation: {
-				degree: animationConfig.value,
 				inputRange: newInputRange,
 				outputRange: newOutputRange
 			}
