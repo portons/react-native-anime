@@ -16,7 +16,7 @@ React Native Anime is an animation utility. It can animate many of the style pro
 import Anime from 'react-native-anime';
 ```
 
-2. Wrap your view with EasyAnimations component and save its reference
+2. Wrap your view with Anime component and save its reference
 ```javascript
 render () {
     return (
@@ -27,7 +27,7 @@ render () {
 }
 ```
 
-3. Use the ref to animate your component
+3. Use the reference to animate your component
 ```javascript
 onClick() {
     this.easy.moveX(10, { duration: 1000 }).start()
@@ -36,10 +36,11 @@ onClick() {
 
 # Properties
 
-* moveX (translateX, relative to current position)
-* moveY (translateY, relative to current position)
+* translateX, translateY
+* moveX, moveY (relative to current position)
+* skewX, skewY
 * scale
-* rotate
+* rotate (rotateZ, rotateY, rotateX)
 * borderRadius
 * height
 * width
@@ -48,7 +49,9 @@ onClick() {
 * opacity
 * backgroundColor
 * borderColor
-* color
+* zIndex
+* color*
+* perspective
 
 # Parallel execution
 Anime groups animation properties and execute them at once.
