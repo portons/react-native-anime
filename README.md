@@ -107,8 +107,6 @@ You can also use Animated's spring animations, together with all its options
 Like with Animated module, you can also animate Text, Image and ScrollView components
 
 ```javascript
-    import Anime from 'react-native-anime';
-
     render() {
         return (
             <Anime.Text ref={ ref => this.text = ref }
@@ -122,5 +120,31 @@ Like with Animated module, you can also animate Text, Image and ScrollView compo
         this.text
             .color('red', { spring: { friction: 1, velocity: 100 } })
             .fontSize(20, { spring: { friction: 1, velocity: 100 } })
+    }
+```
+
+# Parallel animation of numerous components
+
+```javascript
+    render() {
+        return (
+            <View>
+            	<Anime.View ref={ ref => this.box = ref }
+            							style={{ width: 50, height: 50, backgroundColor: 'blue' }}/>
+
+            	<Anime.Text ref={ ref => this.text = ref }
+            							style={{ color: 'blue', fontSize: 12 }}>
+            		Very easy
+            	</Anime.Text>
+            </View>
+        )
+    }
+
+    animateComponents() {
+        const box = this.box.rotate(90);
+        const text = this.text.fontColor('red');
+
+        const parallel = new Anime.Parallel([box, text])
+            .start(() => parallel.reset());
     }
 ```
