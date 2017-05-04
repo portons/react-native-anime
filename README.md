@@ -9,6 +9,18 @@ React Native Anime is an animation utility. It can animate many of the style pro
 * Easings
 * Springs
 
+# Installation
+
+```javascript
+$ npm i react-native-anime
+```
+
+OR
+
+```javascript
+$ yarn add react-native-anime
+```
+
 # Code Example
 1. Import Anime
 
