@@ -69,7 +69,7 @@ onClick() {
 Anime groups animation properties and executes them at once.
 
 ```javascript
-    this.easy
+    this.box
         .moveX(50)
         .moveY(50)
         .rotate(180)
@@ -80,10 +80,12 @@ Anime groups animation properties and executes them at once.
 `wait` will wait until all animations placed before it completed. It can also receive milliseconds to wait to start next animation
 
 ```javascript
-    this.easy
+    this.box
         .moveX(50)
+        .scale(1.5)
         .wait(1000)
         .moveX(-50)
+        .scale(0.5)
         .start()
 ```
 
@@ -94,10 +96,10 @@ Just like with Animated, you can specify durations, delays and easings for your 
     import { Easing } from 'react-native';
 
     animate() {
-        this.easy
-        .moveX(50, { duration: 2000, easing: Easing.bounce })
-        .moveY(-50, { delay: 1000 })
-        .start()
+        this.box
+            .skewX(50, { duration: 2000, easing: Easing.bounce })
+            .rotateY(-100, { delay: 2000 })
+            .start();
     }
 ```
 
@@ -105,12 +107,13 @@ Just like with Animated, you can specify durations, delays and easings for your 
 You can also use Animated's spring animations, together with all its options
 
 ```javascript
-    this.easy
-        .backgroundColor('red', { spring: { friction: 1, velocity: 100 } })
+    this.box
+        .height(100, { spring: { friction: 1, velocity: 100 } })
+        .borderRadius(100)
         .start()
         
     // or simply use `spring: true` for default spring behaviour
-    this.easy
+    this.box
         .moveX(50, { spring: true })
         .start()
 ```
@@ -121,17 +124,18 @@ Like with Animated module, you can also animate Text, Image and ScrollView compo
 ```javascript
     render() {
         return (
-            <Anime.Text ref={ ref => this.text = ref }
-                        style={{ color: 'blue', fontSize: 12 }}>
-                Very easy
-            </Anime.Text>
+            <Anime.Image ref={ ref => this.image = ref }
+                         source={{ require('pikachu.gif') }} />
         )
     }
 
     animate() {
-        this.text
-            .color('red', { spring: { friction: 1, velocity: 100 } })
-            .fontSize(20, { spring: { friction: 1, velocity: 100 } })
+        this.image
+            .skewX(5, { spring: true })
+            .skewY(5, { spring: true })
+            .wait()
+            .rotate(360*20, { duration: 2000 })
+        	.start()
     }
 ```
 
@@ -154,7 +158,7 @@ Like with Animated module, you can also animate Text, Image and ScrollView compo
 
     animateComponents() {
         const box = this.box.rotate(90);
-        const text = this.text.fontColor('red');
+        const text = this.text.color('red');
 
         const parallel = new Anime.Parallel([box, text]);
 
