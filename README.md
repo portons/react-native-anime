@@ -145,11 +145,9 @@ Like with Animated module, you can also animate Text, Image and ScrollView compo
             .skewY(5, { spring: true })
             .wait()
             .rotate(360*20, { duration: 2000 })
-        	.start()
+        .start()
     }
 ```
-
-![image](https://giant.gfycat.com/LawfulSpiritedCornsnake.gif)
 
 # Parallel animation of numerous components
 
