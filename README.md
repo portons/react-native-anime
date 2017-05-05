@@ -117,7 +117,7 @@ Just like with Animated, you can specify durations, delays and easings for your 
 ![duration](https://zippy.gfycat.com/JauntySmartIrukandjijellyfish.gif)
 
 # Spring
-You can also use Animated's spring animations, together with all its options
+You can also use Animated's spring animations, together with all its options (http://browniefed.com/react-native-animation-book/api/SPRING.html)
 
 ```javascript
     this.box
