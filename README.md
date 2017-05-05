@@ -1,7 +1,7 @@
 # React Native Anime
 (Inspired by Cheetah for Swift: https://github.com/suguru/Cheetah)
 
-Anime is an animation utility for React Native. It's built on top of the Animated module, and provides a much simpler API for handling animations.
+Anime is an animation utility for React Native. It's built on top of the [Animated module](https://facebook.github.io/react-native/docs/animated.html), and provides a much simpler API for handling animations.
 
 The library is still in early development. I also need to add a proper API documentation. Open issues if you find any bugs, and contributions are also welcomed!
 
@@ -45,6 +45,12 @@ render () {
 ```javascript
 onClick() {
     this.box.moveX(100, { duration: 1500 }).start();
+}
+
+// You can also stop an animation with a .stop() method, and reset the components styling with .reset()
+stopAndReset() {
+    this.box.stop();
+    this.box.reset();
 }
 ```
 
