@@ -46,6 +46,8 @@ onClick() {
 }
 ```
 
+![simple-move](https://zippy.gfycat.com/DistantCluelessCowrie.gif)
+
 # Properties
 
 * translateX, translateY
@@ -76,6 +78,8 @@ Anime groups animation properties and executes them at once.
         .start()
 ```
 
+![parallel](https://zippy.gfycat.com/SecondGlitteringGannet.gif)
+
 # Sequence execution
 `wait` will wait until all animations placed before it completed. It can also receive milliseconds to wait to start next animation
 
@@ -88,6 +92,8 @@ Anime groups animation properties and executes them at once.
         .scale(0.5)
         .start()
 ```
+
+![sequence](https://zippy.gfycat.com/IlliterateFreeArchaeocete.gif)
 
 # Duration, delay, easing
 Just like with Animated, you can specify durations, delays and easings for your animations
@@ -103,6 +109,8 @@ Just like with Animated, you can specify durations, delays and easings for your 
     }
 ```
 
+![duration](https://zippy.gfycat.com/JauntySmartIrukandjijellyfish.gif)
+
 # Spring
 You can also use Animated's spring animations, together with all its options
 
@@ -111,12 +119,14 @@ You can also use Animated's spring animations, together with all its options
         .height(100, { spring: { friction: 1, velocity: 100 } })
         .borderRadius(100)
         .start()
-        
+
     // or simply use `spring: true` for default spring behaviour
     this.box
         .moveX(50, { spring: true })
         .start()
 ```
+
+![spring](https://zippy.gfycat.com/HonoredWastefulBeaver.gif)
 
 # Also supports Image, Text and ScrollView
 Like with Animated module, you can also animate Text, Image and ScrollView components
@@ -138,6 +148,8 @@ Like with Animated module, you can also animate Text, Image and ScrollView compo
         	.start()
     }
 ```
+
+![image](https://giant.gfycat.com/LawfulSpiritedCornsnake.gif)
 
 # Parallel animation of numerous components
 
@@ -166,3 +178,5 @@ Like with Animated module, you can also animate Text, Image and ScrollView compo
         parallel.start(() => parallel.reset())
     }
 ```
+
+![numerous](https://zippy.gfycat.com/SlimyTinyFiddlercrab.gif)
