@@ -47,7 +47,7 @@ onClick() {
     this.box.moveX(100, { duration: 1500 }).start();
 }
 
-// You can also stop an animation with a .stop() method, and reset the components styling with .reset()
+// You can also stop an animation with a .stop() method, and reset the component's styling with .reset()
 stopAndReset() {
     this.box.stop();
     this.box.reset();
