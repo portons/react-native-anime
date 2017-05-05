@@ -106,7 +106,7 @@ Anime groups animation properties and executes them at once.
 
 ![sequence](https://zippy.gfycat.com/IlliterateFreeArchaeocete.gif)
 
-# Duration, delay, easing
+# Duration, delay, [easing](https://github.com/facebook/react-native/blob/master/Libraries/Animated/src/Easing.js)
 Just like with Animated, you can specify durations, delays and easings for your animations
 
 ```javascript
