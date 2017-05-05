@@ -32,7 +32,7 @@ import Anime from 'react-native-anime';
 ```javascript
 render () {
     return (
-        <Anime.View ref={ ref => this.easy = ref }>
+        <Anime.View ref={ ref => this.box = ref }>
             <View style={ styles.box }/>
         </Anime.View>
     )
@@ -42,7 +42,7 @@ render () {
 3. Use the reference to animate your component
 ```javascript
 onClick() {
-    this.easy.moveX(10, { duration: 1000 }).start()
+    this.box.moveX(100, { duration: 1500 }).start();
 }
 ```
 
