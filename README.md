@@ -85,9 +85,12 @@ Anime groups animation properties and executes them at once.
 
 ```javascript
     this.box
+        // first animation
         .moveX(50)
         .scale(1.5)
+        // wait 1s before starting second animation
         .wait(1000)
+        // second animation
         .moveX(-50)
         .scale(0.5)
         .start()
