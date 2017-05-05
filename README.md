@@ -149,6 +149,8 @@ Like with Animated module, you can also animate Text, Image and ScrollView compo
     }
 ```
 
+![image](https://thumbs.gfycat.com/LawfulSpiritedCornsnake-size_restricted.gif)
+
 # Parallel animation of numerous components
 
 ```javascript
