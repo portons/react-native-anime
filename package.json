@@ -8,9 +8,7 @@
   },
   "scripts": {},
   "dependencies": {
-    "lodash": "4.0.0",
-    "react": "0.13.0",
-    "react-native": "0.39.0"
+    "lodash": "^4.17.2"
   },
   "devDependencies": {}
 }
