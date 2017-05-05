@@ -3,7 +3,7 @@
 
 Anime is an animation utility for React Native. It's built on top of the Animated module, and provides a much simpler API for handling animations.
 
-The library is still in early development. Open issues if you find any bugs. Contributions are also welcomed!
+The library is still in early development. I also need to add a proper API documentation. Open issues if you find any bugs, and contributions are also welcomed!
 
 # Features
 * Animations with durations and delays
