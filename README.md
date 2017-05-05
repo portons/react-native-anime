@@ -1,7 +1,9 @@
 # React Native Anime
 (Inspired by Cheetah for Swift: https://github.com/suguru/Cheetah)
 
-React Native Anime is an animation utility. It can animate many of the style properties the Animated library works with.
+Anime is an animation utility for React Native. It's built on top of the Animated module, and provides a much simpler API for handling animations.
+
+The library is still in early development. Open issues if you find any bugs. Contributions are also welcomed!
 
 # Features
 * Animations with durations and delays
