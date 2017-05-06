@@ -60,7 +60,8 @@ const createTimingAnimation = (toValue, options, animatedValue) => {
 			toValue,
 			duration: options.duration || DEFAULT_DURATION,
 			delay: options.delay || 0,
-			easing: options.easing || noEasing
+			easing: options.easing || noEasing,
+			useNativeDriver: options.useNativeDriver || false
 		}
 	);
 };
