@@ -82,7 +82,7 @@ export const moveX = (animationConfig, animatedValues, finalAnimationsValues) =>
 	animatedValues[TRANSLATE_X] = animatedValues[TRANSLATE_X] || new Animated.Value(defaultMoveXValue);
 
 	if (!finalAnimationsValues[TRANSLATE_X]) {
-		finalAnimationsValues[TRANSLATE_X] = animationConfig.value + defaultMoveXValue;
+		finalAnimationsValues[TRANSLATE_X] = animatedValues[TRANSLATE_X]._value + animationConfig.value;
 	} else {
 		finalAnimationsValues[TRANSLATE_X] = finalAnimationsValues[TRANSLATE_X] + animationConfig.value;
 	}
@@ -110,7 +110,7 @@ export const moveY = (animationConfig, animatedValues, finalAnimationsValues) =>
 	animatedValues[TRANSLATE_Y] = animatedValues[TRANSLATE_Y] || new Animated.Value(defaultMoveYValue);
 
 	if (!finalAnimationsValues[TRANSLATE_Y]) {
-		finalAnimationsValues[TRANSLATE_Y] = animationConfig.value + defaultMoveYValue;
+		finalAnimationsValues[TRANSLATE_Y] = animatedValues[TRANSLATE_Y]._value + animationConfig.value;
 	} else {
 		finalAnimationsValues[TRANSLATE_Y] = finalAnimationsValues[TRANSLATE_Y] + animationConfig.value;
 	}
