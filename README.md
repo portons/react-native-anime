@@ -56,25 +56,60 @@ stopAndReset() {
 
 ![simple-move](https://zippy.gfycat.com/DistantCluelessCowrie.gif)
 
-# Properties
+# Available methods
 
-* translateX, translateY
-* moveX, moveY (relative to current position)
-* skewX, skewY
-* scale
-* rotate (rotateZ, rotateY, rotateX)
-* borderRadius
-* height
-* width
-* borderWidth
-* fontSize
-* opacity
-* backgroundColor
-* borderColor
-* zIndex
-* color
-* perspective
+Translate:
+```
+translateX
+translateY
+moveX // Relative to last X translation
+moveY // Relative to last Y translation
+```
 
+Skew:
+```
+skewX
+skewY
+```
+
+Prespective:
+```
+perspective
+```
+
+Scale:
+```
+scale
+```
+
+Rotate:
+```
+rotateZ OR rotate
+rotateX
+rotateY
+```
+
+Borders:
+```
+borderRadius
+borderWidth
+borderColor
+```
+
+Text:
+```
+fontSize
+color
+```
+
+Layout:
+```
+height
+width
+opacity
+backgroundColor
+zIndex
+```
 # Parallel execution
 Anime groups animation properties and executes them at once.
 
