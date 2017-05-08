@@ -1,5 +1,4 @@
 import React from 'react';
-import { assign } from 'lodash';
 
 import { scenarioParser } from './utils/parsers';
 import {
@@ -298,10 +297,7 @@ export default class Anime extends React.Component {
 			return;
 		}
 
-		const { animations, styles, animatedValues } = scenarioParser({
-			scenario: this.scenario,
-			animatedValues: assign({}, this.state.animatedValues)
-		});
+		const { animations, styles, animatedValues } = this._getAnimation();
 
 		this.currentAnimation = animations;
 		this.onAnimationEnd = onAnimationEnd;
@@ -320,10 +316,7 @@ export default class Anime extends React.Component {
 	}
 
 	repeat(count, onAnimationEnd) {
-		const { animations, styles, animatedValues } = scenarioParser({
-			scenario: this.scenario,
-			animatedValues: assign({}, this.state.animatedValues)
-		});
+		const { animations, styles, animatedValues } = this._getAnimation();
 
 		this.currentAnimation = animations;
 		this.onAnimationEnd = onAnimationEnd;
@@ -349,10 +342,7 @@ export default class Anime extends React.Component {
 	}
 
 	infinite() {
-		const { animations, styles, animatedValues } = scenarioParser({
-			scenario: this.scenario,
-			animatedValues: assign({}, this.state.animatedValues)
-		});
+		const { animations, styles, animatedValues } = this._getAnimation();
 
 		this.currentAnimation = animations;
 
@@ -396,7 +386,7 @@ export default class Anime extends React.Component {
 	_getAnimation() {
 		return scenarioParser({
 			scenario: this.scenario,
-			animatedValues: assign({}, this.state.animatedValues)
+			animatedValues: { ...this.state.animatedValues }
 		});
 	}
 
