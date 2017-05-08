@@ -55,6 +55,7 @@ import {
 	opacity,
 	color
 } from './animation-creators';
+
 /*
  * Parses the whole scenario, and returns: final Animated object, updated styles, updated Animated values
  *
