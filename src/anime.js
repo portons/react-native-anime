@@ -330,10 +330,7 @@ export default class Anime extends React.Component {
 				if (count === 1) {
 					this.onAnimationEnd && this.onAnimationEnd();
 
-					this.scenario = [];
-					this.currentAnimation = null;
-					this.onAnimationEnd = null;
-					this.setState({ animating: false });
+					this._animationEnd();
 				} else {
 					this.repeat(count - 1);
 				}
