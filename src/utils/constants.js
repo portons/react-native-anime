@@ -32,9 +32,9 @@ export const ONE = 'one';
 export const FONT = 'font';
 
 export const DEFAULT_VALUES = {
-	[ZERO]: 0,
-	[ONE]: 1,
-	[COLOR]: 'white',
-	[FONT]: 15,
-	[ZERO_DEG]: '0deg'
+  [ZERO]: 0,
+  [ONE]: 1,
+  [COLOR]: 'white',
+  [FONT]: 15,
+  [ZERO_DEG]: '0deg',
 };
