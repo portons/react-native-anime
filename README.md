@@ -12,16 +12,31 @@ The library is still in early development. I also need to add a proper API docum
 * Springs
 
 # Installation
-
-```javascript
-$ npm i react-native-anime
-```
-
-OR
-
 ```javascript
 $ yarn add react-native-anime
 ```
+
+# Local Development
+
+> Taken from [`victory-native`](https://github.com/FormidableLabs/victory-native#local-development), you should check this project, it's awesome.
+
+If you'd like to contribute to victory-native, you can use the local demo app to test your changes on the iOS simulator. (But if you're just getting started with victory-native and want to see a demo, we recommend using victory-native-demo, as it supports Android and is simpler to set up.)
+```sh
+# Install
+$ yarn global add react-native-cli # if you haven't already
+$ git clone https://github.com/FormidableLabs/victory-native
+$ cd victory-native
+$ yarn
+
+# Start the react-native packager in a terminal that will remain running
+$ yarn start
+
+# Run the demo from a new terminal window
+$ yarn demo:ios
+```
+Changes to ``src` will be reflected in the demo app.
+
+Do not run `yarn` in the demo/ directory, or the packager packager will crash due to "duplicate @providesModule declarations" found in node_modules/ and demo/node_modules.
 
 # Code Example
 1. Import Anime
